@@ -15,32 +15,35 @@
 <body>
     <header>
         <nav>
-            <button class="theme-icon"><img src="assets/svg/sun.svg" alt="ligth"></button>
-            <button class="theme-icon"><img src="assets/svg/moon.svg" alt="dark"></button>
-            <button>PT</button>
-            <button>EN</button>
+            <button id="btn-ligth" class="theme-icon"><img src="assets/svg/sun.svg" alt="ligth"></button>
+            <button id="btn-dark" class="theme-icon"><img src="assets/svg/moon.svg" alt="dark"></button>
+            <button id="btn-pt">PT</button>
+            <button id="btn-en">EN</button>
         </nav>
     </header>
 
     <main>
+        <button id="btn-scroll">scroll</button>
+
         <!-- #region presentation  -->
 
         <section class="layer" id="presentation">
             <article>
                 <h5>Olá, meu nome é</h5>
-                <h1>Lucas Araújo</h1>
-                <h4>Desenvolvedor Full-Stack</h4>
+                <h1><strong>Lucas Araújo</strong></h1>
+                <h4><strong>Desenvolvedor Full-Stack</strong></h4>
                 <p>
                     Programador e desenvolvedor de sistemas inovador e detalhista, com profundo entusiasmo
                     em criar soluções de software de ponta e otimizar sistemas complexos.
                 </p>
-                <a href="https://drive.google.com/file/d/1nFcJppo1Oi0R_pzhCFTUMQq9U6nOth4_/view" target="_blank">
+                <a class="btn-download-cv"
+                    href="https://drive.google.com/file/d/1nFcJppo1Oi0R_pzhCFTUMQq9U6nOth4_/view" target="_blank">
                     <span>Download CV</span>
                 </a>
             </article>
 
-            <div id="profile-1">
-                <img src="assets/img/profile-1.png" alt="profile-1">
+            <div id="presentation-profile">
+                <img src="assets/img/profile-icon.png" alt="profile-1">
             </div>
         </section>
 
@@ -49,8 +52,8 @@
         <!-- #region biography -->
 
         <section class="layer" id="biography">
-            <div id="profile-2">
-                <img src="assets/img/profile-2.png" alt="profile-1">
+            <div id="biography-profile">
+                <img src="assets/img/profile-icon.png" alt="profile-1">
 
                 <div class="icon-group">
                     <a class="social-icon" href="https://www.linkedin.com/in/lucas-ara%C3%BAjo-95b312181/"
@@ -81,14 +84,15 @@
             </div>
 
             <article>
-                <h1>Biografia</h1>
+                <h1><strong>Biografia</strong></h1>
                 <p>
-                    Brasileiro, casado e com dois filhos. Ansioso para ingressar em uma organização com visão de futuro
-                    que promove a criatividade e adota os avanços tecnológicos. Em busca de uma função desafiadora em um
-                    ambiente dinâmico e colaborativo, onde possa aplicar minha proficiência técnica e paixão por
-                    entregar soluções de software de alta qualidade, aspiro projetar e implementar aplicativos
-                    escaláveis e eficientes que elevem as experiências do usuário e simplifiquem processos críticos de
-                    negócios garantindo a integração perfeita entre diversos sistemas.
+                    Brasileiro, casado e com dois filhos. Ansioso para ingressar em
+                    uma organização com visão de futuro que promove a criatividade e adota os avanços tecnológicos.
+                    Em busca de uma função desafiadora em um ambiente dinâmico e colaborativo, onde possa aplicar
+                    minha proficiência técnica e paixão por entregar soluções de software de alta qualidade, aspiro
+                    projetar e implementar aplicativos escaláveis e eficientes que elevem as experiências do usuário e
+                    simplifiquem processos críticos de negócios garantindo a integração perfeita entre diversos
+                    sistemas.
                 </p>
 
                 <p>
@@ -97,12 +101,12 @@
                     para impulsionar o sucesso da equipe de desenvolvimento e superar os objetivos organizacionais.
                 </p>
 
-                <div class="personal-information">
+                <div id="personal-information">
                     <div>
                         <span><strong>Nome: </strong>José Lucas Alcântara de Araújo</span>
-                        <span><strong>Aniversário: </strong>José Lucas Alcântara de Araújo</span>
-                        <span><strong>Idade: </strong>José Lucas Alcântara de Araújo</span>
-                        <span><strong>endereço: </strong>José Lucas Alcântara de Araújo</span>
+                        <span><strong>Nascimento: </strong>2 de Setembro de 1991</span>
+                        <span><strong>Idade: </strong>32 anos</span>
+                        <span><strong>endereço: </strong>Praia Grande, São Paulo, Brasil</span>
                     </div>
 
                     <div>
@@ -121,7 +125,35 @@
         <!-- #region projects -->
 
         <section class="layer" id="projects">
+            <article>
+                <h1 id="project-title"><strong>PROJETO 1</strong></h1>
+                <p id="project-description">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iure temporibus ratione voluptatum quos
+                    est quas, incidunt perferendis quo maxime quod earum, consequuntur iusto placeat magni distinctio.
+                    Beatae perspiciatis est pariatur. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Distinctio optio dicta velit numquam nisi perspiciatis incidunt voluptates deserunt provident sequi
+                    reprehenderit suscipit rem laborum nostrum, excepturi culpa vel nesciunt repellendus.
+                </p>
+                <a class="btn btn-view-work" href="" target="_blank">
+                    <span>Ver Trabalho</span>
+                </a>
+            </article>
 
+            <div class="carousel">
+                <div class="carousel-item-group">
+                    <div class="carousel-item"></div>
+                    <label>Projeto 1</label>
+                    <img src="..." class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item"></div>
+                <label>Projeto 2</label>
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+
+            <div class="btn-group">
+                <button class="btn-Prev">Anterior</button>
+                <button class="btn-next">Próximo</button>
+            </div>
         </section>
 
         <!-- #endregion  -->
@@ -129,47 +161,225 @@
         <!-- #region testimonials -->
 
         <section class="layer" id="testimonials">
+            <h1><strong>Depoimentos</strong></h1>
+            <div class="card">
+                <img class="card-img" src="..." alt="...">
+                <div class="card-content">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error inventore fugiat
+                        cum nobis, recusandae perferendis, a iste quos sequi fugit et, ad rerum ipsa. Mollitia at
+                        veritatis ut eligendi aut?
+                    </p>
+                    <a href=""><strong>José Lucas Alcântara de Araújo</strong></a>
+                    <p>Desenvolvedor Full-Stack</p>
+                </div>
+            </div>
 
+            <div class="card">
+                <img class="card-img" src="..." alt="...">
+                <div class="card-content">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error inventore fugiat
+                        cum nobis, recusandae perferendis, a iste quos sequi fugit et, ad rerum ipsa. Mollitia at
+                        veritatis ut eligendi aut?
+                    </p>
+                    <a href=""><strong>José Lucas Alcântara de Araújo</strong></a>
+                    <p>Desenvolvedor Front-end</p>
+                </div>
+            </div>
+
+            <div class="btn-group" id="">
+                <button class="btn-Prev">Anterior</button>
+                <button class="btn-next">Próximo</button>
+            </div>
         </section>
+
+        <hr />
 
         <!-- #endregion  -->
 
         <!-- #region professional skills -->
 
         <section class="layer" id="professional-skills">
+            <h1><strong>Habilidades Profissionais</strong></h1>
 
+            <div class="card">
+                <div class="card-content">
+                    <h3><strong>Front-end</strong></h3>
+                    <ul>
+                        <li>Javascript</li>
+                        <li>HTML5</li>
+                        <li>CSS3</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <h3><strong>Back-end</strong></h3>
+                    <ul>
+                        <li>C#</li>
+                        <li>.NET Framework</li>
+                        <li>.NET Core</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <h3><strong>Banco de Dados</strong></h3>
+                    <ul>
+                        <li>SQL Server</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <h3><strong>DevOps</strong></h3>
+                    <ul>
+                        <li>Git</li>
+                        <li>GitHub</li>
+                        <li>Microsoft TFS</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <h3><strong>Outras</strong></h3>
+                    <ul>
+                        <li>API Rest</li>
+                        <li>microsserviços</li>
+                        <li>Clean Architecture</li>
+                        <li>UML</li>
+                        <li>Scrum</li>
+                        <li>Pacote Office</li>
+                        <li>Pacote Adobe</li>
+                    </ul>
+                </div>
+            </div>
         </section>
+
+        <hr />
 
         <!-- #endregion  -->
 
         <!-- #region certification -->
 
         <section class="layer" id="certification">
+            <h1><strong>Certificações</strong></h1>
 
+            <div class="card">
+                <img class="card-img" src="..." alt="...">
+                <div class="card-content">
+                    <h3><strong>SFPC</strong></h3>
+                    <p>Scrum Foundation Professional Certificate (SFPC) - 2019</p>
+                </div>
+            </div>
         </section>
+
+        <hr />
 
         <!-- #endregion  -->
 
         <!-- #region education -->
 
         <section class="layer" id="education">
+            <h1><strong>Educação</strong></h1>
 
+            <div class="vertical-timeline">
+                <hr class="vertical-hr" />
+                <div class="timeline-circle"></div>
+                <div class="timeline-circle"></div>
+            </div>
+
+            <div class="timeline card">
+                <div class="card-content">
+                    <p>Estudando - previsão, Janeiro de 2024</p>
+                    <h3><strong>Pós-Graduação em Engenharia DevOps</strong></h3>
+                    <p><strong>Universidade:</strong> Faculdade Focus (EAD)</p>
+                </div>
+            </div>
+
+            <div class="timeline card">
+                <div class="card-content">
+                    <p>Dezembro de 2014</p>
+                    <h3><strong>Bacharel em Sistemas da Informação</strong></h3>
+                    <p><strong>Universidade:</strong> Faculdade do Litoral Sul Paulista (FALS)</p>
+                </div>
+            </div>
         </section>
+
+        <hr />
 
         <!-- #endregion  -->
 
         <!-- #region experience -->
 
         <section class="layer" id="experience">
+            <h1><strong>Experiência</strong></h1>
 
+            <div class="vertical-timeline">
+                <hr class="vertical-hr" />
+                <div class="timeline-circle"></div>
+                <div class="timeline-circle"></div>
+            </div>
+
+            <div class="timeline card">
+                <div class="card-content">
+                    <p>2022 - 2023</p>
+                    <h3><strong>Programador de Computador</strong></h3>
+                    <p><strong>Empresa:</strong> 
+                        Prefeitura da Estância Balneária de Praia Grande - Secretaria de Planejamento.
+                    </p>
+                    <p><strong>Endereço:</strong> 
+                        Av. Presidente Kennedy, 9000 - Praia Grande, São Paulo, Brasil.
+                    </p>
+                    <p>
+                        Programador de Computador Full Stack. Atuando no processo de
+                        desenvolvimento e manutenção de layouts de sites web, utilizando as linguagens front-end
+                        Javascript, CSS3 e HTML5. Programando/mantendo aplicações Web e API’s Rest, utilizando as
+                        aplicações back-end ASP.NET C# e Banco SQL Server. Adotando os conceitos de Programação em
+                        Clean Architecture.
+                    </p>
+                </div>
+            </div>
+
+            <div class="timeline card">
+                <div class="card-content">
+                    <p>2013</p>
+                    <h3><strong>Estagiário</strong></h3>
+                    <p><strong>Empresa:</strong> 
+                        Prefeitura da Estância Balneária de Praia Grande - Secretaria de Educação.
+                    </p>
+                    <p><strong>Endereço:</strong> 
+                        Av. Presidente Kennedy, 9000 - Praia Grande, São Paulo, Brasil.
+                    </p>
+                    <p>
+                        Estagiário no departamento de inclusão digital, executando como professor de
+                        informática para alunos de escola municipal e orientando os professores na utilização das
+                        aplicações,
+                        hardwares e softwares em laboratório de informática e salas de aula.
+                    </p>
+                </div>
+            </div>
         </section>
 
         <!-- #endregion  -->
 
-        <!-- #region message -->
+        <!-- #region final message -->
 
-        <section class="layer" id="message">
+        <section class="layer" id="final-message">
+            <div class="card">
+                <div class="card-content">
+                    <h3><strong>Vamos trabalhar juntos!</strong></h3>
+                    <p>“Os detalhes importam, vale a pena esperar para acertar”.</p>
+                    <p><strong>Steve Jobs</strong></p>
+                </div>
 
+                <a class="btn-contact" href="https://wa.me/5513981444022" target="_blank">
+                    <span>CONTATO</span>
+                </a>
+            </div>
         </section>
 
         <!-- #endregion  -->
@@ -205,7 +415,8 @@
         <div>
             Copyrigth <span>&copy;</span> 2023 Portifólio. Design By
             <a href="https://www.linkedin.com/in/lucas-ara%C3%BAjo-95b312181/" target="_blank"
-                class="text-decoration-none">Lucas Araújo</a>
+                class="text-decoration-none">Lucas Araújo
+            </a>
         </div>
     </footer>
 </body>
