@@ -1,0 +1,34 @@
+@font-face {
+    font-family: "arimo-regular";
+    src: url("../lib/font/arimo/arimo-regular.woff2") format("woff2"), url("../lib/font/arimo/arimo-regular.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ernestone-regular';
+    src: url('../lib/font/Ernestone-Script/ernestone.woff2') format('woff2'), url('../lib/font/Ernestone-Script/ernestone.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --base-font: 'arimo-regular', sans-serif;
+    --highlight-font: 'ernestone-regular', serif;
+}
+
+/* #region global */
+
+body {
+    font-family: var(--base-font);
+}
+
+.highlight-font {
+    font-family: var(--highlight-font);
+}
+
+a {
+    text-decoration: none;
+}
+
+/* #endregion */
