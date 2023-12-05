@@ -1,8 +1,51 @@
 :root {
     --dark-bg-color: #212934;
+    --dark-bg-color-highlight: #2a303e;
+    --light-bg-color: #f9fbfd;
+    --light-bg-color-highlight: #e9eef4;
 }
 
-.dark {
+/* #region Dark */
+
+body.dark {
     color: white;
     background-color: var(--dark-bg-color);
 }
+
+.dark header #btn-dark {
+    border: none;
+    background-color: transparent;
+}
+
+.dark main .card,
+.dark footer {
+    background-color: var(--dark-bg-color-highlight);
+}
+
+.dark .light-icon {
+    display: none;
+}
+
+/* #endregion */
+
+/* #region Light */
+
+body.light {
+    background-color: var(--light-bg-color);
+}
+
+.light header #btn-ligth {
+    border: none;
+    background-color: transparent;
+}
+
+.light main .card,
+.light footer {
+    background-color: var(--light-bg-color-highlight);
+}
+
+.light .dark-icon {
+    display: none;
+}
+
+/* #endregion */
