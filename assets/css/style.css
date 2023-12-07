@@ -7,26 +7,85 @@
 
 @font-face {
     font-family: 'ernestone-regular';
-    src: url('../lib/font/Ernestone-Script/ernestone.woff2') format('woff2'), url('../lib/font/Ernestone-Script/ernestone.woff') format('woff');
+    src: url('../lib/font/ernestone/ernestone.woff2') format('woff2'), url('../lib/font/ernestone/ernestone.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
 
 :root {
     --base-font: 'arimo-regular', sans-serif;
-    --highlight-font: 'ernestone-regular', serif;
+    --highlight-font: 'ernestone-regular', sans-serif;
 
     --blue: #03a9f4;
+    --blue-hover: #1195d0;
 }
 
 /* #region global */
 
-body {
-    font-family: var(--base-font);
+/* * {
+    margin: 0px;
+    padding: 0px;
+} */
+
+/* .btn {
+
+} */
+
+.btn-blue {
+    color: white;
+    background-color: var(--blue);
+    border-radius: 6px;
+    padding: 12px;
+    margin: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.btn-blue:hover {
+    background-color: var(--blue-hover);
 }
 
 .highlight-font {
     font-family: var(--highlight-font);
+}
+
+.box-shadow {
+    box-shadow: 4px 4px 6px 1px #0000002b;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.direction-row {
+    flex-direction: row;
+}
+
+.direction-column {
+    flex-direction: column;
+}
+
+.justify-start {
+    justify-content: start;
+    align-items: center;
+}
+
+.justify-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.justify-end {
+    justify-content: end;
+    align-items: center;
+}
+
+.justify-space-between {
+    justify-content: space-between;
+}
+
+body {
+    font-family: var(--base-font);
 }
 
 a {
@@ -34,9 +93,21 @@ a {
     color: var(--blue);
 }
 
+button {
+    border: none;
+}
+
 /* #endregion */
 
 /* #region Header */
+
+header {
+    margin-bottom: 40px;
+}
+
+header nav {
+    padding: 30px 60px 0px 0px;
+}
 
 /* #endregion */
 
@@ -45,5 +116,9 @@ a {
 /* #endregion */
 
 /* #region Footer */
+
+footer {
+    margin-top: 40px;
+}
 
 /* #endregion */
