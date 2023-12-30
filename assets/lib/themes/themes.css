@@ -5,6 +5,10 @@
     --light-bg-color-highlight: #e9eef4;
 }
 
+.theme-icon {
+    margin-right: 30px;
+}
+
 /* #region Dark */
 
 body.dark {

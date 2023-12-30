@@ -1,0 +1,136 @@
+{
+    "presentation": [
+        {
+            "salutation": "Olá, meu nome é",
+            "profession": "Desenvolvedor Full-Stack",
+            "description": "Programador e desenvolvedor de sistemas inovador e detalhista, com profundo entusiasmo em criar soluções de software de ponta e otimizar sistemas complexos."
+        }
+    ],
+    "biography": [
+        {
+            "title": "Biografia",
+            "initialContent": "Brasileiro, casado e com dois filhos. Ansioso para ingressar em uma organização com visão de futuro que promove a criatividade e adota os avanços tecnológicos. Em busca de uma função desafiadora em um ambiente dinâmico e colaborativo, onde possa aplicar minha proficiência técnica e paixão por entregar soluções de software de alta qualidade, aspiro projetar e implementar aplicativos escaláveis e eficientes que elevem as experiências do usuário e simplifiquem processos críticos de negócios garantindo a integração perfeita entre diversos sistemas.",
+            "finalContent": "Comprometido com o aprendizado contínuo e com as tecnologias emergentes, estou preparado para contribuir com minhas fortes habilidades de resolução de problemas e mentalidade colaborativa para impulsionar o sucesso da equipe de desenvolvimento e superar os objetivos organizacionais.",
+            "personalInformation": [
+                {
+                    "name": "Nome: ",
+                    "birthday": "<strong>Nascimento: </strong>2 de Setembro de 1991",
+                    "age": "<strong>Idade: </strong>32 anos",
+                    "address": "<strong>Endereço: </strong>Praia Grande, São Paulo, Brasil",
+                    "phone": "Celular: "
+                }
+            ]
+        }
+    ],
+    "projects": [
+        {
+            "viewWork": "Ver Trabalho",
+            "1": [
+                {
+                    "title": "Projeto 1",
+                    "description": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iure temporibus ratione voluptatum quos est quas, incidunt perferendis quo maxime quod earum, consequuntur iusto placeat magni distinctio. Beatae perspiciatis est pariatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio optio dicta velit numquam nisi perspiciatis incidunt voluptates deserunt provident sequi reprehenderit suscipit rem laborum nostrum, excepturi culpa vel nesciunt repellendus."
+                }
+            ],
+            "2": [
+                {
+                    "title": "Projeto 2",
+                    "description": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iure temporibus ratione voluptatum quos est quas, incidunt perferendis quo maxime quod earum, consequuntur iusto placeat magni distinctio. Beatae perspiciatis est pariatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio optio dicta velit numquam nisi perspiciatis incidunt voluptates deserunt provident sequi reprehenderit suscipit rem laborum nostrum, excepturi culpa vel nesciunt repellendus."
+                }
+            ],
+            "3": [
+                {
+                    "title": "Projeto 3",
+                    "description": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iure temporibus ratione voluptatum quos est quas, incidunt perferendis quo maxime quod earum, consequuntur iusto placeat magni distinctio. Beatae perspiciatis est pariatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio optio dicta velit numquam nisi perspiciatis incidunt voluptates deserunt provident sequi reprehenderit suscipit rem laborum nostrum, excepturi culpa vel nesciunt repellendus."
+                }
+            ]
+        }
+    ],
+    "testimonials": [
+        {
+            "title": "Depoimentos",
+            "1": [
+                {
+                    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla.cing elit. Lorem ipsum dolor.",
+                    "personName": "Nome Pessoa",
+                    "profession": "Desenvolvedor Full-Stack"
+                }
+            ],
+            "2": [
+                {
+                    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla.cing elit. Lorem ipsum dolor.",
+                    "personName": "Nome Pessoa",
+                    "profession": "Desenvolvedor Front-end"
+                }
+            ]
+        }
+    ],
+    "professionalSkills": [
+        {
+            "title": "Habilidades Profissionais",
+            "database": "Banco de Dados",
+            "others": [
+                {
+                    "title": "Outros",
+                    "restApi": "API Rest",
+                    "microservices": "Microsserviços",
+                    "adobePackage": "Pacote Adobe",
+                    "officePackage": "Pacote Office"
+                }
+            ]
+        }
+    ],
+    "certifications": [
+        {
+            "title": "Certificações"
+        }
+    ],
+    "education": [
+        {
+            "title": "Educação",
+            "university": "Universidade:",
+            "DevOps": [
+                {
+                    "termination": "Estudando - previsão, Janeiro de 2024",
+                    "title": "Pós-Graduação em Engenharia DevOps"
+                }
+            ],
+            "TIBachelor": [
+                {
+                    "termination": "Dezembro de 2014",
+                    "title": "Bacharel em Sistemas da Informação"
+                }
+            ]
+        }
+    ],
+    "experience": [
+        {
+            "title": "Experiência",
+            "company": "Empresa:",
+            "address": "Endereço:",
+            "1": [
+                {
+                    "profession": "Programador de Computador",
+                    "description": "Programador de Computador Full Stack. Atuando no processo de desenvolvimento e manutenção de layouts de sites web, utilizando as linguagens front-end Javascript, CSS3 e HTML5. Programando/mantendo aplicações Web e API’s Rest, utilizando as aplicações back-end ASP.NET C# e Banco SQL Server. Adotando os conceitos de Programação em Clean Architecture."
+                }
+            ],
+            "2": [
+                {
+                    "profession": "Estagiário",
+                    "description": "Estagiário no departamento de inclusão digital, executando como professor de informática para alunos de escola municipal e orientando os professores na utilização das aplicações, hardwares e softwares em laboratório de informática e salas de aula."
+                }
+            ]
+        }
+    ],
+    "finalMessage": [
+        {
+            "invitation": "Vamos trabalhar juntos!",
+            "message": "“Os detalhes importam, vale a pena esperar para acertar”.",
+            "contact": "CONTATO"
+        }
+    ],
+    "footer": [
+        {
+            "portifolio": "Portifólio"
+        }
+    ]
+}

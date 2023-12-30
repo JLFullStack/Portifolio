@@ -10,7 +10,9 @@
     <!-- #region styles -->
 
     <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/animation.css" />
     <link rel="stylesheet" href="assets/lib/themes/themes.css" />
+    <link rel="stylesheet" href="assets/lib/languages/languages.css" />
     <link rel="stylesheet" href="assets/css/responsive.css" />
 
     <!-- #endregion -->
@@ -21,28 +23,34 @@
         <nav class="d-flex direction-row justify-end">
             <button id="btn-ligth" class="btn theme-icon light-icon"><img src="assets/svg/sun.svg" alt="ligth"></button>
             <button id="btn-dark" class="btn theme-icon dark-icon"><img src="assets/svg/moon.svg" alt="dark"></button>
-            <button id="btn-pt" class="btn btn-blue">PT</button>
-            <button id="btn-en" class="btn btn-blue">EN</button>
+            <button id="btn-pt" class="btn-language btn btn-blue notranslate active" language="portuguese">PT</button>
+            <button id="btn-en" class="btn-language btn btn-blue notranslate" language="english">EN</button>
         </nav>
     </header>
 
     <main>
-        <button id="btn-scroll" class="btn btn-blue">scroll</button>
+        <!-- <button id="btn-scroll" class="btn btn-blue">
+            <svg xmlns="http://www.w3.org/2000/svg" width="45px" height="45px" fill="currentColor"
+                class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                <path
+                    d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707z" />
+            </svg>
+        </button> -->
 
         <!-- #region presentation  -->
 
         <section class="layer d-flex direction-row justify-center" id="presentation">
             <article>
-                <h5>Olá, meu nome é</h5>
+                <h5 id="salutation">Olá, meu nome é</h5>
                 <h1><strong>Lucas Araújo</strong></h1>
-                <h4><strong>Desenvolvedor Full-Stack</strong></h4>
-                <p>
+                <h4><strong id="profession">Desenvolvedor Full-Stack</strong></h4>
+                <p id="description">
                     Programador e desenvolvedor de sistemas inovador e detalhista, com profundo entusiasmo
                     em criar soluções de software de ponta e otimizar sistemas complexos.
                 </p>
-                <a class="btn-download-cv btn btn-blue" href="https://drive.google.com/file/d/1nFcJppo1Oi0R_pzhCFTUMQq9U6nOth4_/view"
-                    target="_blank">
-                    <span>Download CV</span>
+                <a class="btn-download-cv btn btn-blue"
+                    href="https://drive.google.com/file/d/1nFcJppo1Oi0R_pzhCFTUMQq9U6nOth4_/view" target="_blank">
+                    <span class="notranslate">Download CV</span>
                 </a>
             </article>
 
@@ -94,8 +102,8 @@
             </circle>
 
             <article>
-                <h1><strong>Biografia</strong></h1>
-                <p>
+                <h1><strong id="title">Biografia</strong></h1>
+                <p id="initial-content">
                     Brasileiro, casado e com dois filhos. Ansioso para ingressar em
                     uma organização com visão de futuro que promove a criatividade e adota os avanços tecnológicos.
                     Em busca de uma função desafiadora em um ambiente dinâmico e colaborativo, onde possa aplicar
@@ -105,24 +113,24 @@
                     sistemas.
                 </p>
 
-                <p>
+                <p id="final-content">
                     Comprometido com o aprendizado contínuo e com as tecnologias emergentes, estou preparado para
                     contribuir com minhas fortes habilidades de resolução de problemas e mentalidade colaborativa
                     para impulsionar o sucesso da equipe de desenvolvimento e superar os objetivos organizacionais.
                 </p>
 
-                <div id="personal-information">
-                    <div>
-                        <span><strong>Nome: </strong>José Lucas Alcântara de Araújo</span>
-                        <span><strong>Nascimento: </strong>2 de Setembro de 1991</span>
-                        <span><strong>Idade: </strong>32 anos</span>
-                        <span><strong>endereço: </strong>Praia Grande, São Paulo, Brasil</span>
+                <div id="personal-information" class="d-flex direction-row">
+                    <div class="d-flex direction-column">
+                        <span><strong id="name">Nome: </strong>José Lucas Alcântara de Araújo</span>
+                        <span id="birthday"><strong>Nascimento: </strong>2 de Setembro de 1991</span>
+                        <span id="age"><strong>Idade: </strong>32 anos</span>
+                        <span id="address"><strong>Endereço: </strong>Praia Grande, São Paulo, Brasil</span>
                     </div>
 
-                    <div>
-                        <span><strong>Celular: </strong>+55 13 98144-4022</span>
-                        <span>
-                            <strong>e-mail: </strong>
+                    <div class="d-flex direction-column">
+                        <span><strong id="phone">Celular: </strong>+55 13 98144-4022</span>
+                        <span id="email">
+                            <strong>Email: </strong>
                             <a href="mailto:jledicao@gmail.com">jledicao@gmail.com</a>
                         </span>
                     </div>
@@ -136,9 +144,9 @@
 
         <section class="layer d-flex direction-column justify-center" id="projects">
             <div class="d-flex direction-row">
-                <article>
-                    <h1 id="project-title"><strong>PROJETO 1</strong></h1>
-                    <p id="project-description">
+                <article featuredProject="1">
+                    <h1><strong class="title">PROJETO 1</strong></h1>
+                    <p class="description">
                         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iure temporibus ratione voluptatum
                         quos
                         est quas, incidunt perferendis quo maxime quod earum, consequuntur iusto placeat magni
@@ -154,21 +162,26 @@
                 </article>
 
                 <div class="carousel carousel-item-group d-flex direction-row justify-center">
-                    <div class="carousel-item d-flex direction-column">
-                        <label>Projeto 1</label>
+                    <div class="carousel-item d-flex direction-column" Project="1">
+                        <label class="title">Projeto 1</label>
                         <img src="..." class="box-shadow d-block w-100" alt="...">
                     </div>
 
-                    <div class="carousel-item d-flex direction-column">
-                        <label>Projeto 2</label>
+                    <div class="carousel-item d-flex direction-column" Project="2">
+                        <label class="title">Projeto 2</label>
+                        <img src="..." class="box-shadow d-block w-100" alt="...">
+                    </div>
+
+                    <div class="carousel-item d-flex direction-column" Project="3">
+                        <label class="title">Projeto 3</label>
                         <img src="..." class="box-shadow d-block w-100" alt="...">
                     </div>
                 </div>
             </div>
 
             <div class="btn-group">
-                <button class="btn-Prev">Anterior</button>
-                <button class="btn-next">Próximo</button>
+                <button class="btn btn-Prev">Anterior</button>
+                <button class="btn btn-next">Próximo</button>
             </div>
         </section>
 
@@ -177,41 +190,39 @@
         <!-- #region testimonials -->
 
         <section class="layer" id="testimonials">
-            <h1><strong>Depoimentos</strong></h1>
-            
+            <h1><strong class="title">Depoimentos</strong></h1>
+
             <div class="d-flex direction-column justify-center">
                 <div class="card-group d-flex direction-row justify-space-between">
-                    <div class="card box-shadow d-flex direction-row justify-center">
+                    <div testimonial="1" class="card box-shadow d-flex direction-row justify-center">
                         <img class="card-img" src="..." alt="...">
                         <div class="card-content">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error inventore fugiat
-                                cum nobis, recusandae perferendis, a iste quos sequi fugit et, ad rerum ipsa. Mollitia at
-                                veritatis ut eligendi aut?
+                            <p class="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus,
+                                nulla.cing elit. Lorem ipsum dolor.
                             </p>
-                            <a href=""><strong>José Lucas Alcântara de Araújo</strong></a>
-                            <p>Desenvolvedor Full-Stack</p>
+                            <a href=""><strong class="person-name">José Lucas Alcântara de Araújo</strong></a>
+                            <p class="profession">Desenvolvedor Full-Stack</p>
                         </div>
                     </div>
-        
-                    <div class="card box-shadow d-flex direction-row justify-center">
+
+                    <div testimonial="2" class="card box-shadow d-flex direction-row justify-center">
                         <img class="card-img" src="..." alt="...">
                         <div class="card-content">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error inventore fugiat
-                                cum nobis, recusandae perferendis, a iste quos sequi fugit et, ad rerum ipsa. Mollitia at
-                                veritatis ut eligendi aut?
+                            <p class="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus,
+                                nulla.cing elit. Lorem ipsum dolor.
                             </p>
-                            <a href=""><strong>José Lucas Alcântara de Araújo</strong></a>
-                            <p>Desenvolvedor Front-end</p>
+                            <a href=""><strong class="person-name">José Lucas Alcântara de Araújo</strong></a>
+                            <p class="profession">Desenvolvedor Front-end</p>
                         </div>
                     </div>
                 </div>
-                
-    
-                <div class="btn-group" id="">
-                    <button class="btn-Prev">Anterior</button>
-                    <button class="btn-next">Próximo</button>
+
+
+                <div class="btn-group">
+                    <button class="btn btn-Prev">Anterior</button>
+                    <button class="btn btn-next">Próximo</button>
                 </div>
-            </div>            
+            </div>
         </section>
 
         <hr />
@@ -221,7 +232,7 @@
         <!-- #region professional skills -->
 
         <section class="layer" id="professional-skills">
-            <h1><strong>Habilidades Profissionais</strong></h1>
+            <h1><strong class="title">Habilidades Profissionais</strong></h1>
 
             <div class="card-group d-flex direction-row justify-space-between">
                 <div class="card box-shadow">
@@ -234,7 +245,7 @@
                         </ul>
                     </div>
                 </div>
-    
+
                 <div class="card box-shadow">
                     <div class="card-content">
                         <h3><strong>Back-end</strong></h3>
@@ -245,16 +256,16 @@
                         </ul>
                     </div>
                 </div>
-    
+
                 <div class="card box-shadow">
                     <div class="card-content">
-                        <h3><strong>Banco de Dados</strong></h3>
+                        <h3><strong id="database">Banco de Dados</strong></h3>
                         <ul>
                             <li>SQL Server</li>
                         </ul>
                     </div>
                 </div>
-    
+
                 <div class="card box-shadow">
                     <div class="card-content">
                         <h3><strong>DevOps</strong></h3>
@@ -265,22 +276,22 @@
                         </ul>
                     </div>
                 </div>
-    
-                <div class="card box-shadow">
+
+                <div id="others" class="card box-shadow">
                     <div class="card-content">
-                        <h3><strong>Outras</strong></h3>
+                        <h3><strong class="title">Outras</strong></h3>
                         <ul>
-                            <li>API Rest</li>
-                            <li>microsserviços</li>
+                            <li id="restApi">API Rest</li>
+                            <li id="microservices">microsserviços</li>
                             <li>Clean Architecture</li>
                             <li>UML</li>
                             <li>Scrum</li>
-                            <li>Pacote Office</li>
-                            <li>Pacote Adobe</li>
+                            <li id="adobe-package">Pacote Adobe</li>
+                            <li id="office-package">Pacote Office</li>
                         </ul>
                     </div>
                 </div>
-            </div>   
+            </div>
         </section>
 
         <hr />
@@ -289,8 +300,8 @@
 
         <!-- #region certification -->
 
-        <section class="layer" id="certification">
-            <h1><strong>Certificações</strong></h1>
+        <section class="layer" id="certifications">
+            <h1><strong class="title">Certificações</strong></h1>
 
             <div class="card box-shadow d-flex direction-row justify-center">
                 <img class="card-img" src="..." alt="...">
@@ -308,7 +319,7 @@
         <!-- #region education -->
 
         <section class="layer" id="education">
-            <h1><strong>Educação</strong></h1>
+            <h1><strong class="title">Educação</strong></h1>
 
             <div class="vertical-timeline">
                 <hr class="vertical-hr" />
@@ -316,19 +327,19 @@
                 <div class="timeline-circle"></div>
             </div>
 
-            <div class="timeline card box-shadow">
+            <div class="timeline card box-shadow" academicEducation="DevOps">
                 <div class="card-content">
-                    <p>Estudando - previsão, Janeiro de 2024</p>
-                    <h3><strong>Pós-Graduação em Engenharia DevOps</strong></h3>
-                    <p><strong>Universidade:</strong> Faculdade Focus (EAD)</p>
+                    <p class="termination">Estudando - previsão, Janeiro de 2024</p>
+                    <h3><strong class="title">Pós-Graduação em Engenharia DevOps</strong></h3>
+                    <p><strong class="university">Universidade:</strong> Faculdade Focus (EAD)</p>
                 </div>
             </div>
 
-            <div class="timeline card box-shadow">
+            <div class="timeline card box-shadow" academicEducation="TIBachelor">
                 <div class="card-content">
-                    <p>Dezembro de 2014</p>
-                    <h3><strong>Bacharel em Sistemas da Informação</strong></h3>
-                    <p><strong>Universidade:</strong> Faculdade do Litoral Sul Paulista (FALS)</p>
+                    <p class="termination">Dezembro de 2014</p>
+                    <h3><strong class="title">Bacharel em Sistemas da Informação</strong></h3>
+                    <p><strong class="university">Universidade:</strong> Faculdade do Litoral Sul Paulista (FALS)</p>
                 </div>
             </div>
         </section>
@@ -340,7 +351,7 @@
         <!-- #region experience -->
 
         <section class="layer" id="experience">
-            <h1><strong>Experiência</strong></h1>
+            <h1><strong class="title">Experiência</strong></h1>
 
             <div class="vertical-timeline">
                 <hr class="vertical-hr" />
@@ -348,17 +359,17 @@
                 <div class="timeline-circle"></div>
             </div>
 
-            <div class="timeline card box-shadow">
+            <div class="timeline card box-shadow" experience="1">
                 <div class="card-content">
                     <p>2022 - 2023</p>
-                    <h3><strong>Programador de Computador</strong></h3>
-                    <p><strong>Empresa:</strong>
+                    <h3><strong class="profession">Programador de Computador</strong></h3>
+                    <p><strong class="company">Empresa:</strong>
                         Prefeitura da Estância Balneária de Praia Grande - Secretaria de Planejamento.
                     </p>
-                    <p><strong>Endereço:</strong>
+                    <p><strong class="address">Endereço:</strong>
                         Av. Presidente Kennedy, 9000 - Praia Grande, São Paulo, Brasil.
                     </p>
-                    <p>
+                    <p class="description">
                         Programador de Computador Full Stack. Atuando no processo de
                         desenvolvimento e manutenção de layouts de sites web, utilizando as linguagens front-end
                         Javascript, CSS3 e HTML5. Programando/mantendo aplicações Web e API’s Rest, utilizando as
@@ -368,17 +379,17 @@
                 </div>
             </div>
 
-            <div class="timeline card box-shadow">
+            <div class="timeline card box-shadow" experience="2">
                 <div class="card-content">
                     <p>2013</p>
-                    <h3><strong>Estagiário</strong></h3>
-                    <p><strong>Empresa:</strong>
+                    <h3><strong class="profession">Estagiário</strong></h3>
+                    <p><strong class="company">Empresa:</strong>
                         Prefeitura da Estância Balneária de Praia Grande - Secretaria de Educação.
                     </p>
-                    <p><strong>Endereço:</strong>
+                    <p><strong class="address">Endereço:</strong>
                         Av. Presidente Kennedy, 9000 - Praia Grande, São Paulo, Brasil.
                     </p>
-                    <p>
+                    <p class="description">
                         Estagiário no departamento de inclusão digital, executando como professor de
                         informática para alunos de escola municipal e orientando os professores na utilização das
                         aplicações,
@@ -395,13 +406,13 @@
         <section class="layer d-flex justify-center" id="final-message">
             <div class="card box-shadow d-flex direction-row justify-center">
                 <div class="card-content">
-                    <h3><strong>Vamos trabalhar juntos!</strong></h3>
-                    <p>“Os detalhes importam, vale a pena esperar para acertar”.</p>
+                    <h3><strong id="invitation">Vamos trabalhar juntos!</strong></h3>
+                    <p id="message">“Os detalhes importam, vale a pena esperar para acertar”.</p>
                     <p><strong>Steve Jobs</strong></p>
                 </div>
 
                 <a class="btn-contact btn btn-blue" href="https://wa.me/5513981444022" target="_blank">
-                    <span>CONTATO</span>
+                    <span id="contact">CONTATO</span>
                 </a>
             </div>
         </section>
@@ -443,7 +454,7 @@
         </div>
 
         <div>
-            Copyrigth <span>&copy;</span> 2023 Portifólio. Design By
+            Copyrigth <span>&copy;</span> 2023 <span id="portifolio">Portifólio.</span> Design By
             <a href="https://www.linkedin.com/in/lucas-ara%C3%BAjo-95b312181/" target="_blank"
                 class="highlight-font">Lucas Araújo
             </a>
@@ -453,7 +464,9 @@
     <!-- #region scripts -->
 
     <script src="assets/js/script.js"></script>
+    <script src="assets/js/animation.js"></script>
     <script src="assets/lib/themes/themes.js"></script>
+    <script src="assets/lib/languages/languages.js"></script>
 
     <!-- #endregion -->
 </body>

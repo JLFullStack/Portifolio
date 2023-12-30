@@ -1,0 +1,15 @@
+#btn-pt {
+    margin-right: 0px;
+}
+
+#btn-en {
+    margin-left: 0px;
+}
+
+.btn-language:not(.active) {
+    background-color: transparent;
+}
+
+.light .btn-language:not(.active) {
+    color: black;
+}

@@ -22,14 +22,29 @@
 
 /* #region global */
 
-/* * {
+* {
     margin: 0px;
     padding: 0px;
+}
+
+/* #btn-scroll {
+    text-decoration: none;
+    position: fixed;
+    right: 20px;
+    bottom: 0;
+    opacity: 0;
+    transition: all .6s;
+    color: var(----blue);
+}
+
+#btn-scroll.active {
+    bottom: 7rem;
+    opacity: 1;
 } */
 
-/* .btn {
-
-} */
+.btn {
+    cursor: pointer;
+}
 
 .btn-blue {
     color: white;
@@ -118,7 +133,7 @@ header nav {
 /* #region Footer */
 
 footer {
-    margin-top: 40px;
+    margin: 40px 0px 0px 0px;
 }
 
 /* #endregion */

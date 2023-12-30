@@ -1,0 +1,136 @@
+{
+    "presentation": [
+        {
+            "salutation": "Hello, my name is",
+            "profession": "Full-Stack Developer",
+            "description": "Innovative and detail-oriented programmer and systems developer with deep enthusiasm for creating cutting-edge software solutions and optimizing complex systems."
+        }
+    ],
+    "biography": [
+        {
+            "title": "Biography",
+            "initialContent": "Brazilian, married and with two children. Looking forward to joining a forward-thinking organization that promotes creativity and embraces technological advancements. Seeking a challenging role in a dynamic and collaborative environment where I can apply my technical proficiency and passion for delivering high-quality software solutions, I aspire to design and implement scalable and efficient applications that elevate user experiences and simplify critical business processes ensuring perfect integration between different systems.",
+            "finalContent": "Committed to continuous learning and emerging technologies, I am prepared to contribute my strong problem-solving skills and collaborative mindset to drive the development team's success and exceed organizational goals.",
+            "personalInformation": [
+                {
+                    "name": "Name: ",
+                    "birthday": "<strong>Birthday: </strong>2th September 1991",
+                    "age": "<strong>Age: </strong>32 years",
+                    "address": "<strong>Address: </strong>Praia Grande, São Paulo, Brazil",
+                    "phone": "Phone: "
+                }
+            ]
+        }
+    ],
+    "projects": [
+        {
+            "viewWork": "View Work",
+            "1": [
+                {
+                    "title": "Project 1",
+                    "description": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iure temporibus ratione voluptatum quos est quas, incidunt perferendis quo maxime quod earum, consequuntur iusto placeat magni distinctio. Beatae perspiciatis est pariatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio optio dicta velit numquam nisi perspiciatis incidunt voluptates deserunt provident sequi reprehenderit suscipit rem laborum nostrum, excepturi culpa vel nesciunt repellendus."
+                }
+            ],
+            "2": [
+                {
+                    "title": "Project 2",
+                    "description": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iure temporibus ratione voluptatum quos est quas, incidunt perferendis quo maxime quod earum, consequuntur iusto placeat magni distinctio. Beatae perspiciatis est pariatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio optio dicta velit numquam nisi perspiciatis incidunt voluptates deserunt provident sequi reprehenderit suscipit rem laborum nostrum, excepturi culpa vel nesciunt repellendus."
+                }
+            ],
+            "3": [
+                {
+                    "title": "Project 3",
+                    "description": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iure temporibus ratione voluptatum quos est quas, incidunt perferendis quo maxime quod earum, consequuntur iusto placeat magni distinctio. Beatae perspiciatis est pariatur. Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio optio dicta velit numquam nisi perspiciatis incidunt voluptates deserunt provident sequi reprehenderit suscipit rem laborum nostrum, excepturi culpa vel nesciunt repellendus."
+                }
+            ]
+        }
+    ],
+    "testimonials": [
+        {
+            "title": "Testimonials",
+            "1": [
+                {
+                    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla.cing elit. Lorem ipsum dolor.",
+                    "personName": "Person Name",
+                    "profession": "Full-Stack Developer"
+                }
+            ],
+            "2": [
+                {
+                    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla.cing elit. Lorem ipsum dolor.",
+                    "personName": "Person Name",
+                    "profession": "Front-end Developer"
+                }
+            ]
+        }
+    ],
+    "professionalSkills": [
+        {
+            "title": "Professional skills",
+            "database": "Database",
+            "others": [
+                {
+                    "title": "Others",
+                    "restApi": "Rest API",
+                    "microservices": "Microservices",
+                    "adobePackage": "Adobe Package",
+                    "officePackage": "Office Package"
+                }
+            ]
+        }
+    ],
+    "certifications": [
+        {
+            "title": "Certifications"
+        }
+    ],
+    "education": [
+        {
+            "title": "Education",
+            "university": "University:",
+            "DevOps": [
+                {
+                    "termination": "Studying - forecast January 2024",
+                    "title": "Postgraduate degree in DevOps Engineering"
+                }
+            ],
+            "TIBachelor": [
+                {
+                    "termination": "December 2014",
+                    "title": "Bachelor's Degree in Information Systems"
+                }
+            ]
+        }
+    ],
+    "experience": [
+        {
+            "title": "Experience",
+            "company": "Company:",
+            "address": "Address:",
+            "1": [
+                {
+                    "profession": "Computer Programmer",
+                    "description": "Full-Stack Computer Programmer. Working in the process of development and maintenance of website layouts, using front-end languages Javascript, CSS3 and HTML5. Programming/maintaining Web applications and Rest API’s, using the ASP.NET C# back-end applications and SQL Server Database. Adopting the concepts of Programming in Clean Architecture."
+                }
+            ],
+            "2": [
+                {
+                    "profession": "Trainee",
+                    "description": "Intern in the digital inclusion department, working as a professor of information technology for municipal school students and guiding teachers in the use of applications, hardware and software in computer labs and classrooms"
+                }
+            ]
+        }
+    ],
+    "finalMessage": [
+        {
+            "invitation": "Let's work together!",
+            "message": "“Details matter, it's worth waiting to get it right”.",
+            "contact": "CONTACT"
+        }
+    ],
+    "footer": [
+        {
+            "portifolio": "Portifolio"
+        }
+    ]
+}
