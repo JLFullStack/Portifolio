@@ -26,6 +26,10 @@ body.dark {
     background-color: var(--dark-bg-color-highlight);
 }
 
+.dark .light-icon {
+    display: none;
+}
+
 /* #endregion */
 
 /* #region Light */
