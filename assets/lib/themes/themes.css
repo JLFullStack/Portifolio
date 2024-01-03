@@ -26,10 +26,6 @@ body.dark {
     background-color: var(--dark-bg-color-highlight);
 }
 
-.dark .light-icon {
-    display: none;
-}
-
 /* #endregion */
 
 /* #region Light */
@@ -48,8 +44,9 @@ body.light {
     background-color: var(--light-bg-color-highlight);
 }
 
-.light .dark-icon {
-    display: none;
+.light .social-icon i svg,
+.light .social-icon i svg g {
+    fill: black;
 }
 
 /* #endregion */

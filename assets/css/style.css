@@ -27,21 +27,6 @@
     padding: 0px;
 }
 
-/* #btn-scroll {
-    text-decoration: none;
-    position: fixed;
-    right: 20px;
-    bottom: 0;
-    opacity: 0;
-    transition: all .6s;
-    color: var(----blue);
-}
-
-#btn-scroll.active {
-    bottom: 7rem;
-    opacity: 1;
-} */
-
 .btn {
     cursor: pointer;
 }
@@ -127,6 +112,14 @@ header nav {
 /* #endregion */
 
 /* #region Main */
+
+i svg#scroll-icon {
+    fill: var(--blue);
+}
+
+i svg#scroll-icon:hover {
+    fill: var(--blue-hover);
+}
 
 /* #endregion */
 
