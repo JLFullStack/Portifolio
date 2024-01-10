@@ -30,6 +30,10 @@ body.dark {
     display: none;
 }
 
+.dark .icon-group .social-icon {
+    background-color: var(--dark-bg-color);
+}
+
 /* #endregion */
 
 /* #region Light */
@@ -48,8 +52,13 @@ body.light {
     background-color: var(--light-bg-color-highlight);
 }
 
-.light .social-icon i svg,
-.light .social-icon i svg g {
+.light .icon-group .social-icon {
+    background-color: var(--light-bg-color);
+}
+
+.light svg#profile-icon g,
+.light .social-icon svg,
+.light .social-icon svg g {
     fill: black;
 }
 

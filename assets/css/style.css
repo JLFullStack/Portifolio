@@ -17,6 +17,7 @@
     --highlight-font: 'ernestone-regular', sans-serif;
 
     --blue: #03a9f4;
+    --dark-blue: #03a8f467;
     --blue-hover: #1195d0;
 }
 
@@ -25,6 +26,10 @@
 * {
     margin: 0px;
     padding: 0px;
+}
+
+.text-blue {
+    color: var(--blue);
 }
 
 .btn {
@@ -39,6 +44,7 @@
     margin: 8px;
     font-size: 1rem;
     font-weight: bold;
+    width: max-content;
 }
 
 .btn-blue:hover {
@@ -52,6 +58,16 @@
 .box-shadow {
     box-shadow: 4px 4px 6px 1px #0000002b;
 }
+
+.w-50{
+    width: 50%;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* #region display flex */
 
 .d-flex {
     display: flex;
@@ -67,7 +83,7 @@
 
 .justify-start {
     justify-content: start;
-    align-items: center;
+    align-items: start;
 }
 
 .justify-center {
@@ -82,7 +98,88 @@
 
 .justify-space-between {
     justify-content: space-between;
+    align-items: center;
 }
+
+/* #endregion */
+
+/* #region font size */
+
+.fs-1{
+    font-size: 1rem;
+}
+.fs-2{
+    font-size: 1.5rem;
+    line-height: 25px;
+}
+.fs-3{
+    font-size: 2rem;
+    letter-spacing: -2px;
+    line-height: 35px;
+}
+.fs-4{
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+}
+.fs-5{
+    font-size: 5rem;
+    word-spacing: -10px;
+    line-height: 80px;
+}
+
+/* #endregion */
+
+/* #region margin */
+
+.mt-1{
+    margin-top: 10px;
+}
+
+.mt-2{
+    margin-top: 20px;
+}
+
+.mt-3{
+    margin-top: 30px;
+}
+
+.mb-1{
+    margin-bottom: 10px;
+}
+
+.mb-2{
+    margin-bottom: 20px;
+}
+
+.mb-3{
+    margin-bottom: 30px;
+}
+
+.ms-1{
+    margin-left: 10px;
+}
+
+.ms-2{
+    margin-left: 20px;
+}
+
+.ms-3{
+    margin-left: 30px;
+}
+
+.me-1{
+    margin-right: 10px;
+}
+
+.me-2{
+    margin-right: 20px;
+}
+
+.me-3{
+    margin-right: 30px;
+}
+
+/* #endregion */
 
 body {
     font-family: var(--base-font);
@@ -95,6 +192,11 @@ a {
 
 button {
     border: none;
+}
+
+p {
+    text-indent: 1.5rem;
+    text-align: justify;
 }
 
 /* #endregion */
@@ -113,15 +215,119 @@ header nav {
 
 /* #region Main */
 
-i svg#scroll-icon {
+svg#scroll-icon {
     fill: var(--blue);
 }
 
-i svg#scroll-icon:hover {
+svg#scroll-icon:hover {
     fill: var(--blue-hover);
 }
 
-/* #endregion */
+hr.vertical-hr {
+    color: var(--blue);
+}
+
+hr:not(.vertical-hr) {
+    color: var(--dark-blue);
+    margin: 30px 120px;
+}
+
+.icon-group .social-icon {
+    display: inline-flex;
+    padding: 10px;
+    border: solid 3px var(--blue);
+    border-radius: 50%;
+    padding: 10px;
+    z-index: 1;
+}
+
+section.layer:not(#projects) {
+    margin-left: 60px;
+    margin-right: 60px;
+}
+
+/* #region presentation */
+
+#presentation {
+    margin-top: 60px;
+    margin-bottom: 150px;
+}
+
+#presentation article #description {
+    max-width: 500px;
+}
+
+#presentation .btn-download-cv{
+    margin-left: 0px;
+}
+
+/* #endregion presentation */
+
+/* #region biography */
+
+#biography {
+    margin-bottom: 150px;
+}
+
+#biography #profile-icon {
+    border: solid 3px var(--blue);
+    border-radius: 50%;
+    padding-top: 15px;
+    width: 350px;
+    height: 350px;
+    position: relative;
+    z-index: 0;
+}
+
+/* #region social icons position */
+
+#biography .social-icon {
+    position: relative;
+}
+
+#biography .social-icon.linkedin {
+    top: 244px;
+    right: 56px;
+}
+
+#biography .social-icon.github {
+    top: 325px;
+    right: 65px;
+}
+
+#biography .social-icon.whatsapp {
+    top: 380px;
+    right: 30px;
+}
+
+#biography .social-icon.skype {
+    top: 380px;
+    left: 30px;
+}
+
+#biography .social-icon.facebook {
+    top: 325px;
+    left: 65px;
+}
+
+#biography .social-icon.instagram {
+    top: 244px;
+    left: 56px;
+}
+
+/* #endregion social icons position */
+
+/* #endregion biography */
+
+/* #region projects */
+
+#projects {
+    margin: 0px 0px 150px 60px;
+}
+
+/* #endregion projects */
+
+/* #endregion Main */
 
 /* #region Footer */
 

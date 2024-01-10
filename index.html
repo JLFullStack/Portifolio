@@ -36,23 +36,23 @@
 
         <!-- #region presentation  -->
 
-        <section class="layer d-flex direction-row justify-center" id="presentation">
-            <article>
-                <h5 id="salutation">Olá, meu nome é</h5>
-                <h1><strong>Lucas Araújo</strong></h1>
-                <h4><strong id="profession">Desenvolvedor Full-Stack</strong></h4>
-                <p id="description">
+        <section class="layer d-flex direction-row justify-space-between" id="presentation">
+            <article class="d-flex direction-column justify-start w-50">
+                <h5 id="salutation" class="fs-2">Olá, meu nome é</h5>
+                <h1 class="fs-5"><strong>Lucas Araújo</strong></h1>
+                <h4 class="fs-3"><strong id="profession" class="text-blue">Desenvolvedor Full-Stack</strong></h4>
+                <p class="fs-1" id="description">
                     Programador e desenvolvedor de sistemas inovador e detalhista, com profundo entusiasmo
                     em criar soluções de software de ponta e otimizar sistemas complexos.
                 </p>
                 <a class="btn-download-cv btn btn-blue"
                     href="https://drive.google.com/file/d/1nFcJppo1Oi0R_pzhCFTUMQq9U6nOth4_/view" target="_blank">
-                    <span class="notranslate">Download CV</span>
+                    <span class="notranslate fs-1">Download CV</span>
                 </a>
             </article>
 
-            <div id="presentation-profile">
-                <img src="assets/img/profile-icon.png" alt="profile-1">
+            <div id="presentation-profile" class="w-50 text-center">
+                <img id="profile-icon" class="svg" src="assets/img/profile-icon.svg" alt="profile-1">
             </div>
         </section>
 
@@ -60,43 +60,43 @@
 
         <!-- #region biography -->
 
-        <section class="layer d-flex direction-row justify-center" id="biography">
-            <circle id="biography-profile">
-                <img class="box-shadow" src="assets/img/profile-icon.png" alt="profile-1">
-
+        <section class="layer d-flex direction-row justify-space-between" id="biography">
+            <circle id="biography-profile" class="text-center">
                 <div class="icon-group">
-                    <a class="social-icon" href="https://www.linkedin.com/in/lucas-ara%C3%BAjo-95b312181/"
+                    <a class="social-icon linkedin" href="https://www.linkedin.com/in/lucas-ara%C3%BAjo-95b312181/"
                         target="_blank">
                         <img id="linkedin-icon" class="svg" src="assets/svg/social-icons/linkedin.svg" alt="linkedin">
                     </a>
 
-                    <a class="social-icon" href="https://github.com/JLFullStack" target="_blank">
+                    <a class="social-icon github" href="https://github.com/JLFullStack" target="_blank">
                         <img id="github-icon" class="svg" src="assets/svg/social-icons/github.svg" alt="github">
                     </a>
 
-                    <a class="social-icon" href="https://wa.me/5513981444022" target="_blank">
+                    <a class="social-icon whatsapp" href="https://wa.me/5513981444022" target="_blank">
                         <img id="whatsapp-icon" class="svg" src="assets/svg/social-icons/whatsapp.svg"
                             alt="chat on whatsapp">
                     </a>
 
-                    <a class="social-icon" href="skype:live:fuscalca?chat" target="_blank">
+                    <a class="social-icon skype" href="skype:live:fuscalca?chat" target="_blank">
                         <img id="skype-icon" class="svg" src="assets/svg/social-icons/skype.svg" alt="skype">
                     </a>
 
-                    <a class="social-icon" href="https://www.facebook.com/LuhOficialPerfil" target="_blank">
+                    <a class="social-icon facebook" href="https://www.facebook.com/LuhOficialPerfil" target="_blank">
                         <img id="facebook-icon" class="svg" src="assets/svg/social-icons/facebook.svg" alt="facebook">
                     </a>
 
-                    <a class="social-icon" href="https://www.instagram.com/lucas._luh/" target="_blank">
+                    <a class="social-icon instagram" href="https://www.instagram.com/lucas._luh/" target="_blank">
                         <img id="instagram-icon" class="svg" src="assets/svg/social-icons/instagram.svg"
                             alt="instagram">
                     </a>
+
+                    <img id="profile-icon" class="svg box-shadow" src="assets/img/profile-icon.svg" alt="profile-1">
                 </div>
             </circle>
 
-            <article>
-                <h1><strong id="title">Biografia</strong></h1>
-                <p id="initial-content">
+            <article class="ms-3">
+                <h1><strong id="title" class="fs-4">Biografia</strong></h1>
+                <p id="initial-content" class="mb-1">
                     Brasileiro, casado e com dois filhos. Ansioso para ingressar em
                     uma organização com visão de futuro que promove a criatividade e adota os avanços tecnológicos.
                     Em busca de uma função desafiadora em um ambiente dinâmico e colaborativo, onde possa aplicar
@@ -106,7 +106,7 @@
                     sistemas.
                 </p>
 
-                <p id="final-content">
+                <p id="final-content" class="mb-3">
                     Comprometido com o aprendizado contínuo e com as tecnologias emergentes, estou preparado para
                     contribuir com minhas fortes habilidades de resolução de problemas e mentalidade colaborativa
                     para impulsionar o sucesso da equipe de desenvolvimento e superar os objetivos organizacionais.
@@ -114,17 +114,17 @@
 
                 <div id="personal-information" class="d-flex direction-row">
                     <div class="d-flex direction-column">
-                        <span><strong id="name">Nome: </strong>José Lucas Alcântara de Araújo</span>
-                        <span id="birthday"><strong>Nascimento: </strong>2 de Setembro de 1991</span>
-                        <span id="age"><strong>Idade: </strong>32 anos</span>
+                        <span class="mb-1"><strong id="name">Nome: </strong>José Lucas Alcântara de Araújo</span>
+                        <span id="birthday" class="mb-1"><strong>Nascimento: </strong>2 de Setembro de 1991</span>
+                        <span id="age" class="mb-1"><strong>Idade: </strong>32 anos</span>
                         <span id="address"><strong>Endereço: </strong>Praia Grande, São Paulo, Brasil</span>
                     </div>
 
-                    <div class="d-flex direction-column">
-                        <span><strong id="phone">Celular: </strong>+55 13 98144-4022</span>
+                    <div class="d-flex direction-column ms-3">
+                        <span class="mb-1"><strong id="phone">Celular: </strong>+55 13 98144-4022</span>
                         <span id="email">
                             <strong>Email: </strong>
-                            <a href="mailto:jledicao@gmail.com">jledicao@gmail.com</a>
+                            <a class="text-blue" href="mailto:jledicao@gmail.com">jledicao@gmail.com</a>
                         </span>
                     </div>
                 </div>
@@ -193,7 +193,7 @@
                             <p class="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus,
                                 nulla.cing elit. Lorem ipsum dolor.
                             </p>
-                            <a href=""><strong class="person-name">José Lucas Alcântara de Araújo</strong></a>
+                            <a href=""><strong class="person-name text-blue">José Lucas Alcântara de Araújo</strong></a>
                             <p class="profession">Desenvolvedor Full-Stack</p>
                         </div>
                     </div>
@@ -204,7 +204,7 @@
                             <p class="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus,
                                 nulla.cing elit. Lorem ipsum dolor.
                             </p>
-                            <a href=""><strong class="person-name">José Lucas Alcântara de Araújo</strong></a>
+                            <a href=""><strong class="person-name text-blue">José Lucas Alcântara de Araújo</strong></a>
                             <p class="profession">Desenvolvedor Front-end</p>
                         </div>
                     </div>
@@ -323,7 +323,7 @@
             <div class="timeline card box-shadow" academicEducation="DevOps">
                 <div class="card-content">
                     <p class="termination">Estudando - previsão, Janeiro de 2024</p>
-                    <h3><strong class="title">Pós-Graduação em Engenharia DevOps</strong></h3>
+                    <h3><strong class="title text-blue">Pós-Graduação em Engenharia DevOps</strong></h3>
                     <p><strong class="university">Universidade:</strong> Faculdade Focus (EAD)</p>
                 </div>
             </div>
@@ -331,7 +331,7 @@
             <div class="timeline card box-shadow" academicEducation="TIBachelor">
                 <div class="card-content">
                     <p class="termination">Dezembro de 2014</p>
-                    <h3><strong class="title">Bacharel em Sistemas da Informação</strong></h3>
+                    <h3><strong class="title text-blue">Bacharel em Sistemas da Informação</strong></h3>
                     <p><strong class="university">Universidade:</strong> Faculdade do Litoral Sul Paulista (FALS)</p>
                 </div>
             </div>
@@ -355,7 +355,7 @@
             <div class="timeline card box-shadow" experience="1">
                 <div class="card-content">
                     <p>2022 - 2023</p>
-                    <h3><strong class="profession">Programador de Computador</strong></h3>
+                    <h3><strong class="profession text-blue">Programador de Computador</strong></h3>
                     <p><strong class="company">Empresa:</strong>
                         Prefeitura da Estância Balneária de Praia Grande - Secretaria de Planejamento.
                     </p>
@@ -375,7 +375,7 @@
             <div class="timeline card box-shadow" experience="2">
                 <div class="card-content">
                     <p>2013</p>
-                    <h3><strong class="profession">Estagiário</strong></h3>
+                    <h3><strong class="profession text-blue">Estagiário</strong></h3>
                     <p><strong class="company">Empresa:</strong>
                         Prefeitura da Estância Balneária de Praia Grande - Secretaria de Educação.
                     </p>

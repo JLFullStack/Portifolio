@@ -18,7 +18,7 @@
                     return response.text();
                 })
                 .then((data) => {
-                    // Create a new div element and set its innerHTML to the SVG content
+                    //Create a new div element and set its innerHTML to the SVG content
                     const icon = document.createElement("i");
                     icon.innerHTML = data;
 
@@ -27,7 +27,7 @@
                     if (imgClass) svg.setAttribute("class", imgClass); // Add replaced image's classes to the new SVG                    
 
                     svg.removeAttribute("xmlns:a"); // Remove any invalid XML tags   
-                    img.parentNode.replaceChild(icon, img); // Replace image with new SVG
+                    img.parentNode.replaceChild(svg, img); // Replace image with new SVG
                 })
         });
     };
