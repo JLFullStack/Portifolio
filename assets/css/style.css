@@ -249,8 +249,9 @@ section.layer:not(#projects) {
 /* #region presentation */
 
 #presentation {
-    margin-top: 60px;
-    margin-bottom: 150px;
+    width: 100vw;
+    height: 90vh;
+    margin-bottom: 100px;
 }
 
 #presentation article #description {
