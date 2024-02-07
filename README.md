@@ -1,12 +1,12 @@
 # Portifólio
-[[NPM](https://img.shields.io/npm/l/react)](https://github.com/JLFullStack/Portifolio/blob/master/LICENSE)
+![[NPM](https://img.shields.io/npm/l/react)](https://github.com/JLFullStack/Portifolio/blob/master/LICENSE)
 
 # Sobre o projeto
 
 Este [Portifólio](https://jlfullstack.github.io/Portifolio) pessoal apresenta projetos desenvolvidos por mim e equipes das quais trabalhei. Além de projetos, compartilho minhas habilidades, competências, qualificações, experiências profissionais, entre outras.
 
 ## Layout
-[Layout-portifolio](https://jlfullstack.github.io/Portifolio/assets/img/layout-portifolio.png)
+![Layout-portifolio](https://jlfullstack.github.io/Portifolio/assets/img/layout-portifolio.png)
 
 # Tecnologias utilizadas
 ## Front-end
