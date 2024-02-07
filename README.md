@@ -1,5 +1,5 @@
 # Portifólio
-![![NPM](https://img.shields.io/npm/l/react)](https://github.com/JLFullStack/Portifolio/blob/master/LICENSE)
+[![NPM](https://img.shields.io/npm/l/react)](https://github.com/JLFullStack/Portifolio/blob/master/LICENSE)
 
 # Sobre o projeto
 
