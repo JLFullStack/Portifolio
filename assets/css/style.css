@@ -107,22 +107,23 @@
 
 .fs-1{
     font-size: 1rem;
+    letter-spacing: 1px;
 }
 .fs-2{
     font-size: 1.5rem;
-    line-height: 25px;
+    line-height: 40px;
 }
 .fs-3{
-    font-size: 2rem;
+    font-size: 2.5rem;
     letter-spacing: -2px;
-    line-height: 35px;
+    line-height: 60px;
 }
 .fs-4{
-    font-size: 2.5rem;
+    font-size: 4rem;
     letter-spacing: -1px;
 }
 .fs-5{
-    font-size: 5rem;
+    font-size: 6.5rem;
     word-spacing: -10px;
     line-height: 80px;
 }
@@ -211,6 +212,10 @@ header nav {
     padding: 30px 60px 0px 0px;
 }
 
+header button {
+    z-index: 2;
+}
+
 /* #endregion */
 
 /* #region Main */
@@ -248,32 +253,31 @@ section.layer:not(#projects) {
 
 /* #region presentation */
 
-#presentation {
-    width: 100vw;
-    height: 90vh;
-    margin-bottom: 100px;
+#presentation article {
+    width: 60%;
 }
 
 #presentation article #description {
-    max-width: 500px;
+    max-width: 620px;
 }
 
 #presentation .btn-download-cv{
     margin-left: 0px;
 }
 
+#presentation #profile-001 {
+    z-index: 1;
+    max-width: 650px;
+}
+
 /* #endregion presentation */
 
 /* #region biography */
 
-#biography {
-    margin-bottom: 150px;
-}
-
 #biography #profile-icon {
     border: solid 3px var(--blue);
     border-radius: 50%;
-    padding-top: 15px;
+    /* padding-top: 15px; */
     width: 350px;
     height: 350px;
     position: relative;
@@ -292,23 +296,23 @@ section.layer:not(#projects) {
 }
 
 #biography .social-icon.github {
-    top: 325px;
-    right: 65px;
+    top: 320px;
+    right: 62px;
 }
 
 #biography .social-icon.whatsapp {
-    top: 380px;
+    top: 366px;
     right: 30px;
 }
 
 #biography .social-icon.skype {
-    top: 380px;
+    top: 366px;
     left: 30px;
 }
 
 #biography .social-icon.facebook {
-    top: 325px;
-    left: 65px;
+    top: 320px;
+    left: 62px;
 }
 
 #biography .social-icon.instagram {
@@ -323,7 +327,7 @@ section.layer:not(#projects) {
 /* #region projects */
 
 #projects {
-    margin: 0px 0px 150px 60px;
+    margin-left: 60px;
 }
 
 /* #endregion projects */
