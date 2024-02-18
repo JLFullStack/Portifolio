@@ -15,4 +15,5 @@
 #btn-scroll.active {
     bottom: 2rem;
     opacity: 1;
+    z-index: 999;
 }

@@ -23,16 +23,24 @@
 
 /* #region Screens Smaller Than 992px ---------------------------------- */
 @media only screen and (max-width: 992px) {
-    main {
-        margin-bottom: 270px;
+    section.layer:not(#projects) {
+        margin:100px 20px 100px 20px;
+    }
+
+    section.layer#projects {
+        margin-left: 20px;
     }
 }
 /* #endregion */
 
 /* #region Desktop and Bigger Screens ---------------------------------- */
 @media only screen and (min-width: 993px) {
-    /* body {
-        max-width: 1920px;
-    } */
+    #presentation {
+        height: 85vh;
+    }
+
+    #biography, #projects {
+        height: 100vh;
+    }
 }
 /* #endregion */
