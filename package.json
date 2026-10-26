@@ -1,0 +1,38 @@
+{
+  "name": "portifolio",
+  "private": true,
+  "description": "Portfólio de Lucas Araújo: Next.js (exportação estática) publicado no Cloudflare Workers, com conteúdo no D1",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "preview": "next build && wrangler dev",
+    "deploy": "node scripts/exportar-conteudo.mjs --remoto && next build && wrangler deploy",
+    "tipos": "tsc --noEmit",
+    "icones": "node scripts/gerar-icones.mjs",
+    "imagens": "node scripts/otimizar-imagens.mjs",
+    "banco:migrar": "wrangler d1 migrations apply portifolio --local",
+    "banco:migrar:remoto": "wrangler d1 migrations apply portifolio --remote",
+    "banco:semente": "node scripts/carregar-semente.mjs",
+    "banco:semente:remoto": "node scripts/carregar-semente.mjs --remoto",
+    "conteudo": "node scripts/exportar-conteudo.mjs",
+    "conteudo:remoto": "node scripts/exportar-conteudo.mjs --remoto"
+  },
+  "dependencies": {
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "sharp": "0.35.5",
+    "typescript": "5.9.3",
+    "wrangler": "4.153.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "workerd@1.20261023.1": true
+  }
+}

@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin
+Disallow: /depoimento
+Disallow: /login
+Disallow: /convite
+Disallow: /api/
+Disallow: /auth/
+
+Sitemap: https://lucasaraujo.dev.br/sitemap.xml

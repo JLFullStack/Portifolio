@@ -1,0 +1,39 @@
+// Publicação no Cloudflare Workers (npm run deploy = exporta o D1 + next build + wrangler deploy).
+// A landing (/, /en, /midia/*) sai direto dos arquivos estáticos de out/. Só as rotas de
+// run_worker_first passam pelo Worker (worker/index.js): login, API e a guarda das páginas
+// do painel. Sem R2: as imagens ficam no D1, para não haver custo. Roteiro: docs/roteiro-v1.md.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "portifolio",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "out",
+    "binding": "ASSETS",
+    // /en serve out/en.html; endereço inexistente recebe out/404.html com status 404.
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/auth/*", "/api/*", "/admin", "/admin/*", "/depoimento", "/depoimento/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "portifolio",
+      // Banco próprio do portfólio.
+      "database_id": "568ee63b-1938-4f4c-8a05-faade6dc07e8",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    // Repositório que o botão Publicar aciona (worker/publicar.js).
+    "GITHUB_REPOSITORIO": "JLFullStack/Portifolio"
+  },
+  // Segredo (Worker → Settings → Variables and Secrets, ou npx wrangler secret put):
+  //   GITHUB_TOKEN_PUBLICAR  token fine-grained do GitHub, só deste repositório, Contents: Read and write
+  // Domínio próprio, na zona lucasaraujo.dev.br (o market-pressure fica no subdomínio marketpressure.).
+  "routes": [{ "pattern": "lucasaraujo.dev.br", "custom_domain": true }],
+  // Um único endereço público: sem *.workers.dev nem URLs de prévia.
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": { "enabled": true }
+}

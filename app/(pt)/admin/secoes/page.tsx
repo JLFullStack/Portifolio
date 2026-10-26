@@ -1,0 +1,90 @@
+"use client";
+
+import type { Grupo, Linha } from "@/lib/painel";
+import { EditorColecao, type DefCampo } from "@/componentes/painel/EditorColecao";
+import { usePainel } from "@/componentes/painel/PainelAdmin";
+
+const titulo = (item: Linha, ...campos: string[]) => String(campos.map(c => item[c]).find(Boolean) ?? "Sem título");
+
+const REDES: DefCampo[] = [
+    { nome: "nome", rotulo: "Nome da rede" },
+    { nome: "url", rotulo: "Endereço", tipo: "url", dica: "https://..., mailto:, tel: ou skype:" },
+    { nome: "icone", rotulo: "Ícone", tipo: "icone" }
+];
+
+const GRUPO: DefCampo[] = [{ nome: "titulo", rotulo: "Título do card", bilingue: true }];
+
+const HABILIDADE: DefCampo[] = [
+    { nome: "nome_pt", rotulo: "Habilidade" },
+    { nome: "nome_en", rotulo: "Em inglês (só se for diferente)", dica: "Vazio: usa o mesmo nome. Ex.: API Rest → Rest API" }
+];
+
+const CERTIFICACAO: DefCampo[] = [
+    { nome: "sigla", rotulo: "Sigla" },
+    { nome: "descricao", rotulo: "Descrição", bilingue: true }
+];
+
+const FORMACAO: DefCampo[] = [
+    { nome: "periodo", rotulo: "Período", bilingue: true, dica: "Ex.: Dezembro de 2014 / December 2014" },
+    { nome: "titulo", rotulo: "Curso", bilingue: true },
+    { nome: "instituicao", rotulo: "Instituição", bilingue: true }
+];
+
+const EXPERIENCIA: DefCampo[] = [
+    { nome: "periodo", rotulo: "Período", bilingue: true },
+    { nome: "cargo", rotulo: "Cargo", bilingue: true },
+    { nome: "empresa", rotulo: "Empresa", bilingue: true },
+    { nome: "endereco", rotulo: "Endereço", bilingue: true },
+    { nome: "descricao", rotulo: "Descrição", tipo: "area", bilingue: true }
+];
+
+/** As seções em lista da landing. Seção sem nenhum item some da landing e do menu. */
+export default function PaginaSecoes() {
+    const { dados } = usePainel();
+
+    return (
+        <>
+            <h1 className="painel-titulo">Seções</h1>
+            <p className="painel-subtitulo">Itens de cada seção, na ordem em que aparecem na landing. Use as setas para reordenar.</p>
+
+            <section className="cartao">
+                <h2>Redes sociais</h2>
+                <p className="cartao-nota">Aparecem em volta da foto da biografia e no rodapé.</p>
+                <EditorColecao tabela="redes_sociais" itens={dados.redes} campos={REDES} rotuloNovo="Nova rede"
+                               resumo={item => titulo(item, "nome")} />
+            </section>
+
+            <section className="cartao">
+                <h2>Habilidades profissionais</h2>
+                <p className="cartao-nota">Cada grupo é um card. Abra o grupo para editar as habilidades dele.</p>
+                <EditorColecao tabela="grupos_habilidades" itens={dados.grupos} campos={GRUPO} rotuloNovo="Novo grupo"
+                               resumo={item => `${titulo(item, "titulo_pt", "titulo_en")} (${(item as Grupo).itens.length})`}
+                               extras={item => (
+                                   <div style={{ marginTop: "var(--espaco-3)" }}>
+                                       <EditorColecao tabela="habilidades" itens={(item as Grupo).itens} campos={HABILIDADE}
+                                                      rotuloNovo="Nova habilidade" valoresFixos={{ grupo_id: item.id }}
+                                                      resumo={h => titulo(h, "nome_pt")} />
+                                   </div>
+                               )} />
+            </section>
+
+            <section className="cartao">
+                <h2>Certificações</h2>
+                <EditorColecao tabela="certificacoes" itens={dados.certificacoes} campos={CERTIFICACAO} rotuloNovo="Nova certificação"
+                               resumo={item => titulo(item, "sigla")} />
+            </section>
+
+            <section className="cartao">
+                <h2>Educação</h2>
+                <EditorColecao tabela="formacoes" itens={dados.formacoes} campos={FORMACAO} rotuloNovo="Nova formação"
+                               resumo={item => titulo(item, "titulo_pt", "titulo_en")} />
+            </section>
+
+            <section className="cartao">
+                <h2>Experiência</h2>
+                <EditorColecao tabela="experiencias" itens={dados.experiencias} campos={EXPERIENCIA} rotuloNovo="Nova experiência"
+                               resumo={item => `${titulo(item, "cargo_pt", "cargo_en")} · ${titulo(item, "periodo_pt", "periodo_en")}`} />
+            </section>
+        </>
+    );
+}

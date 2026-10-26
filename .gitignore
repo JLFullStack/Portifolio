@@ -1,0 +1,20 @@
+# Next.js e Cloudflare (gerados)
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.wrangler/
+.dev.vars
+.env*
+
+# Conteúdo e imagens exportados do D1 no build (a fonte é o banco)
+conteudo/conteudo.json
+public/midia/
+
+# Arquivos locais que não podem ser publicados: o Font Awesome Pro tem licença
+# que proíbe redistribuição. scripts/gerar-icones.mjs lê de .local/font-awesome-pro/.
+.local/
+
+# Visual Studio
+.vs/
