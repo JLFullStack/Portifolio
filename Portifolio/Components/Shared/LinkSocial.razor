@@ -1,0 +1,20 @@
+@*
+    Link para uma rede social do autor.
+
+    Usado no arco da Biografia e na fila do Rodapé — o que muda entre os dois
+    é só o posicionamento, feito pelo CSS de cada seção. Manter o link aqui
+    garante que aria-label, target e rel fiquem iguais nos dois lugares.
+
+    O link é apenas iconográfico, então o aria-label carrega o nome da rede:
+    sem ele o leitor de tela anunciaria um link sem texto.
+*@
+
+<a href="@Rede.Url" target="_blank" rel="noopener noreferrer"
+   aria-label="@Rede.Nome" title="@Rede.Nome">
+    <i class="@Rede.ClasseIcone" aria-hidden="true"></i>
+</a>
+
+@code {
+    [Parameter, EditorRequired]
+    public RedeSocial Rede { get; set; } = default!;
+}

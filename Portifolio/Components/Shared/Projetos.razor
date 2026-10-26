@@ -1,0 +1,108 @@
+@*
+    Seção 4 do mockup — Projects.
+
+    À esquerda o título do projeto em display grande, a descrição e o botão
+    Ver Trabalho. À direita a faixa de cards: o ativo maior, os seguintes
+    menores e sangrando na borda direita da tela.
+
+    O mockup não exibe um título "Projetos": o h2 fica só para leitores de tela.
+
+    Sobre o carrossel: a faixa é um contêiner de rolagem com scroll-snap, não
+    o carrossel do Bootstrap. O carrossel do Bootstrap mostra um item por vez
+    (os demais ficam display:none), e o mockup exige ver o card ativo e os
+    seguintes ao mesmo tempo, sangrando para fora da faixa de conteúdo. Os
+    Depoimentos, onde o padrão de um slide por vez serve, usam o Bootstrap.
+*@
+
+<section id="projetos" class="secao projetos">
+    <div class="conteudo projetos-grade">
+
+        <div class="projetos-info">
+            <h2 class="visualmente-oculto">@T["Secao_Projetos"]</h2>
+
+            @foreach (var projeto in Vitrine.Projetos)
+            {
+                @* Todos os textos vão no HTML; app.js só alterna qual está visível,
+                   conforme o card que a faixa mostra. Sem JS, o primeiro aparece. *@
+                <article class="projeto-info @(projeto.Numero == PrimeiroNumero ? "ativo" : null)"
+                         data-projeto="@projeto.Numero">
+
+                    <h3 class="projeto-titulo">@T["Projetos_TituloPlaceholder", projeto.Numero]</h3>
+                    <p class="projeto-descricao">@T["Projetos_DescricaoPlaceholder"]</p>
+
+                    @if (projeto.Url is not null)
+                    {
+                        <a class="btn-acento" href="@projeto.Url" target="_blank" rel="noopener noreferrer">
+                            @T["Projetos_VerTrabalho"]
+                            <i class="fal fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        @* Sem endereço definido: um botão inerte é mais honesto
+                           que um link que não leva a lugar nenhum. *@
+                        <button type="button" class="btn-acento" aria-disabled="true"
+                                title="@T["Projetos_LinkPendente"]">
+                            @T["Projetos_VerTrabalho"]
+                            <i class="fal fa-arrow-right" aria-hidden="true"></i>
+                        </button>
+                    }
+                </article>
+            }
+        </div>
+
+        <div class="projetos-vitrine">
+
+            @* tabindex="0" torna a faixa rolável pelo teclado (setas), já que
+               é um contêiner de rolagem com conteúdo além da borda. *@
+            <ul class="projetos-faixa" id="projetos-faixa" tabindex="0"
+                aria-label="@T["Projetos_Vitrine"]">
+
+                @foreach (var projeto in Vitrine.Projetos)
+                {
+                    <li class="projeto-card @(projeto.Numero == PrimeiroNumero ? "ativo" : null)"
+                        data-projeto="@projeto.Numero">
+
+                        <p class="projeto-rotulo">@T["Projetos_TituloPlaceholder", projeto.Numero]</p>
+
+                        @if (projeto.Imagem is not null)
+                        {
+                            <img class="projeto-imagem"
+                                 src="@projeto.Imagem"
+                                 width="370" height="512"
+                                 alt="@T["Projetos_ImagemAlt", projeto.Numero]"
+                                 loading="lazy" decoding="async" />
+                        }
+                        else
+                        {
+                            @* Caixa cinza com a palavra "Imagem", exatamente como no mockup *@
+                            <div class="projeto-imagem projeto-imagem--vazia"
+                                 role="img" aria-label="@T["Projetos_ImagemAlt", projeto.Numero]">
+                                <span aria-hidden="true">@T["Projetos_ImagemPendente"]</span>
+                            </div>
+                        }
+                    </li>
+                }
+            </ul>
+
+            <div class="controles-carrossel">
+                <button type="button" class="controle-faixa"
+                        data-faixa="#projetos-faixa" data-direcao="-1"
+                        aria-controls="projetos-faixa" aria-label="@T["Projetos_Anterior"]">
+                    <i class="fal fa-chevron-left" aria-hidden="true"></i>
+                </button>
+
+                <button type="button" class="controle-faixa"
+                        data-faixa="#projetos-faixa" data-direcao="1"
+                        aria-controls="projetos-faixa" aria-label="@T["Projetos_Proximo"]">
+                    <i class="fal fa-chevron-right" aria-hidden="true"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@code {
+    private static readonly int PrimeiroNumero = Vitrine.Projetos[0].Numero;
+}

@@ -1,0 +1,1205 @@
+/* #region Fontes */
+
+/* Inter — fonte variável adicionada ao projeto; cobre os pesos 100..900 em um único arquivo.
+   A vírgula do nome do arquivo precisa vir codificada (%2C) para a URL resolver. */
+@font-face {
+    font-family: 'Inter';
+    src: url('../font/Inter/Inter-VariableFont_slnt%2Cwght.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Arimo e Ernestone são declaradas pelos stylesheet.css de cada pasta,
+   referenciados em App.razor: 'arimoregular', 'arimobold', 'ernestone_scriptregular'. */
+
+/* #endregion Fontes */
+
+/* #region Tokens do Portifólio
+
+   Paleta amostrada diretamente do mockup assets/img/layout-portifolio.png
+   (fundo #212934, superfície #2a303e, acento #03a9f4) — coincide com a paleta
+   do site estático legado (themes.css + style.css).
+
+   Dois temas, um único conjunto de tokens:
+     :root                    → tema escuro (padrão do produto)
+     :root[data-tema="claro"] → tema claro
+
+   O atributo data-tema é escrito no <html> pelo script inline de App.razor,
+   antes da primeira pintura, e alternado por app.js.
+   Nenhuma regra de componente deve usar hex literal.
+
+*/
+
+:root {
+    color-scheme: dark;
+    /* Cores — superfícies */
+    --cor-fundo: #212934;
+    --cor-superficie: #2a303e;
+    --cor-superficie-alta: #333b4c;
+    --cor-cabecalho: #212934f2;
+    /* Cores — acento (único, ciano)
+       --cor-acento        : texto, links e ícones (ajustado por tema para ter contraste)
+       --cor-acento-solido : preenchimentos (botões, régua, badge) — o ciano do mockup
+       --cor-acento-contraste : cor do texto por cima do preenchimento */
+    --cor-acento: #03a9f4;
+    --cor-acento-solido: #03a9f4;
+    --cor-acento-hover: #1195d0;
+    --cor-acento-suave: #03a8f467;
+    --cor-acento-contraste: #ffffff;
+    /* Cores — texto */
+    --cor-texto: #ffffff;
+    --cor-texto-suave: #b8bfc9;
+    --cor-texto-tenue: #868a90;
+    /* Cores — traços */
+    --cor-regua: var(--cor-acento-solido);
+    --cor-placeholder: #566069;
+    --cor-borda: #ffffff1f;
+    --cor-sombra: #0000002b;
+    --cor-foco: #7fd5ff;
+    /* Tipografia */
+    --fonte-base: 'Inter', 'arimoregular', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --fonte-assinatura: 'ernestone_scriptregular', 'Segoe Script', cursive;
+    --texto-xs: 0.8125rem;
+    --texto-sm: 0.875rem;
+    --texto-md: 1rem;
+    --texto-lg: 1.25rem;
+    --texto-titulo: clamp(1.75rem, 1.05rem + 2.4vw, 3rem);
+    --texto-destaque: clamp(1.5rem, 0.95rem + 2.4vw, 2.75rem);
+    --texto-display: clamp(2.5rem, 0.4rem + 6.4vw, 5.75rem);
+    --peso-regular: 400;
+    --peso-medio: 500;
+    --peso-forte: 700;
+    --peso-display: 800;
+    /* Espaçamento */
+    --espaco-1: 0.5rem;
+    --espaco-2: 1rem;
+    --espaco-3: 1.5rem;
+    --espaco-4: 2.5rem;
+    --espaco-5: 4rem;
+    --espaco-secao: clamp(4rem, 2rem + 6vw, 7.5rem);
+    /* Métricas de layout */
+    --largura-conteudo: 1240px;
+    --altura-cabecalho: 4.5rem;
+    --raio: 0.5rem;
+    --raio-pequeno: 0.375rem;
+    --sombra-card: 4px 4px 6px 1px var(--cor-sombra);
+    /* Bootstrap passa a herdar o acento do Portifólio */
+    --bs-primary: var(--cor-acento);
+    --bs-primary-rgb: 3, 169, 244;
+    --bs-link-color: var(--cor-acento);
+    --bs-link-hover-color: var(--cor-acento-hover);
+    --bs-body-bg: var(--cor-fundo);
+    --bs-body-color: var(--cor-texto);
+    --bs-border-color: var(--cor-borda);
+}
+
+/* Tema claro — portado de assets/lib/themes/themes.css do site legado
+   (--light-bg-color #f9fbfd, --light-bg-color-highlight #e9eef4).
+   Só os valores mudam: nenhuma regra de componente precisa saber do tema. */
+:root[data-tema="claro"] {
+    color-scheme: light;
+    --cor-fundo: #f9fbfd;
+    --cor-superficie: #e9eef4;
+    --cor-superficie-alta: #dbe3ec;
+    --cor-cabecalho: #f9fbfdf2;
+    /* Mesmo matiz ciano, escurecido: #03a9f4 sobre fundo claro não atinge
+       contraste de leitura. O preenchimento continua sendo o ciano do mockup. */
+    --cor-acento: #026d9c;
+    --cor-acento-solido: #03a9f4;
+    --cor-acento-hover: #01526f;
+    --cor-acento-suave: #03a8f43d;
+    --cor-acento-contraste: #ffffff;
+    --cor-texto: #111820;
+    --cor-texto-suave: #47505c;
+    --cor-texto-tenue: #6b7482;
+    --cor-regua: var(--cor-acento-solido);
+    --cor-placeholder: #c4ccd6;
+    --cor-borda: #11182029;
+    --cor-sombra: #0000001f;
+    --cor-foco: #01526f;
+    --bs-body-bg: var(--cor-fundo);
+    --bs-body-color: var(--cor-texto);
+    --bs-link-color: var(--cor-acento);
+    --bs-link-hover-color: var(--cor-acento-hover);
+    --bs-border-color: var(--cor-borda);
+}
+
+/* #endregion Tokens do Portifólio */
+
+/* #region Base */
+
+html {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    font-family: var(--fonte-base);
+}
+
+body {
+    margin: 0;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-size: var(--texto-md);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    transition: background-color .25s ease, color .25s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.15;
+    font-weight: var(--peso-forte);
+}
+
+a {
+    color: var(--cor-acento);
+    text-decoration: none;
+}
+
+    a:hover {
+        color: var(--cor-acento-hover);
+    }
+
+img {
+    max-width: 100%;
+}
+
+/* Foco de teclado visível em qualquer elemento interativo */
+:focus-visible {
+    outline: 2px solid var(--cor-foco);
+    outline-offset: 3px;
+    border-radius: var(--raio-pequeno);
+}
+
+/* Conteúdo lido por leitor de tela, invisível na página */
+.visualmente-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Atalho "pular para o conteúdo" — só aparece ao receber foco */
+.pular-conteudo {
+    position: absolute;
+    top: var(--espaco-2);
+    left: var(--espaco-2);
+    z-index: 1080;
+    padding: var(--espaco-1) var(--espaco-2);
+    border-radius: var(--raio-pequeno);
+    background-color: var(--cor-acento-solido);
+    color: var(--cor-acento-contraste);
+    font-weight: var(--peso-forte);
+    transform: translateY(-200%);
+}
+
+    .pular-conteudo:focus {
+        transform: translateY(0);
+        color: var(--cor-acento-contraste);
+    }
+
+/* #endregion Base */
+
+/* #region Estrutura da landing page */
+
+/* Faixa de largura máxima usada por todas as seções */
+.conteudo {
+    width: 100%;
+    max-width: var(--largura-conteudo);
+    margin-inline: auto;
+    padding-inline: var(--espaco-3);
+}
+
+/* Toda <section> da landing. O scroll-margin-top compensa o cabeçalho fixo
+   para que a âncora não pare com o título escondido atrás dele. */
+.secao {
+    padding-block: var(--espaco-secao);
+    scroll-margin-top: calc(var(--altura-cabecalho) + var(--espaco-2));
+}
+
+    /* A primeira seção encosta no cabeçalho: compensa a altura dele */
+    .secao.secao--abertura {
+        padding-top: calc(var(--altura-cabecalho) + var(--espaco-4));
+    }
+
+/* Título de seção: alinhado à esquerda, com régua fina ciano logo abaixo */
+.titulo-secao {
+    margin: 0 0 var(--espaco-4);
+}
+
+    .titulo-secao > h2 {
+        margin: 0;
+        font-size: var(--texto-titulo);
+        font-weight: var(--peso-display);
+        letter-spacing: -0.02em;
+    }
+
+/* Régua fina entre seções. No mockup ela é recuada nas pontas: ocupa cerca de
+   85% da faixa de conteúdo, não a largura inteira. */
+.separador-secao {
+    width: 85%;
+    height: 1px;
+    border: 0;
+    margin: 0 auto var(--espaco-5);
+    opacity: 1;
+    background-color: var(--cor-regua);
+}
+
+/* Marcador temporário das seções ainda não implementadas (fases 1 a 4).
+   Cada fase remove o placeholder da sua seção. */
+.secao-pendente {
+    margin: 0;
+    padding: var(--espaco-4);
+    border: 1px dashed var(--cor-borda);
+    border-radius: var(--raio);
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-sm);
+}
+
+/* #endregion Estrutura da landing page */
+
+/* #region Seção 2 — Hero */
+
+.hero {
+    position: relative;
+    /* as curvas sangram para fora da faixa de conteúdo e não podem gerar rolagem */
+    overflow: hidden;
+}
+
+/* Traçado decorativo ao fundo: fica atrás do conteúdo e fora do fluxo de foco */
+.hero-curvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.hero-grade {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--espaco-5);
+}
+
+.hero-saudacao {
+    margin: 0;
+    font-size: clamp(1.05rem, 0.85rem + 0.6vw, 1.5rem);
+}
+
+.hero-nome {
+    margin: 0.25rem 0 0;
+    font-size: var(--texto-display);
+    font-weight: var(--peso-display);
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+
+.hero-profissao {
+    margin: var(--espaco-1) 0 0;
+    color: var(--cor-acento);
+    font-size: var(--texto-destaque);
+    font-weight: var(--peso-forte);
+    /* evita a quebra feia "Desenvolvedor Full-" / "Stack" em tela estreita */
+    text-wrap: balance;
+}
+
+.hero-descricao {
+    max-width: 48ch;
+    margin: var(--espaco-3) 0 var(--espaco-4);
+    text-align: justify;
+    text-indent: 1.5rem;
+}
+
+.hero-foto {
+    justify-self: end;
+}
+
+    .hero-foto > img {
+        display: block;
+        width: 100%;
+        max-width: 26rem;
+        height: auto;
+    }
+
+/* #endregion Seção 2 — Hero */
+
+/* #region Seção 3 — Biografia */
+
+.bio-grade {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: center;
+    gap: var(--espaco-5);
+}
+
+.bio-retrato {
+    display: flex;
+    justify-content: center;
+}
+
+.bio-anel {
+    --diametro-anel: clamp(14rem, 8rem + 18vw, 22rem);
+    --raio-anel: calc(var(--diametro-anel) / 2);
+    --tamanho-icone-social: clamp(2.25rem, 1.85rem + 1.1vw, 2.75rem);
+    position: relative;
+    width: var(--diametro-anel);
+    height: var(--diametro-anel);
+    padding: 0.5rem;
+    border: 4px solid var(--cor-acento-solido);
+    border-radius: 50%;
+}
+
+.bio-foto {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.bio-redes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Os seis ícones ficam no arco inferior, a 25° um do outro e centrados
+   embaixo — a distribuição medida no mockup. O ângulo sai do --indice que o
+   componente escreve em cada item, então mexer na lista de Dados/Contato.cs
+   reposiciona o arco sem tocar no CSS. */
+.bio-rede {
+    --angulo: calc(152.5deg - var(--indice) * 25deg);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--tamanho-icone-social);
+    height: var(--tamanho-icone-social);
+    margin: calc(var(--tamanho-icone-social) / -2);
+    transform: rotate(var(--angulo)) translate(var(--raio-anel)) rotate(calc(var(--angulo) * -1));
+}
+
+    .bio-rede > a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        border: 2px solid var(--cor-acento-solido);
+        border-radius: 50%;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+        font-size: 1rem;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+        .bio-rede > a:hover,
+        .bio-rede > a:focus-visible {
+            background-color: var(--cor-acento-solido);
+            color: var(--cor-acento-contraste);
+        }
+
+.bio-paragrafo {
+    margin: 0 0 var(--espaco-2);
+    text-align: justify;
+    text-indent: 1.5rem;
+}
+
+/* Duas colunas: Nome, Nascimento, Idade e Endereço na primeira; Celular e
+   E-mail na segunda — a ordem do mockup. O fluxo por coluna com 4 linhas
+   reproduz isso sem precisar de marcação extra. */
+.bio-dados {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(4, auto);
+    justify-content: start;
+    gap: var(--espaco-1) var(--espaco-5);
+    margin: var(--espaco-4) 0 0;
+}
+
+.bio-dado {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.4rem;
+}
+
+    .bio-dado > dt {
+        font-weight: var(--peso-forte);
+    }
+
+    .bio-dado > dd {
+        margin: 0;
+    }
+
+/* #endregion Seção 3 — Biografia */
+
+/* #region Controles ‹ › dos carrosséis */
+
+/* Mesmo par de setas nas duas seções: centralizado sob o conteúdo, fino e
+   sem moldura, como no mockup. */
+.controles-carrossel {
+    display: flex;
+    justify-content: center;
+    gap: var(--espaco-5);
+    margin-top: var(--espaco-4);
+}
+
+.controle-faixa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background-color: transparent;
+    color: var(--cor-texto);
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+    .controle-faixa:hover {
+        color: var(--cor-acento);
+        background-color: var(--cor-superficie);
+    }
+
+/* #endregion Controles ‹ › dos carrosséis */
+
+/* #region Seção 4 — Projetos */
+
+.projetos {
+    /* a faixa sangra para fora da largura de conteúdo, mas não pode
+       criar rolagem horizontal na página */
+    overflow: hidden;
+}
+
+.projetos-vitrine {
+    --largura-card: clamp(14rem, 24vw, 23rem);
+}
+
+.projetos-grade {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: center;
+    gap: var(--espaco-4);
+}
+
+/* Os textos dos projetos ficam empilhados no mesmo lugar; só o ativo aparece.
+   Sem JavaScript, o primeiro continua visível. */
+.projeto-info {
+    display: none;
+}
+
+    .projeto-info.ativo {
+        display: block;
+    }
+
+.projeto-titulo {
+    margin: 0;
+    /* No mockup o título do projeto tem cerca de dois terços da altura do nome
+       da hero — e precisa caber em uma linha, como "PROJECT 1". */
+    font-size: clamp(2rem, 0.9rem + 3.4vw, 4rem);
+    font-weight: var(--peso-display);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.projeto-descricao {
+    max-width: 46ch;
+    margin: var(--espaco-3) 0 var(--espaco-4);
+    text-align: justify;
+    text-indent: 1.5rem;
+}
+
+/* A faixa alcança a borda direita da janela: desconta a metade da margem que
+   centraliza .conteudo, mais o padding lateral dela. */
+.projetos-faixa {
+    display: flex;
+    gap: var(--espaco-4);
+    align-items: center;
+    margin: 0;
+    margin-right: calc(-1 * ((100vw - min(100vw, var(--largura-conteudo))) / 2 + var(--espaco-3)));
+    padding: var(--espaco-3) 0;
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    /* os controles ‹ › fazem o papel da barra de rolagem */
+    scrollbar-width: none;
+}
+
+    .projetos-faixa::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Respiro no fim da faixa: sem ele o último card nunca alcança a borda
+       esquerda, e por isso nunca chega a ficar ativo. */
+    .projetos-faixa::after {
+        content: "";
+        flex: 0 0 auto;
+        width: max(0px, calc(100% - var(--largura-card) - var(--espaco-4)));
+    }
+
+.projeto-card {
+    flex: 0 0 auto;
+    width: clamp(13rem, 22vw, 21rem);
+    scroll-snap-align: start;
+    transition: width 0.35s ease, opacity 0.35s ease;
+    opacity: 0.75;
+}
+
+    /* O card ativo é maior e em destaque, como no mockup */
+    .projeto-card.ativo {
+        width: var(--largura-card);
+        opacity: 1;
+    }
+
+.projeto-rotulo {
+    margin: 0 0 var(--espaco-1);
+    font-size: var(--texto-sm);
+}
+
+.projeto-imagem {
+    display: block;
+    width: 100%;
+    aspect-ratio: 370 / 512;
+    border-radius: var(--raio-pequeno);
+    object-fit: cover;
+    box-shadow: var(--sombra-card);
+}
+
+/* Caixa cinza "Imagem" — o placeholder do próprio mockup */
+.projeto-imagem--vazia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cor-placeholder);
+    color: var(--cor-texto-suave);
+    font-size: var(--texto-lg);
+}
+
+    /* No mockup as setas ficam centradas sob o card ativo, não sob a
+       coluna inteira. */
+    .projetos-vitrine > .controles-carrossel {
+        width: var(--largura-card);
+    }
+
+/* #endregion Seção 4 — Projetos */
+
+/* #region Seção 5 — Depoimentos */
+
+.depoimentos-lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--espaco-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.depoimento-card {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-3);
+    padding: var(--espaco-3);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+}
+
+/* No mockup o avatar domina o card: cerca de 150px em 1440. */
+.depoimento-avatar {
+    --tamanho-avatar: clamp(5rem, 2.5rem + 6vw, 9rem);
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: var(--tamanho-avatar);
+    height: var(--tamanho-avatar);
+    border-radius: 50%;
+    background-color: var(--cor-superficie-alta);
+    color: var(--cor-acento);
+    font-size: calc(var(--tamanho-avatar) * 0.42);
+}
+
+.depoimento-texto {
+    margin: 0;
+    text-align: justify;
+}
+
+.depoimento-autor {
+    display: flex;
+    flex-direction: column;
+    margin: var(--espaco-2) 0 0;
+}
+
+.depoimento-cargo {
+    color: var(--cor-texto-suave);
+}
+
+/* O Bootstrap corta o que passa da borda; os cards têm sombra, então o
+   recorte precisa de uma folga para não decepar o sombreado. */
+.carrossel-depoimentos > .carousel-inner {
+    padding: var(--espaco-1);
+    margin: calc(-1 * var(--espaco-1));
+    width: auto;
+}
+
+/* #endregion Seção 5 — Depoimentos */
+
+/* #region Seção 6 — Habilidades Profissionais */
+
+/* Cinco cards de mesma altura lado a lado. auto-fit + minmax faz a grade
+   reduzir o número de colunas sozinha antes mesmo do breakpoint. */
+.habilidades-grade {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--espaco-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.habilidades-card {
+    padding: var(--espaco-3) var(--espaco-2);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+}
+
+.habilidades-titulo {
+    margin: 0 0 var(--espaco-3);
+    text-align: center;
+    font-size: var(--texto-lg);
+    font-weight: var(--peso-forte);
+}
+
+.habilidades-itens {
+    margin: 0;
+    padding-left: var(--espaco-3);
+    /* lista aninhada usaria "circle" (vazado); o mockup tem disco cheio */
+    list-style-type: disc;
+}
+
+    .habilidades-itens > li {
+        margin-bottom: 0.35rem;
+    }
+
+/* #endregion Seção 6 — Habilidades Profissionais */
+
+/* #region Seção 7 — Certificação */
+
+.certificacoes-lista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.certificacao-card {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-3);
+    /* no mockup o card ocupa cerca de 40% da faixa, não a largura toda */
+    max-width: 36rem;
+    padding: var(--espaco-3);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+}
+
+.certificacao-icone {
+    flex: 0 0 auto;
+    font-size: 3.25rem;
+    line-height: 1;
+}
+
+.certificacao-sigla {
+    margin: 0 0 var(--espaco-1);
+    font-size: var(--texto-lg);
+}
+
+.certificacao-descricao {
+    margin: 0;
+    color: var(--cor-texto-suave);
+}
+
+/* #endregion Seção 7 — Certificação */
+
+/* #region Seções 8 e 9 — Timelines de Educação e Experiência */
+
+.linha-tempo {
+    --meia-calha: var(--espaco-4);
+    --raio-marcador: 0.4375rem;
+    position: relative;
+    display: grid;
+    gap: var(--espaco-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    /* A linha vertical central */
+    .linha-tempo::before {
+        content: "";
+        position: absolute;
+        /* no mockup a linha ultrapassa o primeiro e o último card */
+        top: calc(-1 * var(--espaco-3));
+        bottom: calc(-1 * var(--espaco-3));
+        left: 50%;
+        width: 2px;
+        transform: translateX(-50%);
+        background-color: var(--cor-acento-solido);
+    }
+
+.linha-tempo-item {
+    position: relative;
+    width: calc(50% - var(--meia-calha));
+}
+
+    /* Cards alternam os lados; a ordem no markup é a cronológica */
+    .linha-tempo-item:nth-child(even) {
+        margin-left: calc(50% + var(--meia-calha));
+    }
+
+    /* O marcador fica exatamente sobre a linha, no centro vertical do card */
+    .linha-tempo-item::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: calc(var(--raio-marcador) * 2);
+        height: calc(var(--raio-marcador) * 2);
+        border-radius: 50%;
+        background-color: var(--cor-acento-solido);
+        transform: translateY(-50%);
+    }
+
+    .linha-tempo-item:nth-child(odd)::before {
+        right: calc(-1 * (var(--meia-calha) + var(--raio-marcador)));
+    }
+
+    .linha-tempo-item:nth-child(even)::before {
+        left: calc(-1 * (var(--meia-calha) + var(--raio-marcador)));
+    }
+
+.linha-tempo-card {
+    padding: var(--espaco-3);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+}
+
+.linha-tempo-periodo {
+    margin: 0;
+}
+
+.linha-tempo-titulo {
+    margin: 0;
+    color: var(--cor-acento);
+    font-size: var(--texto-lg);
+    font-weight: var(--peso-regular);
+}
+
+/* No mockup há um respiro claro entre o cargo e o bloco de detalhes */
+.linha-tempo-corpo {
+    margin-top: var(--espaco-3);
+}
+
+    .linha-tempo-corpo > p {
+        margin: 0 0 var(--espaco-2);
+    }
+
+        .linha-tempo-corpo > p:last-child {
+            margin-bottom: 0;
+        }
+
+.linha-tempo-descricao {
+    text-align: justify;
+}
+
+/* #endregion Seções 8 e 9 — Timelines */
+
+/* #region Seção 10 — Chamada final */
+
+/* No mockup o card ocupa pouco mais da metade da faixa e fica centrado */
+.chamada-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espaco-4);
+    max-width: 46rem;
+    margin-inline: auto;
+    padding: var(--espaco-4);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+}
+
+/* Menor que --texto-destaque: no mockup o convite tem ~30px, e em pt-BR
+   "Vamos trabalhar juntos!" é mais longo que o texto em inglês. */
+.chamada-convite {
+    margin: 0 0 var(--espaco-3);
+    font-size: clamp(1.4rem, 0.9rem + 1.5vw, 2rem);
+    font-weight: var(--peso-display);
+}
+
+.chamada-citacao {
+    margin: 0;
+}
+
+    .chamada-citacao > blockquote {
+        margin: 0;
+    }
+
+    /* A autoria fica alinhada à direita, sob o fim da citação */
+    .chamada-citacao > figcaption {
+        margin-top: 0.25rem;
+        text-align: right;
+        font-weight: var(--peso-forte);
+    }
+
+.chamada-botao {
+    flex: 0 0 auto;
+}
+
+/* #endregion Seção 10 — Chamada final */
+
+/* #region Seção 11 — Rodapé */
+
+/* Faixa de ponta a ponta da janela; só o miolo respeita a largura de leitura. */
+.rodape {
+    padding-block: var(--espaco-4);
+    background-color: var(--cor-superficie);
+    text-align: center;
+}
+
+.rodape-redes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--espaco-3);
+    margin: 0 0 var(--espaco-3);
+    padding: 0;
+    list-style: none;
+}
+
+    /* Círculos apenas contornados no acento, como no mockup — diferente dos
+       ícones da biografia, que têm preenchimento. */
+    .rodape-redes a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border: 2px solid var(--cor-acento-solido);
+        border-radius: 50%;
+        color: var(--cor-texto);
+        font-size: var(--texto-lg);
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+        .rodape-redes a:hover,
+        .rodape-redes a:focus-visible {
+            background-color: var(--cor-acento-solido);
+            color: var(--cor-acento-contraste);
+        }
+
+.rodape-copyright {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0 var(--espaco-1);
+    margin: 0;
+}
+
+/* A assinatura usa a Ernestone: é o propósito dela no projeto. Como a fonte
+   é manuscrita e tem altura de x pequena, vai num corpo bem maior. */
+.rodape-assinatura {
+    font-family: var(--fonte-assinatura);
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--cor-texto);
+}
+
+    .rodape-assinatura:hover,
+    .rodape-assinatura:focus-visible {
+        color: var(--cor-acento);
+    }
+
+/* #endregion Seção 11 — Rodapé */
+
+/* #region Cabeçalho fixo */
+
+.cabecalho {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 1030;
+    height: var(--altura-cabecalho);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+    /* Ganha fundo sólido depois que a página rola (classe aplicada em app.js) */
+    .cabecalho.rolado {
+        background-color: var(--cor-cabecalho);
+        box-shadow: 0 1px 0 0 var(--cor-borda);
+        backdrop-filter: blur(8px);
+    }
+
+    .cabecalho > .conteudo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--espaco-2);
+        height: 100%;
+    }
+
+.cabecalho-controles {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-2);
+}
+
+/* Botões só de ícone do cabeçalho (menu e tema) */
+.botao-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--raio-pequeno);
+    background-color: transparent;
+    color: var(--cor-texto);
+    font-size: var(--texto-lg);
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+    .botao-icone:hover {
+        color: var(--cor-acento);
+        background-color: var(--cor-superficie);
+    }
+
+/* Alternador de idioma PT | EN */
+.alternador-idioma {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-1);
+}
+
+.botao-idioma {
+    display: inline-block;
+    min-width: 2.25rem;
+    text-align: center;
+    text-decoration: none;
+    padding: 0.25rem var(--espaco-1);
+    border: 1px solid transparent;
+    border-radius: var(--raio-pequeno);
+    background-color: transparent;
+    color: var(--cor-texto);
+    font-family: inherit;
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+    .botao-idioma:hover {
+        color: var(--cor-acento);
+    }
+
+    .botao-idioma.ativo,
+    .botao-idioma.ativo:hover {
+        background-color: var(--cor-acento-solido);
+        color: var(--cor-acento-contraste);
+    }
+
+/* Ícone do alternador de tema: mostra a AÇÃO, não o estado atual.
+   No escuro aparece o sol (ir para o claro); no claro, a lua.
+   Sem data-tema (JS desligado) vale o padrão do produto: escuro. */
+.icone-ir-escuro {
+    display: none;
+}
+
+:root[data-tema="claro"] .icone-ir-claro {
+    display: none;
+}
+
+:root[data-tema="claro"] .icone-ir-escuro {
+    display: inline-block;
+}
+
+/* #endregion Cabeçalho fixo */
+
+/* #region Menu de navegação (offcanvas) */
+
+.menu-navegacao {
+    width: 20rem;
+    max-width: 85vw;
+    background-color: var(--cor-superficie);
+    color: var(--cor-texto);
+    border-left: 1px solid var(--cor-borda);
+}
+
+    .menu-navegacao .offcanvas-header {
+        border-bottom: 1px solid var(--cor-borda);
+    }
+
+    .menu-navegacao .offcanvas-title {
+        font-size: var(--texto-md);
+        font-weight: var(--peso-forte);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--cor-texto-suave);
+    }
+
+.lista-navegacao {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.link-navegacao {
+    display: block;
+    padding: var(--espaco-1) 0;
+    color: var(--cor-texto);
+    font-size: var(--texto-lg);
+    font-weight: var(--peso-medio);
+}
+
+    .link-navegacao:hover,
+    .link-navegacao:focus-visible {
+        color: var(--cor-acento);
+    }
+
+/* #endregion Menu de navegação */
+
+/* #region Botões do Portifólio */
+
+.btn-acento {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-1);
+    padding: 0.75rem var(--espaco-3);
+    border: 0;
+    border-radius: var(--raio-pequeno);
+    background-color: var(--cor-acento-solido);
+    color: var(--cor-acento-contraste);
+    font-weight: var(--peso-forte);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+    .btn-acento:hover {
+        background-color: var(--cor-acento-hover);
+        color: var(--cor-acento-contraste);
+    }
+
+/* #endregion Botões do Portifólio */
+
+/* #region Herança do template Blazor
+
+   Regras que vieram do template padrão. As cores foram trocadas pelos tokens;
+   as regras de erro e validação são mantidas como estão.
+
+*/
+
+.btn-link {
+    color: var(--cor-acento);
+}
+
+.btn-primary {
+    color: var(--cor-acento-contraste);
+    background-color: var(--cor-acento);
+    border-color: var(--cor-acento);
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem var(--cor-acento-suave);
+}
+
+h1:focus {
+    outline: none;
+}
+
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid #e50000;
+}
+
+.validation-message {
+    color: #e50000;
+}
+
+/* Barra de erro do Blazor. O app.css herdado do template NÃO trazia estas
+   regras, então o elemento de MainLayout renderizava solto no fim de toda
+   página, mostrando "Ocorreu um erro não tratado" o tempo todo.
+   Fica oculto até o Blazor exibi-lo (ele troca o display por script). */
+#blazor-error-ui {
+    color-scheme: light only;
+    display: none;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    background: lightyellow;
+    color: #212934;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+}
+
+    #blazor-error-ui .dismiss {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.75rem;
+        cursor: pointer;
+    }
+
+.blazor-error-boundary {
+    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
+    padding: 1rem 1rem 1rem 3.7rem;
+    color: white;
+}
+
+    .blazor-error-boundary::after {
+        content: "Ocorreu um erro."
+    }
+
+.darker-border-checkbox.form-check-input {
+    border-color: #929292;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* #endregion Herança do template Blazor */

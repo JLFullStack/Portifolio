@@ -1,0 +1,25 @@
+﻿@page "/notfound"
+
+<div class="container text-center" role="alert" aria-live="assertive">
+    <p class="erro">404</p>
+    <h1>Não encontrado</h1>
+    <p class="fs-4 lead">O endereço ou recurso que você tentou acessar não existe ou não foi encontrado.</p>
+
+    <div class="d-flex justify-content-center gap-2 mt-3">
+        <a class="btn btn-primary text-white" @onclick="VoltarHome">Voltar para a página inicial</a>
+        <a class="btn btn-outline-secondary" @onclick="Recarregar">Tentar novamente</a>
+    </div>
+</div>
+
+
+@code {
+    private void VoltarHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private void Recarregar()
+    {
+        Navigation.NavigateTo(Navigation.Uri, true);
+    }
+}

@@ -1,0 +1,207 @@
+/* #region Keyframes */
+
+@keyframes slide-left {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes remove-right {
+    0% {
+        transform: translateX(0px);
+    }
+
+    100% {
+        transform: translateX(120%);
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dashoffset: 187;
+    }
+
+    50% {
+        stroke-dashoffset: 46.75;
+        transform: rotate(130deg);
+    }
+
+    100% {
+        stroke-dashoffset: 187;
+        transform: rotate(450deg);
+    }
+}
+
+@keyframes fade-color {
+    0% {
+        stroke: transparent;
+    }
+
+    50% {
+        stroke: var(--bs-primary);
+    }
+
+    100% {
+        stroke: transparent;
+    }
+}
+
+@keyframes aumentar-escala {
+    0% {
+        transform: scale(.85);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+/* #endregion Keyframes */
+
+/* #region Animações */
+
+.slide-left {
+    animation: slide-left 800ms forwards, fade-in 800ms forwards, remove-right 800ms 2.9s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards, fade-out 800ms 2s forwards;
+}
+
+/* #region spinner */
+
+.spinner {
+    display: none;
+    z-index: 1500;
+    animation: rotate 1.4s linear infinite;
+}
+
+.spinner-circle {
+    stroke-dasharray: 187;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    animation: dash 1.4s ease-in-out infinite, fade-color 1.4s ease-in-out infinite;
+}
+
+/* #endregion */
+
+/* #region scroll */
+
+/* Botão circular de voltar ao topo. A classe .active é aplicada por
+   mostrarScroll() em biblioteca.js quando window.scrollY > 150. */
+#btn-scroll {
+    right: var(--espaco-3);
+    bottom: 0;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    opacity: 0;
+    visibility: hidden;
+    font-size: var(--texto-lg);
+    line-height: 1;
+    cursor: pointer;
+    transition: all .6s;
+    background-color: var(--cor-acento-solido);
+    color: var(--cor-acento-contraste);
+    box-shadow: var(--sombra-card);
+}
+
+    #btn-scroll.active {
+        bottom: var(--espaco-4);
+        opacity: 1;
+        visibility: visible;
+    }
+
+        #btn-scroll.active:hover {
+            background-color: var(--cor-acento-hover);
+        }
+
+/* #endregion */
+
+/* #region Ampliar imagem */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-out;
+    z-index: 9999;
+    opacity: 0;
+    animation: fade-in 0.35s forwards;
+}
+
+    .overlay img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 10px;
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+        transform: scale(0.8);
+        opacity: 0;
+        animation: zoom-in 0.35s forwards, fade-in 0.35s forwards;
+    }
+/* #endregion */
+
+/* #endregion Animações */
+
+/* #region Movimento reduzido
+
+   Respeita a preferência do sistema do visitante: desliga rolagem suave,
+   transições e animações decorativas.
+
+*/
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* O spinner continua girando: é indicador de estado, não decoração */
+    .spinner {
+        animation: rotate 1.4s linear infinite !important;
+    }
+}
+
+/* #endregion Movimento reduzido */

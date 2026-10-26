@@ -1,0 +1,36 @@
+@*
+    Seção 11 do mockup — Rodapé.
+
+    Ícones sociais em círculos contornados no acento e a linha de copyright,
+    com o nome do autor na fonte manuscrita Ernestone — é para isso que ela
+    existe no projeto.
+
+    O fundo é uma faixa de ponta a ponta da janela: o <footer> fica fora de
+    .conteudo, e só o miolo é limitado à largura de leitura.
+
+    O botão de voltar ao topo não fica aqui: é o Scroll.razor, posicionado
+    fixo pelo MainLayout, como no mockup.
+*@
+
+<footer id="rodape" class="rodape">
+    <div class="conteudo">
+
+        <ul class="rodape-redes">
+            @foreach (var rede in Contato.Redes)
+            {
+                <li>
+                    <LinkSocial Rede="@rede" />
+                </li>
+            }
+        </ul>
+
+        <p class="rodape-copyright">
+            @T["Rodape_Copyright", DateTime.Now.Year]
+
+            <a class="rodape-assinatura"
+               href="@Contato.LinkedIn" target="_blank" rel="noopener noreferrer"
+               title="@T["Rodape_AssinaturaTitulo"]">@T["Rodape_Assinatura"]</a>
+        </p>
+
+    </div>
+</footer>

@@ -1,0 +1,14 @@
+@*
+    Botão de voltar ao topo, canto inferior direito.
+
+    O id #btn-scroll é o contrato com mostrarScroll() em biblioteca.js:
+    a função aplica/remove a classe .active conforme window.scrollY > 150
+    e faz a rolagem suave até o topo no clique. Não renomear o id.
+
+    Passou de <i role="button"> para <button>: é operável por teclado
+    nativamente, sem depender de role.
+*@
+
+<button id="btn-scroll" type="button" class="position-fixed z-2" aria-label="@T["Acessibilidade_VoltarAoTopo"]">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+</button>

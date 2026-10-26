@@ -1,0 +1,26 @@
+﻿@* @{
+    if (Titulo != null)
+    {
+        <div class="mb-5">
+            <h1 class="m-0">
+                @if (!string.IsNullOrEmpty(Titulo.ClasseIcone))
+                {
+                    <i class="@Titulo.ClasseIcone me-2"></i>
+                }
+                @Titulo.Titulo
+            </h1>
+
+            @if (!string.IsNullOrEmpty(Titulo.Subtitulo))
+            {
+                <p class="m-0">@Titulo.Subtitulo</p>
+            }
+
+            <hr class="m-0" />
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public TituloState? Titulo { get; set; }
+} *@

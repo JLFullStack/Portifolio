@@ -1,0 +1,41 @@
+@*
+    Seção 9 do mockup — Experience.
+
+    Mesma timeline da Educação, com cards mais densos: Empresa, Endereço e um
+    parágrafo descritivo justificado.
+*@
+
+<section id="experiencia" class="secao">
+    <div class="conteudo">
+        <SeparadorSecao />
+        <TituloSecao Texto="@T["Secao_Experiencia"]" />
+
+        <LinhaTempo>
+
+            <ItemLinhaTempo Periodo="@T["Exp_1_Periodo"]" Titulo="@T["Exp_1_Cargo"]">
+                <p>
+                    <strong>@T["Exp_Empresa"]</strong>
+                    @T["Exp_1_EmpresaValor"]
+                </p>
+                <p>
+                    <strong>@T["Exp_Endereco"]</strong>
+                    @T["Exp_EnderecoValor"]
+                </p>
+                <p class="linha-tempo-descricao">@T["Exp_1_Descricao"]</p>
+            </ItemLinhaTempo>
+
+            <ItemLinhaTempo Periodo="@T["Exp_2_Periodo"]" Titulo="@T["Exp_2_Cargo"]">
+                <p>
+                    <strong>@T["Exp_Empresa"]</strong>
+                    @T["Exp_2_EmpresaValor"]
+                </p>
+                <p>
+                    <strong>@T["Exp_Endereco"]</strong>
+                    @T["Exp_EnderecoValor"]
+                </p>
+                <p class="linha-tempo-descricao">@T["Exp_2_Descricao"]</p>
+            </ItemLinhaTempo>
+
+        </LinhaTempo>
+    </div>
+</section>

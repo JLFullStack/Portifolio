@@ -1,0 +1,22 @@
+@page "/"
+
+@*
+    Landing page de página única. Cada seção é um componente de
+    Components/Shared/, consumido aqui na ordem canônica do mockup
+    assets/img/layout-portifolio.png.
+
+    O cabeçalho fixo e o rodapé ficam em MainLayout.razor, por serem
+    a moldura de todas as rotas do site.
+*@
+
+<PageTitle>@T["Pagina_Titulo"]</PageTitle>
+
+<Apresentacao />
+<Biografia />
+<Projetos />
+<Depoimentos />
+<Habilidades />
+<Certificacoes />
+<Educacao />
+<Experiencia />
+<ChamadaFinal />

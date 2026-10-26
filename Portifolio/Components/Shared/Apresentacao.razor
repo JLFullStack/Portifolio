@@ -1,0 +1,50 @@
+@*
+    Seção 2 do mockup — Hero.
+
+    À esquerda a saudação, o nome em display, o cargo no acento, o parágrafo
+    de apresentação e o botão Download CV. À direita a foto. Ao fundo, três
+    curvas finas em ciano.
+
+    As curvas são SVG inline (não ícone, não imagem raster): é traçado
+    decorativo, escala sem perder nitidez e herda a cor do tema pelo token.
+*@
+
+<section id="apresentacao" class="secao secao--abertura hero" aria-label="@T["Secao_Apresentacao"]">
+
+    <svg class="hero-curvas" viewBox="0 0 1898 1000" preserveAspectRatio="xMaxYMid slice"
+         aria-hidden="true" focusable="false">
+        <g fill="none" stroke="var(--cor-acento-solido)" stroke-width="2">
+            <path d="M814 0 C 828 70, 872 106, 952 162 C 1062 238, 1152 302, 1192 402
+                     C 1226 492, 1200 562, 1232 642 C 1282 762, 1452 852, 1898 942" />
+            <path d="M870 0 C 884 70, 928 106, 1008 162 C 1118 238, 1202 306, 1230 406
+                     C 1258 496, 1236 572, 1270 652 C 1322 772, 1502 862, 1898 892" />
+            <path d="M926 0 C 940 70, 984 106, 1064 162 C 1174 238, 1248 312, 1266 412
+                     C 1288 502, 1270 580, 1302 662 C 1358 782, 1562 872, 1898 988" />
+        </g>
+    </svg>
+
+    <div class="conteudo hero-grade">
+
+        <div class="hero-texto">
+            <p class="hero-saudacao">@T["Hero_Saudacao"]</p>
+            <h1 class="hero-nome">@T["Hero_Nome"]</h1>
+            <p class="hero-profissao">@T["Hero_Profissao"]</p>
+            <p class="hero-descricao">@T["Hero_Descricao"]</p>
+
+            <a class="btn-acento" href="@Contato.Curriculo" target="_blank" rel="noopener noreferrer">
+                <i class="fal fa-download" aria-hidden="true"></i>
+                @T["Hero_BaixarCv"]
+            </a>
+        </div>
+
+        @* Primeira dobra: sem loading="lazy", e com prioridade alta por ser
+           o maior elemento visível do carregamento inicial. *@
+        <div class="hero-foto">
+            <img src="assets/img/perfil-hero.png"
+                 width="640" height="893"
+                 alt="@T["Hero_FotoAlt"]"
+                 fetchpriority="high" decoding="async" />
+        </div>
+
+    </div>
+</section>

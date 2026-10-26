@@ -1,0 +1,20 @@
+@*
+    Título de seção: rótulo alinhado à esquerda, em peso alto.
+
+    Não desenha régua. A leitura do mockup mostrou que as únicas quatro linhas
+    cianas horizontais (y = 3724, 4291, 4845 e 5677 em layout-portifolio.png)
+    ficam ACIMA dos títulos de Habilidades, Certificações, Educação e
+    Experiência — são separadores entre seções, não sublinhados de título.
+    Biografia e Depoimentos não têm régua nenhuma.
+
+    O separador é o componente SeparadorSecao.
+*@
+
+<div class="titulo-secao">
+    <h2>@Texto</h2>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Texto { get; set; } = string.Empty;
+}

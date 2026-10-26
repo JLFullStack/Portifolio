@@ -1,0 +1,31 @@
+@*
+    Seção 8 do mockup — Education.
+
+    Timeline vertical com dois cards alternando os lados. A ordem no markup é
+    a do mockup: primeiro a pós-graduação (em curso), depois o bacharelado.
+*@
+
+<section id="educacao" class="secao">
+    <div class="conteudo">
+        <SeparadorSecao />
+        <TituloSecao Texto="@T["Secao_Educacao"]" />
+
+        <LinhaTempo>
+
+            <ItemLinhaTempo Periodo="@T["Edu_PosTermino"]" Titulo="@T["Edu_PosTitulo"]">
+                <p>
+                    <strong>@T["Edu_Universidade"]</strong>
+                    @T["Edu_PosInstituicao"]
+                </p>
+            </ItemLinhaTempo>
+
+            <ItemLinhaTempo Periodo="@T["Edu_BacharelTermino"]" Titulo="@T["Edu_BacharelTitulo"]">
+                <p>
+                    <strong>@T["Edu_Universidade"]</strong>
+                    @T["Edu_BacharelInstituicao"]
+                </p>
+            </ItemLinhaTempo>
+
+        </LinhaTempo>
+    </div>
+</section>

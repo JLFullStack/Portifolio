@@ -1,0 +1,25 @@
+@*
+    Seção 7 do mockup — Certification.
+
+    Card único, com ícone de certificado à esquerda e o texto à direita.
+    O card não ocupa a largura toda: no mockup fica em torno de 40% da faixa
+    de conteúdo.
+*@
+
+<section id="certificacoes" class="secao">
+    <div class="conteudo">
+        <SeparadorSecao />
+        <TituloSecao Texto="@T["Secao_Certificacoes"]" />
+
+        <ul class="certificacoes-lista">
+            <li class="certificacao-card">
+                <i class="fal fa-file-certificate certificacao-icone" aria-hidden="true"></i>
+
+                <div>
+                    <h3 class="certificacao-sigla">@T["Cert_Sigla"]</h3>
+                    <p class="certificacao-descricao">@T["Cert_Descricao"]</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</section>

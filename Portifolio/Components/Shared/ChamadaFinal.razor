@@ -1,0 +1,31 @@
+@*
+    Seção 10 do mockup — CTA final.
+
+    Card centrado, com pouco mais de metade da largura da faixa de conteúdo:
+    à esquerda o convite e a citação, à direita o botão CONTATO.
+
+    "Vamos trabalhar juntos!" é o h2 da seção — é o título dela de fato, então
+    dispensa um rótulo acessível separado.
+*@
+
+<section id="contato" class="secao">
+    <div class="conteudo">
+        <div class="chamada-card">
+
+            <div class="chamada-texto">
+                <h2 class="chamada-convite">@T["Cta_Convite"]</h2>
+
+                <figure class="chamada-citacao">
+                    <blockquote>@T["Cta_Citacao"]</blockquote>
+                    <figcaption>@T["Cta_Autor"]</figcaption>
+                </figure>
+            </div>
+
+            <a class="btn-acento chamada-botao"
+               href="@Contato.WhatsApp" target="_blank" rel="noopener noreferrer">
+                @T["Cta_Contato"]
+            </a>
+
+        </div>
+    </div>
+</section>

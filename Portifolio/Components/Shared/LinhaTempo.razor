@@ -1,0 +1,22 @@
+@*
+    Timeline vertical usada por Educação e Experiência.
+
+    No desktop a linha fica no centro e os cards alternam os lados, com um
+    marcador na linha alinhado ao centro vertical de cada card. No mobile a
+    linha vai para a esquerda e todos os cards ficam do mesmo lado — a
+    alternância só existe em tela larga (ver responsivo.css).
+
+    A alternância é feita por :nth-child no CSS, então a ordem dos itens no
+    markup é a ordem cronológica do mockup, sem classe de lado no markup.
+
+    É uma <ol> porque a ordem importa: são etapas em sequência no tempo.
+*@
+
+<ol class="linha-tempo">
+    @ChildContent
+</ol>
+
+@code {
+    [Parameter, EditorRequired]
+    public RenderFragment? ChildContent { get; set; }
+}

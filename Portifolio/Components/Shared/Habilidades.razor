@@ -1,0 +1,30 @@
+@*
+    Seção 6 do mockup — Professional skills.
+
+    Cinco cards lado a lado, de mesma altura, cada um com o cabeçalho
+    centralizado e uma lista com marcadores alinhada à esquerda.
+    No mobile a grade colapsa em coluna (ver responsivo.css).
+*@
+
+<section id="habilidades" class="secao">
+    <div class="conteudo">
+        <SeparadorSecao />
+        <TituloSecao Texto="@T["Secao_Habilidades"]" />
+
+        <ul class="habilidades-grade">
+            @foreach (var grupo in CatalogoHabilidades.Grupos)
+            {
+                <li class="habilidades-card">
+                    <h3 class="habilidades-titulo">@T[grupo.ChaveTitulo]</h3>
+
+                    <ul class="habilidades-itens">
+                        @foreach (var item in grupo.Itens)
+                        {
+                            <li>@(item.Traduzir ? T[item.Texto].Value : item.Texto)</li>
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    </div>
+</section>

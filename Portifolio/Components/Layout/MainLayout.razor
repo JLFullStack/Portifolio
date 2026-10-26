@@ -1,0 +1,26 @@
+@inherits LayoutComponentBase
+
+@*
+    Moldura de todas as rotas: cabeçalho fixo, conteúdo e rodapé.
+    Substitui o layout de sidebar do template do Visual Studio.
+*@
+
+<a class="pular-conteudo" href="#conteudo-principal">@T["Acessibilidade_PularConteudo"]</a>
+
+<Cabecalho />
+
+<main id="conteudo-principal">
+    @Body
+</main>
+
+<Rodape />
+
+@* mostrarScroll() em biblioteca.js procura #btn-scroll já no carregamento
+   do script, por isso o componente precisa estar no layout. *@
+<Scroll />
+
+<div id="blazor-error-ui" data-nosnippet>
+    Ocorreu um erro não tratado.
+    <a href="." class="reload">Recarregar</a>
+    <span class="dismiss">🗙</span>
+</div>

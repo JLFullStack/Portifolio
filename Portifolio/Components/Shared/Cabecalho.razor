@@ -1,0 +1,116 @@
+@*
+    Cabeçalho fixo da landing page.
+
+    Mockup: minimalista, sem menu de texto no desktop — no canto superior
+    direito ficam apenas o ícone de tema e o alternador PT | EN.
+
+    A navegação por âncora foi resolvida por um offcanvas do Bootstrap acionado
+    à esquerda, mantendo o canto direito idêntico ao mockup.
+
+    Tema  → alternado no cliente por app.js, gravado em localStorage.
+    Idioma → link para o endpoint /idioma, que grava o cookie de cultura e
+             devolve o visitante à mesma rota. Ambos funcionam em SSR estático,
+             sem @@rendermode InteractiveServer.
+*@
+
+<header class="cabecalho" id="cabecalho">
+    <div class="conteudo">
+
+        <button class="botao-icone" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#menu-navegacao"
+                aria-controls="menu-navegacao" aria-label="@T["Cabecalho_AbrirMenu"]">
+            <i class="fal fa-bars" aria-hidden="true"></i>
+        </button>
+
+        <div class="cabecalho-controles">
+
+            @* Os dois rótulos vão como data-* para app.js trocar o aria-label
+               sem precisar conhecer o idioma ativo. *@
+            <button class="botao-icone" type="button" id="btn-tema"
+                    aria-label="@RotuloTemaAtual"
+                    title="@RotuloTemaAtual"
+                    data-rotulo-claro="@T["Cabecalho_TemaParaClaro"]"
+                    data-rotulo-escuro="@T["Cabecalho_TemaParaEscuro"]">
+                <i class="fas fa-sun icone-tema icone-ir-claro" aria-hidden="true"></i>
+                <i class="fas fa-moon icone-tema icone-ir-escuro" aria-hidden="true"></i>
+            </button>
+
+            <div class="alternador-idioma" role="group" aria-label="@T["Cabecalho_Idioma"]">
+                @foreach (var idioma in Idiomas)
+                {
+                    var ativo = CulturaAtual.Equals(idioma.Cultura, StringComparison.OrdinalIgnoreCase);
+
+                    <a class="botao-idioma @(ativo ? "ativo" : null)"
+                       href="@UrlIdioma(idioma.Cultura)"
+                       hreflang="@idioma.Cultura"
+                       lang="@idioma.Cultura"
+                       title="@idioma.Nome"
+                       aria-current="@(ativo ? "true" : null)">@idioma.Sigla</a>
+                }
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<nav class="offcanvas offcanvas-start menu-navegacao" tabindex="-1" id="menu-navegacao"
+     aria-label="@T["Cabecalho_NavegacaoSecoes"]">
+
+    <div class="offcanvas-header">
+        <span class="offcanvas-title">@T["Cabecalho_Navegar"]</span>
+        <button class="botao-icone" type="button"
+                data-bs-dismiss="offcanvas" aria-label="@T["Cabecalho_FecharMenu"]">
+            <i class="fal fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="offcanvas-body">
+        <ul class="lista-navegacao">
+            @foreach (var (ancora, chave) in Secoes)
+            {
+                <li>
+                    <a class="link-navegacao" href="#@ancora" data-bs-dismiss="offcanvas">@T[chave]</a>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>
+
+@code {
+    // Ordem canônica das seções do mockup. É a mesma ordem de Home.razor.
+    private static readonly (string Ancora, string Chave)[] Secoes =
+    [
+        ("apresentacao",  "Nav_Inicio"),
+        ("biografia",     "Nav_Biografia"),
+        ("projetos",      "Nav_Projetos"),
+        ("depoimentos",   "Nav_Depoimentos"),
+        ("habilidades",   "Nav_Habilidades"),
+        ("certificacoes", "Nav_Certificacoes"),
+        ("educacao",      "Nav_Educacao"),
+        ("experiencia",   "Nav_Experiencia"),
+        ("contato",       "Nav_Contato")
+    ];
+
+    private (string Cultura, string Sigla, string Nome)[] Idiomas =>
+    [
+        ("pt-BR", "PT", T["Cabecalho_IdiomaPortugues"]),
+        ("en",    "EN", T["Cabecalho_IdiomaIngles"])
+    ];
+
+    private string CulturaAtual => CultureInfo.CurrentUICulture.Name;
+
+    // O tema real só é conhecido no cliente (localStorage). O servidor renderiza
+    // o rótulo do padrão — escuro — e app.js corrige se o visitante já escolheu claro.
+    private string RotuloTemaAtual => T["Cabecalho_TemaParaClaro"];
+
+    /// <summary>
+    /// Monta o link de troca de idioma preservando a rota atual.
+    /// O fragmento (#secao) não chega ao servidor, então a volta é sempre no topo.
+    /// </summary>
+    private string UrlIdioma(string cultura)
+    {
+        var retorno = "/" + Navigation.ToBaseRelativePath(Navigation.Uri);
+
+        return $"/idioma?cultura={Uri.EscapeDataString(cultura)}&retorno={Uri.EscapeDataString(retorno)}";
+    }
+}

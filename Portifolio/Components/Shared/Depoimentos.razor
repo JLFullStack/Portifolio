@@ -1,0 +1,79 @@
+@*
+    Seção 5 do mockup — Testimonials.
+
+    Dois cards por vez: avatar circular à esquerda, depoimento à direita, nome
+    em negrito e cargo abaixo. Controles ‹ › centralizados sob os cards.
+
+    Aqui o carrossel do Bootstrap serve bem: cada slide é uma página com dois
+    cards, e o padrão de um slide por vez é exatamente o do mockup. Nenhum JS
+    próprio — só os atributos data-bs-* que o bootstrap.bundle já interpreta,
+    sem precisar de @@rendermode InteractiveServer.
+
+    O conteúdo é placeholder: texto lorem ipsum e avatar genérico, como no
+    mockup. Depoimentos reais dependem do autor.
+*@
+
+<section id="depoimentos" class="secao">
+    <div class="conteudo">
+
+        <TituloSecao Texto="@T["Secao_Depoimentos"]" />
+
+        <div id="carrossel-depoimentos" class="carousel slide carrossel-depoimentos"
+             data-bs-interval="false" data-bs-touch="true">
+
+            <div class="carousel-inner">
+                @foreach (var pagina in Paginas)
+                {
+                    <div class="carousel-item @(pagina == Paginas.First() ? "active" : null)">
+                        <ul class="depoimentos-lista">
+                            @foreach (var depoimento in pagina)
+                            {
+                                <li class="depoimento-card">
+
+                                    <div class="depoimento-avatar" aria-hidden="true">
+                                        <i class="fas fa-user" aria-hidden="true"></i>
+                                    </div>
+
+                                    <div class="depoimento-corpo">
+                                        <blockquote class="depoimento-texto">
+                                            @T["Depoimentos_TextoPlaceholder"]
+                                        </blockquote>
+
+                                        <p class="depoimento-autor">
+                                            <strong>@T["Depoimentos_NomePlaceholder"]</strong>
+                                            <span class="depoimento-cargo">@T[depoimento.ChaveCargo]</span>
+                                        </p>
+                                    </div>
+
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+
+            <div class="controles-carrossel">
+                <button type="button" class="controle-faixa"
+                        data-bs-target="#carrossel-depoimentos" data-bs-slide="prev"
+                        aria-label="@T["Depoimentos_Anterior"]">
+                    <i class="fal fa-chevron-left" aria-hidden="true"></i>
+                </button>
+
+                <button type="button" class="controle-faixa"
+                        data-bs-target="#carrossel-depoimentos" data-bs-slide="next"
+                        aria-label="@T["Depoimentos_Proximo"]">
+                    <i class="fal fa-chevron-right" aria-hidden="true"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@code {
+    /// <summary>Os depoimentos agrupados de dois em dois — cada grupo é um slide.</summary>
+    private static readonly Depoimento[][] Paginas =
+        Vitrine.Depoimentos
+            .Chunk(Vitrine.DepoimentosPorPagina)
+            .ToArray();
+}

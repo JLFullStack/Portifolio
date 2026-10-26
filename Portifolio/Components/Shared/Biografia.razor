@@ -1,0 +1,77 @@
+@*
+    Seção 3 do mockup — Biography.
+
+    À esquerda a foto circular com anel ciano e os ícones sociais distribuídos
+    no arco inferior do círculo. À direita o título, dois parágrafos
+    justificados e o bloco de dados em duas colunas.
+
+    Os ícones são posicionados por CSS a partir do índice de cada rede
+    (--indice): o ângulo é calculado no transform, então mudar a lista em
+    Dados/Contato.cs reposiciona o arco sozinho.
+*@
+
+<section id="biografia" class="secao">
+    <div class="conteudo bio-grade">
+
+        <div class="bio-retrato">
+            <div class="bio-anel">
+                <img class="bio-foto"
+                     src="assets/img/perfil-biografia.jpg"
+                     width="700" height="700"
+                     alt="@T["Bio_FotoAlt"]"
+                     loading="lazy" decoding="async" />
+
+                <ul class="bio-redes">
+                    @for (var i = 0; i < Contato.Redes.Length; i++)
+                    {
+                        var rede = Contato.Redes[i];
+
+                        <li class="bio-rede" style="--indice: @i">
+                            <LinkSocial Rede="@rede" />
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="bio-texto">
+            <TituloSecao Texto="@T["Secao_Biografia"]" />
+
+            <p class="bio-paragrafo">@T["Bio_ParagrafoInicial"]</p>
+            <p class="bio-paragrafo">@T["Bio_ParagrafoFinal"]</p>
+
+            <dl class="bio-dados">
+                <div class="bio-dado">
+                    <dt>@T["Bio_Nome"]</dt>
+                    <dd>@T["Bio_NomeValor"]</dd>
+                </div>
+
+                <div class="bio-dado">
+                    <dt>@T["Bio_Nascimento"]</dt>
+                    <dd>@T["Bio_NascimentoValor"]</dd>
+                </div>
+
+                <div class="bio-dado">
+                    <dt>@T["Bio_Idade"]</dt>
+                    <dd>@T["Bio_IdadeValor", Contato.Idade(DateOnly.FromDateTime(DateTime.Today))]</dd>
+                </div>
+
+                <div class="bio-dado">
+                    <dt>@T["Bio_Endereco"]</dt>
+                    <dd>@T["Bio_EnderecoValor"]</dd>
+                </div>
+
+                <div class="bio-dado">
+                    <dt>@T["Bio_Telefone"]</dt>
+                    <dd><a href="@Contato.TelefoneUrl">@Contato.Telefone</a></dd>
+                </div>
+
+                <div class="bio-dado">
+                    <dt>@T["Bio_Email"]</dt>
+                    <dd><a href="@Contato.EmailUrl">@Contato.Email</a></dd>
+                </div>
+            </dl>
+        </div>
+
+    </div>
+</section>

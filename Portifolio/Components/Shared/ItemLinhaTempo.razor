@@ -1,0 +1,29 @@
+@*
+    Um card da timeline: período em cima, título em destaque no acento e os
+    detalhes no corpo.
+
+    O marcador na linha é desenhado por CSS (::before do item), alinhado ao
+    centro vertical do card, como no mockup.
+*@
+
+<li class="linha-tempo-item">
+    <div class="linha-tempo-card">
+        <p class="linha-tempo-periodo">@Periodo</p>
+        <h3 class="linha-tempo-titulo">@Titulo</h3>
+
+        <div class="linha-tempo-corpo">
+            @ChildContent
+        </div>
+    </div>
+</li>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Periodo { get; set; } = string.Empty;
+
+    [Parameter, EditorRequired]
+    public string Titulo { get; set; } = string.Empty;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

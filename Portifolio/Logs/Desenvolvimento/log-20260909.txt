@@ -1,0 +1,90 @@
+
+
+2026-09-09 14:31:28 [WRN]
+
+Message: 404 - Recurso não encontrado. Path: "/~/assets//css/app.css"
+
+
+
+══════════════════════════════════════════════════════════════
+
+
+
+2026-09-09 14:31:50 [WRN]
+
+Message: 404 - Recurso não encontrado. Path: "/~/vendor/bootstrap/dist/css/bootstrap.min.css"
+
+
+
+══════════════════════════════════════════════════════════════
+
+
+
+2026-09-09 14:32:15 [WRN]
+
+Message: 404 - Recurso não encontrado. Path: "/~/vendor/bootstrap/dist/css/bootstrap.min.css"
+
+
+
+══════════════════════════════════════════════════════════════
+
+
+
+2026-09-09 14:32:15 [WRN]
+
+Message: 404 - Recurso não encontrado. Path: "/~/assets//css/app.css"
+
+
+
+══════════════════════════════════════════════════════════════
+
+
+
+2026-09-09 14:33:31 [WRN]
+
+Message: 404 - Recurso não encontrado. Path: "/~/vendor/bootstrap/dist/css/bootstrap.min.css"
+
+
+
+══════════════════════════════════════════════════════════════
+
+
+
+2026-09-09 14:33:31 [WRN]
+
+Message: 404 - Recurso não encontrado. Path: "/~/assets//css/app.css"
+
+
+
+══════════════════════════════════════════════════════════════
+
+
+
+2026-09-09 14:53:06 [WRN]
+
+Message: 404 - Recurso não encontrado. Path: "/~/vendor/bootstrap/dist/css/bootstrap.min.css"
+
+
+
+══════════════════════════════════════════════════════════════
+
+
+
+2026-09-09 14:53:06 [WRN]
+
+Message: 404 - Recurso não encontrado. Path: "/~/assets//css/app.css"
+
+
+
+══════════════════════════════════════════════════════════════
+
+
+
+2026-09-09 14:58:49 [WRN]
+
+Message: 404 - Recurso não encontrado. Path: "/rota-inexistente"
+
+
+
+══════════════════════════════════════════════════════════════
+

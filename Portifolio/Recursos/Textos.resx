@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Pagina_Titulo" xml:space="preserve">
+    <value>Portifólio — José Lucas Alcântara de Araújo</value>
+  </data>
+  <data name="Acessibilidade_PularConteudo" xml:space="preserve">
+    <value>Pular para o conteúdo</value>
+  </data>
+  <data name="Acessibilidade_VoltarAoTopo" xml:space="preserve">
+    <value>Voltar ao topo da página</value>
+  </data>
+  <data name="Cabecalho_AbrirMenu" xml:space="preserve">
+    <value>Abrir menu de navegação</value>
+  </data>
+  <data name="Cabecalho_FecharMenu" xml:space="preserve">
+    <value>Fechar menu</value>
+  </data>
+  <data name="Cabecalho_Navegar" xml:space="preserve">
+    <value>Navegar</value>
+  </data>
+  <data name="Cabecalho_NavegacaoSecoes" xml:space="preserve">
+    <value>Navegação entre as seções</value>
+  </data>
+  <data name="Cabecalho_Idioma" xml:space="preserve">
+    <value>Idioma do site</value>
+  </data>
+  <data name="Cabecalho_IdiomaPortugues" xml:space="preserve">
+    <value>Português</value>
+  </data>
+  <data name="Cabecalho_IdiomaIngles" xml:space="preserve">
+    <value>Inglês</value>
+  </data>
+  <data name="Cabecalho_TemaParaClaro" xml:space="preserve">
+    <value>Mudar para o tema claro</value>
+  </data>
+  <data name="Cabecalho_TemaParaEscuro" xml:space="preserve">
+    <value>Mudar para o tema escuro</value>
+  </data>
+  <data name="Nav_Inicio" xml:space="preserve">
+    <value>Início</value>
+  </data>
+  <data name="Nav_Biografia" xml:space="preserve">
+    <value>Biografia</value>
+  </data>
+  <data name="Nav_Projetos" xml:space="preserve">
+    <value>Projetos</value>
+  </data>
+  <data name="Nav_Depoimentos" xml:space="preserve">
+    <value>Depoimentos</value>
+  </data>
+  <data name="Nav_Habilidades" xml:space="preserve">
+    <value>Habilidades</value>
+  </data>
+  <data name="Nav_Certificacoes" xml:space="preserve">
+    <value>Certificações</value>
+  </data>
+  <data name="Nav_Educacao" xml:space="preserve">
+    <value>Educação</value>
+  </data>
+  <data name="Nav_Experiencia" xml:space="preserve">
+    <value>Experiência</value>
+  </data>
+  <data name="Nav_Contato" xml:space="preserve">
+    <value>Contato</value>
+  </data>
+  <data name="Secao_Apresentacao" xml:space="preserve">
+    <value>Apresentação</value>
+  </data>
+  <data name="Secao_Biografia" xml:space="preserve">
+    <value>Biografia</value>
+  </data>
+  <data name="Secao_Projetos" xml:space="preserve">
+    <value>Projetos</value>
+  </data>
+  <data name="Secao_Depoimentos" xml:space="preserve">
+    <value>Depoimentos</value>
+  </data>
+  <data name="Secao_Habilidades" xml:space="preserve">
+    <value>Habilidades Profissionais</value>
+  </data>
+  <data name="Secao_Certificacoes" xml:space="preserve">
+    <value>Certificações</value>
+  </data>
+  <data name="Secao_Educacao" xml:space="preserve">
+    <value>Educação</value>
+  </data>
+  <data name="Secao_Experiencia" xml:space="preserve">
+    <value>Experiência</value>
+  </data>
+  <data name="Secao_Contato" xml:space="preserve">
+    <value>Contato</value>
+  </data>
+  <data name="Hero_Saudacao" xml:space="preserve">
+    <value>Olá, meu nome é</value>
+  </data>
+  <data name="Hero_Nome" xml:space="preserve">
+    <value>Lucas Araújo</value>
+  </data>
+  <data name="Hero_Profissao" xml:space="preserve">
+    <value>Desenvolvedor Full-Stack</value>
+  </data>
+  <data name="Hero_Descricao" xml:space="preserve">
+    <value>Programador e desenvolvedor de sistemas inovador e detalhista, com profundo entusiasmo em criar soluções de software de ponta e otimizar sistemas complexos.</value>
+  </data>
+  <data name="Hero_BaixarCv" xml:space="preserve">
+    <value>Download CV</value>
+  </data>
+  <data name="Hero_FotoAlt" xml:space="preserve">
+    <value>Lucas Araújo, desenvolvedor full-stack</value>
+  </data>
+  <data name="Bio_ParagrafoInicial" xml:space="preserve">
+    <value>Brasileiro, casado e com dois filhos. Ansioso para ingressar em uma organização com visão de futuro que promove a criatividade e adota os avanços tecnológicos. Em busca de uma função desafiadora em um ambiente dinâmico e colaborativo, onde possa aplicar minha proficiência técnica e paixão por entregar soluções de software de alta qualidade, aspiro projetar e implementar aplicativos escaláveis e eficientes que elevem as experiências do usuário e simplifiquem processos críticos de negócios garantindo a integração perfeita entre diversos sistemas.</value>
+  </data>
+  <data name="Bio_ParagrafoFinal" xml:space="preserve">
+    <value>Comprometido com o aprendizado contínuo e com as tecnologias emergentes, estou preparado para contribuir com minhas fortes habilidades de resolução de problemas e mentalidade colaborativa para impulsionar o sucesso da equipe de desenvolvimento e superar os objetivos organizacionais.</value>
+  </data>
+  <data name="Bio_Nome" xml:space="preserve">
+    <value>Nome:</value>
+  </data>
+  <data name="Bio_NomeValor" xml:space="preserve">
+    <value>José Lucas Alcântara de Araújo</value>
+  </data>
+  <data name="Bio_Nascimento" xml:space="preserve">
+    <value>Nascimento:</value>
+  </data>
+  <data name="Bio_NascimentoValor" xml:space="preserve">
+    <value>2 de Setembro de 1991</value>
+  </data>
+  <data name="Bio_Idade" xml:space="preserve">
+    <value>Idade:</value>
+  </data>
+  <data name="Bio_IdadeValor" xml:space="preserve">
+    <value>{0} anos</value>
+  </data>
+  <data name="Bio_Endereco" xml:space="preserve">
+    <value>Endereço:</value>
+  </data>
+  <data name="Bio_EnderecoValor" xml:space="preserve">
+    <value>Praia Grande, São Paulo, Brasil</value>
+  </data>
+  <data name="Bio_Telefone" xml:space="preserve">
+    <value>Celular:</value>
+  </data>
+  <data name="Bio_TelefoneValor" xml:space="preserve">
+    <value>+55 13 98144-4022</value>
+  </data>
+  <data name="Bio_Email" xml:space="preserve">
+    <value>E-mail:</value>
+  </data>
+  <data name="Bio_FotoAlt" xml:space="preserve">
+    <value>Retrato de Lucas Araújo</value>
+  </data>
+  <data name="Projetos_VerTrabalho" xml:space="preserve">
+    <value>Ver Trabalho</value>
+  </data>
+  <data name="Projetos_TituloPlaceholder" xml:space="preserve">
+    <value>Projeto {0}</value>
+  </data>
+  <data name="Projetos_DescricaoPlaceholder" xml:space="preserve">
+    <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla.</value>
+  </data>
+  <data name="Projetos_ImagemPendente" xml:space="preserve">
+    <value>Imagem</value>
+  </data>
+  <data name="Projetos_ImagemAlt" xml:space="preserve">
+    <value>Imagem do projeto {0} — ainda não definida</value>
+  </data>
+  <data name="Projetos_LinkPendente" xml:space="preserve">
+    <value>Link do projeto ainda não definido</value>
+  </data>
+  <data name="Projetos_Vitrine" xml:space="preserve">
+    <value>Vitrine de projetos</value>
+  </data>
+  <data name="Projetos_Anterior" xml:space="preserve">
+    <value>Projeto anterior</value>
+  </data>
+  <data name="Projetos_Proximo" xml:space="preserve">
+    <value>Próximo projeto</value>
+  </data>
+  <data name="Depoimentos_Anterior" xml:space="preserve">
+    <value>Depoimento anterior</value>
+  </data>
+  <data name="Depoimentos_Proximo" xml:space="preserve">
+    <value>Próximo depoimento</value>
+  </data>
+  <data name="Depoimentos_TextoPlaceholder" xml:space="preserve">
+    <value>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla.cing elit. Lorem ipsum dolor.</value>
+  </data>
+  <data name="Depoimentos_NomePlaceholder" xml:space="preserve">
+    <value>Nome da pessoa</value>
+  </data>
+  <data name="Depoimentos_CargoFrontEnd" xml:space="preserve">
+    <value>Desenvolvedor Front-end</value>
+  </data>
+  <data name="Depoimentos_AvatarAlt" xml:space="preserve">
+    <value>Avatar de exemplo</value>
+  </data>
+  <data name="Skills_FrontEnd" xml:space="preserve">
+    <value>Front-end</value>
+  </data>
+  <data name="Skills_BackEnd" xml:space="preserve">
+    <value>Back-end</value>
+  </data>
+  <data name="Skills_Banco" xml:space="preserve">
+    <value>Banco de Dados</value>
+  </data>
+  <data name="Skills_DevOps" xml:space="preserve">
+    <value>DevOps</value>
+  </data>
+  <data name="Skills_Outras" xml:space="preserve">
+    <value>Outras</value>
+  </data>
+  <data name="Skills_ApiRest" xml:space="preserve">
+    <value>API Rest</value>
+  </data>
+  <data name="Skills_Microsservicos" xml:space="preserve">
+    <value>Microsserviços</value>
+  </data>
+  <data name="Skills_PacoteAdobe" xml:space="preserve">
+    <value>Pacote Adobe</value>
+  </data>
+  <data name="Skills_PacoteOffice" xml:space="preserve">
+    <value>Pacote Office</value>
+  </data>
+  <data name="Cert_Sigla" xml:space="preserve">
+    <value>SFPC</value>
+  </data>
+  <data name="Cert_Descricao" xml:space="preserve">
+    <value>Scrum Foundation Professional Certificate (SFPC) - 2019</value>
+  </data>
+  <data name="Edu_Universidade" xml:space="preserve">
+    <value>Universidade:</value>
+  </data>
+  <data name="Edu_PosTermino" xml:space="preserve">
+    <value>Estudando - previsão, Janeiro de 2024</value>
+  </data>
+  <data name="Edu_PosTitulo" xml:space="preserve">
+    <value>Pós-Graduação em Engenharia DevOps</value>
+  </data>
+  <data name="Edu_PosInstituicao" xml:space="preserve">
+    <value>Faculdade Focus (EAD)</value>
+  </data>
+  <data name="Edu_BacharelTermino" xml:space="preserve">
+    <value>Dezembro de 2014</value>
+  </data>
+  <data name="Edu_BacharelTitulo" xml:space="preserve">
+    <value>Bacharel em Sistemas da Informação</value>
+  </data>
+  <data name="Edu_BacharelInstituicao" xml:space="preserve">
+    <value>Faculdade do Litoral Sul Paulista (FALS)</value>
+  </data>
+  <data name="Exp_Empresa" xml:space="preserve">
+    <value>Empresa:</value>
+  </data>
+  <data name="Exp_Endereco" xml:space="preserve">
+    <value>Endereço:</value>
+  </data>
+  <data name="Exp_EnderecoValor" xml:space="preserve">
+    <value>Av. Presidente Kennedy, 9000 - Praia Grande, São Paulo, Brasil.</value>
+  </data>
+  <data name="Exp_1_Periodo" xml:space="preserve">
+    <value>2022 - 2023</value>
+  </data>
+  <data name="Exp_1_Cargo" xml:space="preserve">
+    <value>Programador de Computador</value>
+  </data>
+  <data name="Exp_1_EmpresaValor" xml:space="preserve">
+    <value>Prefeitura da Estância Balneária de Praia Grande - Secretaria de Planejamento.</value>
+  </data>
+  <data name="Exp_1_Descricao" xml:space="preserve">
+    <value>Programador de Computador Full Stack. Atuando no processo de desenvolvimento e manutenção de layouts de sites web, utilizando as linguagens front-end Javascript, CSS3 e HTML5. Programando/mantendo aplicações Web e API’s Rest, utilizando as aplicações back-end ASP.NET C# e Banco SQL Server. Adotando os conceitos de Programação em Clean Architecture.</value>
+  </data>
+  <data name="Exp_2_Periodo" xml:space="preserve">
+    <value>2013</value>
+  </data>
+  <data name="Exp_2_Cargo" xml:space="preserve">
+    <value>Estagiário</value>
+  </data>
+  <data name="Exp_2_EmpresaValor" xml:space="preserve">
+    <value>Prefeitura da Estância Balneária de Praia Grande - Secretaria de Educação.</value>
+  </data>
+  <data name="Exp_2_Descricao" xml:space="preserve">
+    <value>Estagiário no departamento de inclusão digital, executando como professor de informática para alunos de escola municipal e orientando os professores na utilização das aplicações, hardwares e softwares em laboratório de informática e salas de aula.</value>
+  </data>
+  <data name="Cta_Convite" xml:space="preserve">
+    <value>Vamos trabalhar juntos!</value>
+  </data>
+  <data name="Cta_Citacao" xml:space="preserve">
+    <value>“Os detalhes importam, vale a pena esperar para acertar”.</value>
+  </data>
+  <data name="Cta_Autor" xml:space="preserve">
+    <value>Steve Jobs</value>
+  </data>
+  <data name="Cta_Contato" xml:space="preserve">
+    <value>CONTATO</value>
+  </data>
+  <data name="Rodape_Copyright" xml:space="preserve">
+    <value>Copyright © {0} Portifólio. Design By</value>
+  </data>
+  <data name="Rodape_AssinaturaTitulo" xml:space="preserve">
+    <value>Perfil de Lucas Araújo no LinkedIn</value>
+  </data>
+  <data name="Rodape_Assinatura" xml:space="preserve">
+    <value>Lucas Araújo</value>
+  </data>
+</root>
