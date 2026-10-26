@@ -1,0 +1,18 @@
+# Next.js e Cloudflare (gerados)
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.wrangler/
+.dev.vars
+.env*
+
+# Conteúdo exportado do D1 no build (a fonte é o banco)
+conteudo/conteudo.json
+
+# Visual Studio e .NET (Blazor, até a remoção na fase 7)
+.vs/
+Portifolio/bin/
+Portifolio/obj/
+Portifolio/Logs/

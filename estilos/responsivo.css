@@ -1,0 +1,199 @@
+/* <!-- CSS devices midia queries
+-- Tipycal Devices Breakpoints --
+    * telas pequenas: até 600px
+    * celular       : de 600px até 768px
+    * tablet        : de 768px até 992px
+    * desktop       : de 992px até 1200px
+    * telas grandes : acima de 1200px
+
+    * and (orientation: landscape) : paisagem
+    * and (orientation: portrait)  : retrato
+--> */
+
+/* #region tablet — o grid de duas colunas fica apertado antes do celular */
+
+@media only screen and (max-width: 991px) {
+    .hero-grade,
+    .bio-grade {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--espaco-4);
+    }
+
+    /* A foto sobe para cima do texto e fica centrada; o texto continua
+       alinhado à esquerda, que é mais legível do que um bloco centralizado. */
+    .hero-foto,
+    .bio-retrato {
+        order: -1;
+        justify-self: center;
+    }
+
+        .hero-foto > img {
+            margin-inline: auto;
+        }
+
+    /* Justificar em coluna estreita abre "rios" de espaço entre as palavras */
+    .hero-descricao,
+    .bio-paragrafo {
+        text-align: left;
+        text-indent: 0;
+    }
+
+    .bio-dados {
+        justify-content: start;
+    }
+
+    /* Projetos: o texto vai para cima e a faixa ocupa a largura toda */
+    .projetos-grade {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Dois cards de depoimento lado a lado não cabem: um por página */
+    .depoimentos-faixa {
+        --por-pagina: 1;
+    }
+
+    /* Cinco cards de habilidade não cabem em tablet: passam a três */
+    .habilidades-grade {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .certificacao-card {
+        max-width: none;
+    }
+}
+
+/* #endregion */
+
+/*#region celular */
+
+@media only screen and (max-width: 767px) {
+    :root {
+        --altura-cabecalho: 3.75rem;
+    }
+
+    .conteudo {
+        padding-inline: var(--espaco-2);
+    }
+
+    .cabecalho-controles {
+        gap: var(--espaco-1);
+    }
+
+    .botao-topo {
+        right: var(--espaco-2);
+    }
+
+    /* As curvas são desenhadas para uma composição larga: recortadas em tela
+       estreita viram ruído atrás do texto. */
+    .hero-curvas {
+        display: none;
+    }
+
+    .hero-foto {
+        max-width: 16rem;
+    }
+
+    /* Uma coluna só: os seis campos empilham */
+    .bio-dados {
+        grid-auto-flow: row;
+        grid-template-rows: none;
+        gap: var(--espaco-1);
+    }
+
+    .separador-secao {
+        width: 100%;
+    }
+
+    .projeto-descricao {
+        text-align: left;
+        text-indent: 0;
+    }
+
+    .depoimento-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .depoimento-texto {
+        text-align: left;
+    }
+
+    .depoimento-autor {
+        align-items: center;
+    }
+
+    .controles-carrossel {
+        gap: var(--espaco-4);
+    }
+
+    /* Coluna única de habilidades */
+    .habilidades-grade {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .certificacao-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    /* As timelines colapsam: a linha vai para a esquerda e todos os cards
+       ficam do mesmo lado. A alternância só existe no desktop. */
+    .linha-tempo {
+        --recuo-linha: 3rem;
+        gap: var(--espaco-4);
+    }
+
+        .linha-tempo::before {
+            left: var(--raio-marcador);
+        }
+
+    .linha-tempo-item,
+    .linha-tempo-item:nth-child(even) {
+        width: auto;
+        margin-left: var(--recuo-linha);
+    }
+
+        .linha-tempo-item:nth-child(odd)::before,
+        .linha-tempo-item:nth-child(even)::before {
+            left: calc(-1 * var(--recuo-linha));
+            right: auto;
+        }
+
+    .linha-tempo-descricao {
+        text-align: left;
+    }
+
+    /* Chamada final: o botão desce para baixo do texto */
+    .chamada-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: var(--espaco-3);
+    }
+
+    .chamada-botao {
+        justify-content: center;
+    }
+
+    /* Seis ícones de 3rem só cabem em uma fila com folga menor */
+    .rodape-redes {
+        gap: var(--espaco-1);
+    }
+
+    /* Reserva espaço para o botão flutuante de voltar ao topo não cobrir
+       a linha de copyright quando a página está rolada até o fim. */
+    .rodape {
+        padding-bottom: 5.5rem;
+    }
+}
+
+/* #endregion */
+
+/* #region telas maiores */
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* #endregion */

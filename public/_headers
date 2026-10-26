@@ -1,0 +1,16 @@
+# Cabeçalhos HTTP dos arquivos estáticos (Cloudflare Workers Static Assets).
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# JS, CSS e fontes do Next têm o hash do conteúdo no nome: podem ficar em cache para sempre.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fotos geradas por scripts/otimizar-imagens.mjs: mudam raramente, mas sem hash no nome.
+/imagens/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400

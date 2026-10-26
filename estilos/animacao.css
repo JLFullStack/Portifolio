@@ -1,0 +1,61 @@
+/* #region Botão de voltar ao topo
+
+   Circular, no canto inferior direito (BotaoTopo.tsx). Aparece com a classe
+   .ativo quando a página passa de 150px de rolagem.
+
+*/
+
+.botao-topo {
+    position: fixed;
+    right: var(--espaco-3);
+    bottom: 0;
+    z-index: 2;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    opacity: 0;
+    visibility: hidden;
+    font-size: var(--texto-lg);
+    line-height: 1;
+    cursor: pointer;
+    transition: all .6s;
+    background-color: var(--cor-acento-solido);
+    color: var(--cor-acento-contraste);
+    box-shadow: var(--sombra-card);
+}
+
+    .botao-topo.ativo {
+        bottom: var(--espaco-4);
+        opacity: 1;
+        visibility: visible;
+    }
+
+        .botao-topo.ativo:hover {
+            background-color: var(--cor-acento-hover);
+        }
+
+/* #endregion */
+
+/* #region Movimento reduzido
+
+   Respeita a preferência do sistema do visitante: desliga rolagem suave,
+   transições e animações decorativas.
+
+*/
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* #endregion Movimento reduzido */

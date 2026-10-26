@@ -4,47 +4,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Projeto
 
-Portfólio pessoal de José Lucas Alcântara de Araújo. O repositório está **em migração**: a versão publicada (GitHub Pages, `jlfullstack.github.io/Portifolio`) é um site estático (`index.html` + `assets/`), ainda rastreado no git mas removido da árvore de trabalho. O desenvolvimento atual acontece em `Portifolio/`, um app **Blazor Server (.NET 9)** recém-criado a partir do template padrão. Ao portar comportamento, o site estático antigo é a referência de design — recupere-o com `git show HEAD:index.html` / `git show HEAD:assets/js/script.js`.
+Portfólio pessoal de José Lucas Alcântara de Araújo: landing page de página única em pt-BR (`/`) e inglês (`/en`).
 
-Código, comentários e nomes de identificadores são em **português** (`TituloPagina`, `mostrarMensagem`, `ativarSpinner`, `animacao.css`). Mantenha essa convenção.
+O repositório está **em migração de Blazor Server para Next.js**, publicado no Cloudflare Workers. O plano, as decisões e as fases estão em [docs/plano-migracao-nextjs.md](docs/plano-migracao-nextjs.md); leia-o antes de mudar a arquitetura. Fase atual: **1** (landing estática, sem banco).
+
+- **Nova stack** (raiz do repositório): Next.js 16 com `output: "export"`, React 19, TypeScript, Wrangler.
+- **`Portifolio/`** é o app Blazor antigo, mantido **só como referência visual** (marcação, CSS e comentários das seções em `Portifolio/Components/Shared/`, textos em `Portifolio/Recursos/*.resx`) até a fase 7, quando sai do repositório. Não desenvolva nele.
+- A aplicação `X:\SEPLAN-0416\GitHub\market-pressure` é a referência de arquitetura e publicação (Worker, D1, login). **Só leitura: nunca altere nada nela.**
+
+Código, comentários e identificadores em **português** (`lerConteudo`, `ProjetosVitrine`, `SeparadorSecao`). Mantenha a convenção.
 
 ## Comandos
 
-```powershell
-dotnet run --project Portifolio            # https://localhost:58564 / http://localhost:58570
-dotnet build Portifolio.sln
-dotnet watch --project Portifolio          # hot reload
+```
+npm run dev        # next dev em http://localhost:3000
+npm run build      # exportação estática em out/
+npm run preview    # build + wrangler dev (versão publicada local) em http://127.0.0.1:8787
+npm run deploy     # build + wrangler deploy
+npm run tipos      # tsc --noEmit
+npm run icones     # regenera componentes/icones/dados.ts
+npm run imagens    # regenera as fotos WebP em public/imagens/
 ```
 
-Não há projeto de testes nem workflow de CI (`.github/` está vazio). SDK em uso: .NET 9.0.304.
+No Windows, o `wrangler dev` segura a pasta `out/` e o `next build` falha com EBUSY: pare o preview antes de recompilar. Não há testes automatizados nem CI ainda.
 
 ## Arquitetura
 
-- **`Portifolio/Program.cs`** — pipeline mínimo: Razor Components com `InteractiveServerRenderMode`, Serilog via `UseSerilog`/`ReadFrom.Configuration`, e `GlobalMiddleware` registrado **depois** de `MapStaticAssets()`.
-- **`Portifolio/Middlewares/GlobalMiddleware.cs`** — captura exceções não tratadas (redireciona para `/error`) e respostas 404 (redireciona para `/NotFound`). Atenção a dois pontos: o namespace é `ProjetoBase.Blazor.Middlewares` (resquício do template base, não `Portifolio.Middlewares`), e **a rota `/NotFound` ainda não existe** — criar `Components/Pages/NotFound.razor` antes de confiar nesse caminho.
-- **Logging** — Serilog grava em arquivo apenas em Development (`appsettings.Development.json`: `Logs/Desenvolvimento/log-.txt`, rolagem diária, 30 dias). Não há sink de arquivo configurado para produção. Os logs ficam versionados sob `Portifolio/Logs/`.
-- **`Components/`** — `App.razor` é o host HTML (declara CSS/JS globais e a ordem dos scripts), `Routes.razor` o router, `Layout/` o layout padrão, `Pages/` as rotas (`/`, `/counter`, `/weather`, `/Error` — as três primeiras ainda são do template), `Shared/` os componentes reutilizáveis.
-
-### Ponte Razor ↔ JavaScript
-
-O front-end não usa JS interop tipado: `wwwroot/assets/js/biblioteca.js` é uma biblioteca de funções globais que manipulam o DOM procurando **IDs e classes fixos** renderizados pelos componentes de `Components/Shared/`. Ao editar um desses componentes, verifique o seletor correspondente em `biblioteca.js`:
-
-| Componente | Seletor | Funções |
-|---|---|---|
-| `Toast.razor` | `#ntf-card`, `#successMessage`, `#errorMessage` | `mostrarMensagem(msg, success)` |
-| `Scroll.razor` | `#btn-scroll` | `mostrarScroll()` |
-| `Loader.razor` | `.spinner` + `.backdrop` injetado | `ativarSpinner` / `desativarSpinner` (+ variantes `*Debounce`) |
-
-`biblioteca.js` também expõe `q`/`qa` (atalhos de `querySelector`), `debounce`, máscaras (`cpf`, `rg`, `telefone`, `cep`, `numerosInteiros`, `numerosDecimais`), `filtrar`/`limparFiltro`, `ampliarImagem` e `ativarPopover`. Várias funções são **auto-invocadas na carga** do script — cuidado ao adicionar comportamento global. `app.js` está vazio e é o lugar para código específico da aplicação.
-
-`TituloPagina.razor` está inteiramente comentado; depende de um tipo `TituloState` ainda não criado.
-
-### Assets
-
-- `wwwroot/vendor/` — Bootstrap 5, Bootstrap Icons e Font Awesome Pro versionados no repositório (sem npm/package.json). Não há build de front-end.
-- `wwwroot/assets/css/` — `app.css` (base do template), `animacao.css`, `responsivo.css`, todos referenciados em `App.razor`.
-- Fontes locais em `wwwroot/assets/font/` (Arimo, Ernestone herdadas do site antigo; Inter adicionada).
-
-## Dependências notáveis
-
-`Microsoft.EntityFrameworkCore.Design` está referenciado no `.csproj` mas **não há DbContext, provider nem connection string** — persistência ainda não foi iniciada.
+- **Rotas**: dois layouts raiz, um por idioma, para o `<html lang>` sair certo no HTML estático: `app/(pt)/` → `/` e `app/(en)/en/` → `/en`. A 404 é `app/global-not-found.tsx` (`experimental.globalNotFound`), exportada como `out/404.html`. Os dois layouts usam `componentes/Documento.tsx` (html, fontes, CSS global, script inline do tema).
+- **Landing**: `componentes/landing/Landing.tsx` monta as seções na ordem do mockup; cada seção é um componente de servidor que recebe `PropsSecao` (`conteudo`, `idioma`, `d`). Seção sem itens não aparece, nem no menu.
+- **Componentes de cliente** (`"use client"`): `CabecalhoFixo`, `MenuNavegacao` (`<dialog>` nativo), `BotaoTema`, `BotaoTopo`, `ControlesFaixa`, `ProjetosVitrine`, `Idade`, `AnoAtual`. Recebem ícones e markup prontos do servidor como `children`/props. Mantenha o resto como componente de servidor: o desempenho da landing no celular é a prioridade nº 1.
+- **Conteúdo**: `lib/conteudo.ts` (tipos e `lerConteudo()`, só no build) lê `conteudo/conteudo.json` (exportado do D1 a partir da fase 2, não versionado) ou, sem ele, `conteudo/semente.json`. Campos traduzíveis são `Texto` (`{ pt, en }`); `texto(valor, idioma)` usa o outro idioma quando um está vazio. Itens com `"exemplo": true` são placeholders do mockup.
+- **Textos fixos da interface**: `dicionarios/index.ts` (`DICIONARIOS.pt`/`.en`, mesmo formato tipado). `{n}` e `{ano}` são preenchidos no navegador (`Idade`, `AnoAtual`), porque a landing só é regerada quando o conteúdo é publicado.
+- **Ícones**: só Font Awesome Pro 5.13, como SVG inline via `<Icone nome="fal:download" />`. `componentes/icones/dados.ts` é gerado por `scripts/gerar-icones.mjs` a partir de `Portifolio/wwwroot/vendor/font-awesome-pro/pro-5.13.0/js/` (lista em `ICONES` no script). Nada de webfont, Bootstrap ou Bootstrap Icons.
+- **Estilos**: `estilos/app.css` (tokens de cor em `:root` e `:root[data-tema="claro"]`; nenhuma regra usa hex literal), `animacao.css`, `responsivo.css`, embutidos no HTML (`experimental.inlineCss`). Tema no `data-tema` do `<html>`, gravado em `localStorage` (`portifolio-tema`).
+- **Imagens**: `<img>` com `srcset` de WebP pré-gerados (`Foto`: `base`, `larguras`); `images.unoptimized` (sem otimizador do Next). A foto do hero é o LCP: `fetchPriority="high"`, sem lazy.
+- **Publicação**: `wrangler.jsonc` (Worker `portifolio`, assets de `out/`, `not_found_handling: "404-page"`, binding D1 `DB` → banco `portifolio`, próprio do portfólio). Cabeçalhos de segurança e cache em `public/_headers`.

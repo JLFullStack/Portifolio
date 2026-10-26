@@ -1,0 +1,28 @@
+// Publicação no Cloudflare Workers (npm run deploy = next build + wrangler deploy).
+// Fase 1: só os arquivos estáticos de out/ (a landing em / e /en e a 404).
+// A partir da fase 3 entram o Worker (worker/index.js: /api, /auth e a guarda de /admin e
+// /depoimento) e o domínio próprio. Sem R2: as imagens ficam no D1, para não haver custo.
+// Plano: docs/plano-migracao-nextjs.md.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "portifolio",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "out",
+    // /en serve out/en.html; endereço inexistente recebe out/404.html com status 404.
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "portifolio",
+      // Banco próprio do portfólio (não é o do market-pressure).
+      "database_id": "568ee63b-1938-4f4c-8a05-faade6dc07e8",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Fase 7 (virada): "routes": [{ "pattern": "lucasaraujo.dev.br", "custom_domain": true }]
+  // Até lá, o teste fica em https://portifolio.<conta>.workers.dev
+  "observability": { "enabled": true }
+}
