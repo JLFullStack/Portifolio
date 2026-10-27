@@ -3,6 +3,8 @@
 // No build, a landing lê conteudo/conteudo.json, exportado do D1 por
 // scripts/exportar-conteudo.mjs. Sem ele (desenvolvimento sem banco), usa
 // conteudo/semente.json, o conteúdo inicial (também usado para popular o banco).
+// Os repositórios do GitHub vêm de conteudo/github.json (scripts/exportar-github.mjs),
+// quando existe.
 // Só roda no servidor, durante o build: nada daqui vai para o navegador.
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -26,7 +28,38 @@ export type Projeto = {
     titulo: Texto;
     descricao: Texto;
     url: string | null;
+    /** Link do código-fonte (GitHub, GitLab...). */
+    repositorio: string | null;
+    stack: string[];
+    /** Etiqueta curta, como "Em produção". Vazia: sem etiqueta. */
+    situacao: Texto;
     imagem: Foto | null;
+    /** Imagem de fundo (paisagem) que aparece bem apagada atrás da seção enquanto o projeto está ativo. */
+    fundo: Foto | null;
+};
+
+/** Um card da seção "O que eu faço". */
+export type Servico = { icone: NomeIcone; titulo: Texto; descricao: Texto };
+
+export type RepositorioGithub = {
+    nome: string;
+    descricao: string;
+    url: string;
+    linguagem: string | null;
+    estrelas: number;
+    forks: number;
+    /** AAAA-MM-DD do último push. */
+    atualizadoEm: string;
+};
+
+/** Atividade pública no GitHub, buscada no build. */
+export type Github = {
+    usuario: string;
+    url: string;
+    repositoriosPublicos: number;
+    seguidores: number;
+    estrelas: number;
+    repositorios: RepositorioGithub[];
 };
 
 export type Depoimento = {
@@ -52,7 +85,8 @@ export type Conteudo = {
         telefone: string;
         whatsapp: string;
         linkedin: string;
-        curriculo: string;
+        /** Link do Download CV em cada idioma (inglês vazio: usa o do português). */
+        curriculo: Texto;
         saudacao: Texto;
         profissao: Texto;
         descricaoHero: Texto;
@@ -63,14 +97,18 @@ export type Conteudo = {
         chamadaAutor: string;
         fotoHero: Foto;
         fotoBiografia: Foto;
+        /** Mostra o selo "Disponível para novos projetos" no topo. */
+        disponivel: boolean;
     };
     redes: RedeSocial[];
+    servicos: Servico[];
     projetos: Projeto[];
     depoimentos: Depoimento[];
     habilidades: { titulo: Texto; itens: ItemHabilidade[] }[];
     certificacoes: { sigla: string; descricao: Texto }[];
     formacoes: { periodo: Texto; titulo: Texto; instituicao: Texto }[];
-    experiencias: { periodo: Texto; cargo: Texto; empresa: Texto; endereco: Texto; descricao: Texto }[];
+    experiencias: { periodo: Texto; cargo: Texto; empresa: Texto; endereco: Texto; descricao: Texto; stack: string[] }[];
+    github: Github | null;
 };
 
 let cache: Conteudo | undefined;
@@ -82,7 +120,30 @@ export function lerConteudo(): Conteudo {
     const exportado = join(pasta, "conteudo.json");
     const arquivo = existsSync(exportado) ? exportado : join(pasta, "semente.json");
 
-    cache = JSON.parse(readFileSync(arquivo, "utf8")) as Conteudo;
+    const lido = JSON.parse(readFileSync(arquivo, "utf8")) as Conteudo;
+    const github = join(pasta, "github.json");
+    const vazio: Texto = { pt: "", en: "" };
+
+    // Campos novos ganham valor padrão: um conteudo.json exportado antes deles continua valendo.
+    cache = {
+        ...lido,
+        perfil: {
+            ...lido.perfil,
+            // Exportado antes do currículo por idioma: o link único vale para o português.
+            curriculo: typeof lido.perfil.curriculo === "string" ? { pt: lido.perfil.curriculo, en: "" } : lido.perfil.curriculo,
+            disponivel: Boolean(lido.perfil.disponivel)
+        },
+        servicos: lido.servicos ?? [],
+        projetos: lido.projetos.map(projeto => ({
+            ...projeto,
+            repositorio: projeto.repositorio ?? null,
+            stack: projeto.stack ?? [],
+            situacao: projeto.situacao ?? vazio,
+            fundo: projeto.fundo ?? null
+        })),
+        experiencias: lido.experiencias.map(experiencia => ({ ...experiencia, stack: experiencia.stack ?? [] })),
+        github: existsSync(github) ? JSON.parse(readFileSync(github, "utf8")) as Github : null
+    };
     return cache;
 }
 

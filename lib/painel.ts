@@ -30,6 +30,18 @@ export type Depoimento = Linha & {
 
 export type Grupo = Linha & { itens: Linha[] };
 
+/** Mensagem do formulário de contato da landing. */
+export type Mensagem = {
+    id: number;
+    nome: string;
+    email: string;
+    interesse: string;
+    texto: string;
+    idioma: "pt" | "en";
+    lida: number;
+    enviada_em: string;
+};
+
 export type UsuarioPainel = {
     id: number;
     nome: string;
@@ -55,6 +67,7 @@ export type DadosPainel = {
     perfil: Perfil;
     redes: Linha[];
     projetos: Projeto[];
+    servicos: Linha[];
     depoimentos: Depoimento[];
     grupos: Grupo[];
     certificacoes: Linha[];
@@ -62,6 +75,9 @@ export type DadosPainel = {
     experiencias: Linha[];
     usuarios: UsuarioPainel[];
     publicacoes: Publicacao[];
+    mensagens: Mensagem[];
+    /** O currículo em PDF enviado no painel em cada idioma, ou null. */
+    curriculos: Record<"pt" | "en", { tamanho: number; atualizado_em: string } | null>;
     imagens: Record<string, InfoImagem>;
 };
 

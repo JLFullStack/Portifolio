@@ -64,7 +64,9 @@ export function AreaDepoente() {
         envio.executar(async () => {
             await api("PUT", "/api/meu-depoimento", { nome, idioma_original: idioma, profissao, texto, foto: foto?.id ?? null });
             await carregar();
-        }, "Depoimento enviado! Ele aparece no portfólio depois que o Lucas aprovar.");
+        }, idioma === "pt"
+            ? "Depoimento enviado! Ele aparece no portfólio depois que o Lucas aprovar."
+            : "Testimonial sent! It will appear on the portfolio once Lucas approves it.");
     };
 
     const situacao = dados?.depoimento ? SITUACAO[dados.depoimento.situacao] : null;
@@ -74,7 +76,10 @@ export function AreaDepoente() {
         <>
             <header className="painel-cabecalho">
                 <div className="conteudo">
-                    <p className="painel-marca">Portfólio <span>Lucas Araújo</span></p>
+                    <a className="painel-marca" href="/">
+                        <span className="monograma" aria-hidden="true">LA</span>
+                        Portfólio <span>Lucas Araújo</span>
+                    </a>
                     <div className="painel-acoes-topo">
                         <a className="botao" href="/">{portugues ? "Ver portfólio" : "View portfolio"}</a>
                         <button type="button" className="botao" onClick={sair}>{portugues ? "Sair" : "Sign out"}</button>
@@ -88,7 +93,7 @@ export function AreaDepoente() {
                     <p className="painel-subtitulo">
                         {portugues
                             ? "Conte como foi trabalhar com o Lucas. Escreva no idioma que preferir: ele cuida da tradução."
-                            : "Tell us what it was like to work with Lucas. Write in the language you prefer: he takes care of the translation."}
+                            : "Tell us what it was like to work with Lucas. Write in whichever language you prefer; he'll take care of the translation."}
                     </p>
 
                     <Aviso aviso={carregamento.aviso} />
@@ -100,7 +105,7 @@ export function AreaDepoente() {
                                     <span className={`selo ${situacao.selo}`}>{situacao[idioma]}</span>
                                     {dados.depoimento?.publicado && (portugues
                                         ? " · A versão aprovada está no portfólio. Uma edição nova só a substitui depois de aprovada."
-                                        : " · The approved version is on the portfolio. A new edit only replaces it once approved.")}
+                                        : " · The approved version is live on the portfolio. A new edit replaces it only after it's approved.")}
                                 </p>
                             )}
 
@@ -117,7 +122,7 @@ export function AreaDepoente() {
                                     <Campo rotulo={portugues ? "Seu nome" : "Your name"}>
                                         <Entrada required maxLength={120} value={nome} onChange={e => setNome(e.target.value)} />
                                     </Campo>
-                                    <Campo rotulo={portugues ? "Sua profissão" : "Your profession"} dica={portugues ? "Ex.: Desenvolvedora Front-end" : "E.g.: Front-end Developer"}>
+                                    <Campo rotulo={portugues ? "Sua profissão" : "Your profession"} dica={portugues ? "Ex.: Desenvolvedora Front-end" : "e.g., Front-end Developer"}>
                                         <Entrada required maxLength={120} value={profissao} onChange={e => setProfissao(e.target.value)} />
                                     </Campo>
                                 </div>
@@ -133,7 +138,7 @@ export function AreaDepoente() {
                                     <div className="imagens">
                                         <Previa id={foto?.id ?? null} info={foto?.info} redonda alt={nome} />
                                         <div>
-                                            <EnviarImagem larguras={[160, 320]} quadrada rotulo={portugues ? "Escolher foto" : "Choose photo"}
+                                            <EnviarImagem larguras={[160, 320]} proporcao={1} redonda idioma={idioma} rotulo={portugues ? "Escolher foto" : "Choose photo"}
                                                           aoEnviar={imagem => setFoto({ id: imagem.id, info: imagem })} />
                                             {foto && (
                                                 <div className="botoes">

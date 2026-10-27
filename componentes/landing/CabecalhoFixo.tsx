@@ -21,6 +21,8 @@ export function CabecalhoFixo({ children }: { children: ReactNode }) {
     return (
         <header className={rolado ? "cabecalho rolado" : "cabecalho"} id="cabecalho">
             {children}
+            {/* Barra de progresso da leitura: preenchida pela rolagem, só com CSS (animation-timeline). */}
+            <span className="cabecalho-progresso" aria-hidden="true" />
         </header>
     );
 }

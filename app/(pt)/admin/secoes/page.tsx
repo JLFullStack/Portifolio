@@ -12,6 +12,12 @@ const REDES: DefCampo[] = [
     { nome: "icone", rotulo: "Ícone", tipo: "icone" }
 ];
 
+const SERVICO: DefCampo[] = [
+    { nome: "icone", rotulo: "Ícone", tipo: "icone-servico" },
+    { nome: "titulo", rotulo: "Título", bilingue: true },
+    { nome: "descricao", rotulo: "Descrição", tipo: "area", bilingue: true, dica: "Uma ou duas frases sobre o que você entrega." }
+];
+
 const GRUPO: DefCampo[] = [{ nome: "titulo", rotulo: "Título do card", bilingue: true }];
 
 const HABILIDADE: DefCampo[] = [
@@ -35,7 +41,8 @@ const EXPERIENCIA: DefCampo[] = [
     { nome: "cargo", rotulo: "Cargo", bilingue: true },
     { nome: "empresa", rotulo: "Empresa", bilingue: true },
     { nome: "endereco", rotulo: "Endereço", bilingue: true },
-    { nome: "descricao", rotulo: "Descrição", tipo: "area", bilingue: true }
+    { nome: "descricao", rotulo: "Descrição", tipo: "area", bilingue: true },
+    { nome: "stack", rotulo: "Tecnologias", dica: "Separadas por vírgula. Aparecem em etiquetas no card." }
 ];
 
 /** As seções em lista da landing. Seção sem nenhum item some da landing e do menu. */
@@ -52,6 +59,18 @@ export default function PaginaSecoes() {
                 <p className="cartao-nota">Aparecem em volta da foto da biografia e no rodapé.</p>
                 <EditorColecao tabela="redes_sociais" itens={dados.redes} campos={REDES} rotuloNovo="Nova rede"
                                resumo={item => titulo(item, "nome")} />
+            </section>
+
+            <section className="cartao">
+                <h2>O que eu faço (serviços)</h2>
+                <p className="cartao-nota">Cards logo depois do topo. Os títulos também viram os assuntos do formulário de contato.</p>
+                <EditorColecao tabela="servicos" itens={dados.servicos} campos={SERVICO} rotuloNovo="Novo serviço"
+                               resumo={item => (
+                                   <>
+                                       {titulo(item, "titulo_pt", "titulo_en")}
+                                       {Boolean(item.exemplo) && <span className="selo selo-pendente"> exemplo</span>}
+                                   </>
+                               )} />
             </section>
 
             <section className="cartao">

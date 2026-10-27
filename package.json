@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "preview": "next build && wrangler dev",
-    "deploy": "node scripts/exportar-conteudo.mjs --remoto && next build && wrangler deploy",
+    "preview:local": "wrangler d1 migrations apply portifolio --local && node scripts/exportar-conteudo.mjs && node scripts/exportar-github.mjs && next build && wrangler dev",
+    "deploy": "node scripts/exportar-conteudo.mjs --remoto && node scripts/exportar-github.mjs && next build && wrangler deploy",
     "tipos": "tsc --noEmit",
     "icones": "node scripts/gerar-icones.mjs",
     "imagens": "node scripts/otimizar-imagens.mjs",
@@ -16,7 +17,8 @@
     "banco:semente": "node scripts/carregar-semente.mjs",
     "banco:semente:remoto": "node scripts/carregar-semente.mjs --remoto",
     "conteudo": "node scripts/exportar-conteudo.mjs",
-    "conteudo:remoto": "node scripts/exportar-conteudo.mjs --remoto"
+    "conteudo:remoto": "node scripts/exportar-conteudo.mjs --remoto",
+    "github": "node scripts/exportar-github.mjs"
   },
   "dependencies": {
     "next": "16.4.3",

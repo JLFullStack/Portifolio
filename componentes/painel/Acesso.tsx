@@ -29,6 +29,7 @@ export function FormLogin() {
     return (
         <main className="acesso">
             <form className="acesso-cartao" onSubmit={entrar}>
+                <span className="monograma acesso-marca" aria-hidden="true">LA</span>
                 <h1>Entrar</h1>
                 <p>Área restrita do portfólio de Lucas Araújo.</p>
 
@@ -91,6 +92,7 @@ export function FormConvite() {
     return (
         <main className="acesso">
             <form className="acesso-cartao" onSubmit={definir}>
+                <span className="monograma acesso-marca" aria-hidden="true">LA</span>
                 <h1>Criar senha</h1>
 
                 {!pessoa ? (

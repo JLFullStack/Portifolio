@@ -8,7 +8,8 @@ import { Icone } from "@/componentes/icones/Icone";
 import { AreaTexto, Aviso, Campo, CampoBilingue, Entrada, useAcao } from "./Campos";
 import { usePainel } from "./PainelAdmin";
 
-type TipoCampo = "texto" | "area" | "url" | "icone" | "bool";
+/** "icone": redes sociais (fab:); "icone-servico": os ícones de traço fino dos cards de Serviços. */
+type TipoCampo = "texto" | "area" | "url" | "icone" | "icone-servico" | "bool";
 
 /** Um campo do formulário. `bilingue` edita as colunas <nome>_pt e <nome>_en. */
 export type DefCampo = { nome: string; rotulo: string; tipo?: TipoCampo; bilingue?: boolean; dica?: string };
@@ -18,13 +19,21 @@ type Valores = Record<string, string | number | boolean | null>;
 /** Ícones de redes sociais disponíveis (gerados por scripts/gerar-icones.mjs). */
 const ICONES_REDES = Object.keys(ICONES).filter(nome => nome.startsWith("fab:")) as (keyof typeof ICONES)[];
 
+/** Ícones oferecidos para os cards de Serviços (todos gerados em scripts/gerar-icones.mjs). */
+const ICONES_SERVICOS = ([
+    "fal:server", "fal:laptop-code", "fal:database", "fal:sync-alt", "fal:tools", "fal:mobile-alt", "fal:cloud", "fal:shield-check",
+    "fal:chart-line", "fal:cogs", "fal:code", "fal:layer-group", "fal:rocket", "fal:paint-brush", "fal:infinity"
+] as const).filter(nome => Object.hasOwn(ICONES, nome));
+
+const opcoesIcone = (tipo?: TipoCampo): readonly (keyof typeof ICONES)[] => tipo === "icone-servico" ? ICONES_SERVICOS : ICONES_REDES;
+
 function valoresIniciais(campos: DefCampo[], item?: Linha): Valores {
     const valores: Valores = {};
 
     for (const campo of campos) {
         const colunas = campo.bilingue ? [`${campo.nome}_pt`, `${campo.nome}_en`] : [campo.nome];
         for (const coluna of colunas) {
-            valores[coluna] = item?.[coluna] ?? (campo.tipo === "bool" ? 1 : campo.tipo === "icone" ? ICONES_REDES[0] : "");
+            valores[coluna] = item?.[coluna] ?? (campo.tipo === "bool" ? 1 : campo.tipo?.startsWith("icone") ? opcoesIcone(campo.tipo)[0] : "");
         }
     }
 
@@ -53,14 +62,14 @@ function Formulario({ campos, valores, mudar }: { campos: DefCampo[]; valores: V
                     );
                 }
 
-                if (campo.tipo === "icone") {
+                if (campo.tipo === "icone" || campo.tipo === "icone-servico") {
                     return (
                         <Campo key={campo.nome} rotulo={campo.rotulo} dica={campo.dica}>
                             <span className="opcoes">
                                 <select className="entrada" style={{ maxWidth: "16rem" }} value={String(valor)} onChange={e => mudar(campo.nome, e.target.value)}>
-                                    {ICONES_REDES.map(nome => <option key={nome} value={nome}>{nome.slice(4)}</option>)}
+                                    {opcoesIcone(campo.tipo).map(nome => <option key={nome} value={nome}>{nome.slice(4)}</option>)}
                                 </select>
-                                {Object.hasOwn(ICONES, String(valor)) && <Icone nome={String(valor) as keyof typeof ICONES} />}
+                                {Object.hasOwn(ICONES, String(valor)) && <span className="previa-icone"><Icone nome={String(valor) as keyof typeof ICONES} /></span>}
                             </span>
                         </Campo>
                     );

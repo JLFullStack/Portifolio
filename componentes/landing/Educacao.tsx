@@ -1,4 +1,5 @@
 import { texto } from "@/lib/conteudo";
+import { Icone } from "@/componentes/icones/Icone";
 import { ItemLinhaTempo, LinhaTempo, SeparadorSecao, TituloSecao } from "./Comuns";
 import type { PropsSecao } from "./Landing";
 
@@ -12,7 +13,8 @@ export function Educacao({ conteudo, idioma, d }: PropsSecao) {
 
                 <LinhaTempo>
                     {conteudo.formacoes.map((formacao, i) => (
-                        <ItemLinhaTempo key={i} periodo={texto(formacao.periodo, idioma)} titulo={texto(formacao.titulo, idioma)}>
+                        <ItemLinhaTempo key={i} periodo={texto(formacao.periodo, idioma)} titulo={texto(formacao.titulo, idioma)}
+                                       icone={<Icone nome="fal:graduation-cap" />}>
                             <p>
                                 <strong>{d.universidade}</strong> {texto(formacao.instituicao, idioma)}
                             </p>

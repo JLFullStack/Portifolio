@@ -3,6 +3,7 @@
 // nunca maior que a original.
 import { api } from "@/lib/api";
 import type { InfoImagem } from "@/lib/painel";
+import type { Recorte } from "./EditorRecorte";
 
 export type ImagemEnviada = InfoImagem & { id: string };
 
@@ -19,10 +20,11 @@ function paraWebp(canvas: HTMLCanvasElement): Promise<Blob> {
 }
 
 /**
- * Prepara e envia uma imagem. `quadrada` recorta o centro (fotos redondas: biografia e depoentes).
+ * Prepara e envia uma imagem. `recorte`: a parte da original escolhida no EditorRecorte
+ * (sem ele, a imagem inteira, como a foto recortada do topo).
  * Devolve o id da imagem no banco e as larguras geradas.
  */
-export async function enviarImagem(arquivo: File, larguras: number[], quadrada = false): Promise<ImagemEnviada> {
+export async function enviarImagem(arquivo: File, larguras: number[], recorteEscolhido?: Recorte): Promise<ImagemEnviada> {
     if (!arquivo.type.startsWith("image/")) throw new Error("Escolha um arquivo de imagem.");
 
     let bitmap: ImageBitmap;
@@ -32,9 +34,14 @@ export async function enviarImagem(arquivo: File, larguras: number[], quadrada =
         throw new Error("Não foi possível ler esta imagem. Tente JPG, PNG ou WebP.");
     }
 
-    const lado = Math.min(bitmap.width, bitmap.height);
-    const recorte = quadrada
-        ? { x: (bitmap.width - lado) / 2, y: (bitmap.height - lado) / 2, largura: lado, altura: lado }
+    // O recorte veio da prévia (<img>, com a mesma orientação EXIF do bitmap): só garante que cabe na imagem.
+    const recorte = recorteEscolhido
+        ? {
+            x: Math.max(0, recorteEscolhido.x),
+            y: Math.max(0, recorteEscolhido.y),
+            largura: Math.min(recorteEscolhido.largura, bitmap.width - Math.max(0, recorteEscolhido.x)),
+            altura: Math.min(recorteEscolhido.altura, bitmap.height - Math.max(0, recorteEscolhido.y))
+        }
         : { x: 0, y: 0, largura: bitmap.width, altura: bitmap.height };
 
     // Larguras maiores que a imagem viram uma só, do tamanho original.

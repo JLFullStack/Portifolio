@@ -1,6 +1,7 @@
 // Exporta o conteúdo do D1 para o build da landing:
 //   conteudo/conteudo.json         o conteúdo no formato de lib/conteudo.ts (Conteudo)
 //   public/midia/<id>-<larg>.webp  as imagens usadas, como arquivos estáticos
+//   public/curriculo-<idioma>.pdf  os currículos enviados no painel (se houver), um por idioma
 // npm run conteudo (banco local) | npm run conteudo:remoto (banco publicado; o deploy usa este).
 //
 // Só entra o que a landing mostra: projetos publicados e a versão aprovada de cada
@@ -13,9 +14,12 @@ import { RAIZ, consultar, literal, remoto } from "./d1.mjs";
 const PASTA_MIDIA = join(RAIZ, "public", "midia");
 const LOTE_BYTES = 2 * 1024 * 1024; // imagens buscadas por consulta (o hexadecimal dobra o tamanho)
 
-const [perfis, redes, projetos, projetoImagens, depoimentos, grupos, habilidades, certificacoes, formacoes, experiencias] = consultar(`
+const CURRICULO = idioma => join(RAIZ, "public", `curriculo-${idioma}.pdf`);
+
+const [perfis, redes, servicos, projetos, projetoImagens, depoimentos, grupos, habilidades, certificacoes, formacoes, experiencias, curriculos] = consultar(`
     SELECT * FROM perfil WHERE id = 1;
     SELECT * FROM redes_sociais ORDER BY ordem, id;
+    SELECT * FROM servicos ORDER BY ordem, id;
     SELECT * FROM projetos WHERE publicado = 1 ORDER BY ordem, id;
     SELECT * FROM projeto_imagens ORDER BY projeto_id, ordem;
     SELECT id, publicado FROM depoimentos WHERE publicado IS NOT NULL ORDER BY ordem, id;
@@ -24,6 +28,7 @@ const [perfis, redes, projetos, projetoImagens, depoimentos, grupos, habilidades
     SELECT * FROM certificacoes ORDER BY ordem, id;
     SELECT * FROM formacoes ORDER BY ordem, id;
     SELECT * FROM experiencias ORDER BY ordem, id;
+    SELECT nome, hex(dados) AS hex FROM arquivos WHERE nome LIKE 'curriculo_%';
 `);
 
 const perfil = perfis[0];
@@ -34,6 +39,20 @@ if (!perfil) {
 }
 
 const t = (linha, campo) => ({ pt: linha[`${campo}_pt`] ?? "", en: linha[`${campo}_en`] ?? "" });
+const lista = texto => (texto ?? "").split(",").map(item => item.trim()).filter(Boolean);
+
+// Currículo de cada idioma enviado no painel: vira um arquivo do site e o Download CV
+// daquele idioma passa a apontar para ele. Sem PDF, vale o link do perfil (e um PDF
+// antigo é apagado). Campo vazio em inglês usa o do português (texto(), na landing).
+const curriculo = {};
+for (const idioma of ["pt", "en"]) {
+    const pdf = curriculos.find(c => c.nome === `curriculo_${idioma}`);
+
+    if (pdf) writeFileSync(CURRICULO(idioma), Buffer.from(pdf.hex, "hex"));
+    else if (existsSync(CURRICULO(idioma))) rmSync(CURRICULO(idioma));
+
+    curriculo[idioma] = pdf ? `/curriculo-${idioma}.pdf` : perfil[`curriculo_${idioma}`] ?? "";
+}
 const aprovados = depoimentos.map(d => ({ id: d.id, ...JSON.parse(d.publicado) }));
 
 // Imagens usadas pela landing: perfil, primeira imagem de cada projeto e fotos dos depoimentos.
@@ -41,13 +60,16 @@ const primeiraImagem = new Map();
 for (const item of projetoImagens) if (!primeiraImagem.has(item.projeto_id)) primeiraImagem.set(item.projeto_id, item);
 
 const idsUsados = new Set([perfil.foto_hero, perfil.foto_biografia]);
-for (const projeto of projetos) if (primeiraImagem.has(projeto.id)) idsUsados.add(primeiraImagem.get(projeto.id).imagem_id);
+for (const projeto of projetos) {
+    if (primeiraImagem.has(projeto.id)) idsUsados.add(primeiraImagem.get(projeto.id).imagem_id);
+    if (projeto.fundo) idsUsados.add(projeto.fundo);
+}
 for (const depoimento of aprovados) if (depoimento.foto) idsUsados.add(depoimento.foto);
 
-const lista = [...idsUsados].map(literal).join(", ");
+const ids = [...idsUsados].map(literal).join(", ");
 const [imagens, arquivos] = consultar(`
-    SELECT id, largura, altura FROM imagens WHERE id IN (${lista});
-    SELECT imagem_id, largura, length(dados) AS tamanho FROM imagem_arquivos WHERE imagem_id IN (${lista}) ORDER BY imagem_id, largura;
+    SELECT id, largura, altura FROM imagens WHERE id IN (${ids});
+    SELECT imagem_id, largura, length(dados) AS tamanho FROM imagem_arquivos WHERE imagem_id IN (${ids}) ORDER BY imagem_id, largura;
 `);
 
 const fotos = new Map(imagens.map(imagem => [imagem.id, {
@@ -98,7 +120,7 @@ const conteudo = {
         telefone: perfil.telefone,
         whatsapp: perfil.whatsapp,
         linkedin: perfil.linkedin,
-        curriculo: perfil.curriculo,
+        curriculo,
         saudacao: t(perfil, "saudacao"),
         profissao: t(perfil, "profissao"),
         descricaoHero: t(perfil, "descricao_hero"),
@@ -108,15 +130,21 @@ const conteudo = {
         chamadaCitacao: t(perfil, "chamada_citacao"),
         chamadaAutor: perfil.chamada_autor,
         fotoHero: foto(perfil.foto_hero),
-        fotoBiografia: foto(perfil.foto_biografia)
+        fotoBiografia: foto(perfil.foto_biografia),
+        disponivel: Boolean(perfil.disponivel)
     },
     redes: redes.map(rede => ({ nome: rede.nome, url: rede.url, icone: rede.icone })),
+    servicos: servicos.map(servico => ({ icone: servico.icone, titulo: t(servico, "titulo"), descricao: t(servico, "descricao") })),
     projetos: projetos.map(projeto => ({
         id: projeto.id,
         titulo: t(projeto, "titulo"),
         descricao: t(projeto, "descricao"),
         url: projeto.url || null,
-        imagem: foto(primeiraImagem.get(projeto.id)?.imagem_id)
+        repositorio: projeto.repositorio || null,
+        stack: lista(projeto.stack),
+        situacao: t(projeto, "situacao"),
+        imagem: foto(primeiraImagem.get(projeto.id)?.imagem_id),
+        fundo: foto(projeto.fundo)
     })),
     depoimentos: aprovados.map(depoimento => ({
         id: depoimento.id,
@@ -133,13 +161,14 @@ const conteudo = {
     certificacoes: certificacoes.map(c => ({ sigla: c.sigla, descricao: t(c, "descricao") })),
     formacoes: formacoes.map(f => ({ periodo: t(f, "periodo"), titulo: t(f, "titulo"), instituicao: t(f, "instituicao") })),
     experiencias: experiencias.map(e => ({
-        periodo: t(e, "periodo"), cargo: t(e, "cargo"), empresa: t(e, "empresa"), endereco: t(e, "endereco"), descricao: t(e, "descricao")
+        periodo: t(e, "periodo"), cargo: t(e, "cargo"), empresa: t(e, "empresa"), endereco: t(e, "endereco"), descricao: t(e, "descricao"),
+        stack: lista(e.stack)
     }))
 };
 
 writeFileSync(join(RAIZ, "conteudo", "conteudo.json"), JSON.stringify(conteudo, null, 2));
 console.log(`Conteúdo exportado do banco ${remoto ? "remoto" : "local"}: ${projetos.length} projetos, ${depoimentos.length} depoimentos, ` +
-    `${arquivos.length} arquivos de imagem (${faltando.length} baixados).`);
+    `${arquivos.length} arquivos de imagem (${faltando.length} baixados), ${curriculos.length} currículo(s) em PDF.`);
 
 /** Parágrafos da biografia (separados por linha em branco) pareados entre os idiomas. */
 function paragrafos(pt, en) {

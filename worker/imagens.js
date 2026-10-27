@@ -100,6 +100,7 @@ export async function limparImagensSemUso(env) {
           WHERE criada_em < datetime('now', '-1 day')
             AND id NOT IN (SELECT foto_hero FROM perfil UNION SELECT foto_biografia FROM perfil
                            UNION SELECT imagem_id FROM projeto_imagens
+                           UNION SELECT fundo FROM projetos WHERE fundo IS NOT NULL
                            UNION SELECT foto FROM depoimentos WHERE foto IS NOT NULL
                            UNION SELECT json_extract(publicado, '$.foto') FROM depoimentos WHERE publicado IS NOT NULL)`
     ).run();

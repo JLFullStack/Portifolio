@@ -25,7 +25,7 @@ if (existente.n > 0 && !substituir) {
 const comandos = [
     // Ordem que respeita as chaves estrangeiras.
     ...["projeto_imagens", "depoimentos", "habilidades", "grupos_habilidades", "projetos", "perfil",
-        "redes_sociais", "certificacoes", "formacoes", "experiencias", "imagem_arquivos", "imagens"]
+        "redes_sociais", "servicos", "certificacoes", "formacoes", "experiencias", "imagem_arquivos", "imagens"]
         .map(tabela => `DELETE FROM ${tabela};`)
 ];
 
@@ -68,7 +68,8 @@ inserir("perfil", {
     telefone: perfil.telefone,
     whatsapp: perfil.whatsapp,
     linkedin: perfil.linkedin,
-    curriculo: perfil.curriculo,
+    curriculo_pt: perfil.curriculo.pt,
+    curriculo_en: perfil.curriculo.en,
     saudacao_pt: perfil.saudacao.pt, saudacao_en: perfil.saudacao.en,
     profissao_pt: perfil.profissao.pt, profissao_en: perfil.profissao.en,
     descricao_hero_pt: perfil.descricaoHero.pt, descricao_hero_en: perfil.descricaoHero.en,
@@ -79,8 +80,16 @@ inserir("perfil", {
     chamada_citacao_pt: perfil.chamadaCitacao.pt, chamada_citacao_en: perfil.chamadaCitacao.en,
     chamada_autor: perfil.chamadaAutor,
     foto_hero: gravarFoto(perfil.fotoHero),
-    foto_biografia: gravarFoto(perfil.fotoBiografia)
+    foto_biografia: gravarFoto(perfil.fotoBiografia),
+    disponivel: perfil.disponivel ? 1 : 0
 });
+
+semente.servicos.forEach((servico, ordem) => inserir("servicos", {
+    ordem, icone: servico.icone,
+    titulo_pt: servico.titulo.pt, titulo_en: servico.titulo.en,
+    descricao_pt: servico.descricao.pt, descricao_en: servico.descricao.en,
+    exemplo: servico.exemplo ? 1 : 0
+}));
 
 semente.redes.forEach((rede, ordem) => inserir("redes_sociais", { ordem, nome: rede.nome, url: rede.url, icone: rede.icone }));
 
@@ -89,7 +98,9 @@ semente.projetos.forEach((projeto, ordem) => {
         id: projeto.id, ordem,
         titulo_pt: projeto.titulo.pt, titulo_en: projeto.titulo.en,
         descricao_pt: projeto.descricao.pt, descricao_en: projeto.descricao.en,
-        url: projeto.url, exemplo: projeto.exemplo ? 1 : 0
+        url: projeto.url, repositorio: projeto.repositorio, stack: projeto.stack.join(", "),
+        situacao_pt: projeto.situacao.pt, situacao_en: projeto.situacao.en,
+        exemplo: projeto.exemplo ? 1 : 0
     });
 
     if (projeto.imagem) inserir("projeto_imagens", { projeto_id: projeto.id, imagem_id: gravarFoto(projeto.imagem), ordem: 0 });
@@ -141,7 +152,8 @@ semente.experiencias.forEach((e, ordem) => inserir("experiencias", {
     cargo_pt: e.cargo.pt, cargo_en: e.cargo.en,
     empresa_pt: e.empresa.pt, empresa_en: e.empresa.en,
     endereco_pt: e.endereco.pt, endereco_en: e.endereco.en,
-    descricao_pt: e.descricao.pt, descricao_en: e.descricao.en
+    descricao_pt: e.descricao.pt, descricao_en: e.descricao.en,
+    stack: e.stack.join(", ")
 }));
 
 executarArquivo(comandos.join("\n"));

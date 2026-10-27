@@ -74,7 +74,7 @@ function CartaoDepoimento({ depoimento, mover }: { depoimento: Depoimento; mover
                 <div className="imagens" style={{ alignItems: "flex-start" }}>
                     <div className="campo">
                         <Previa id={foto} info={foto ? imagens[foto] : undefined} redonda alt={nome} />
-                        <EnviarImagem larguras={[160, 320]} quadrada rotulo="Trocar foto"
+                        <EnviarImagem larguras={[160, 320]} proporcao={1} redonda rotulo="Trocar foto"
                                       aoEnviar={img => { setImagens(i => ({ ...i, [img.id]: img })); setFoto(img.id); }} />
                         {foto && <button type="button" className="botao botao-perigo" onClick={() => setFoto(null)}>Remover foto</button>}
                     </div>

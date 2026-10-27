@@ -11,7 +11,10 @@ import { usePainel } from "@/componentes/painel/PainelAdmin";
 const CAMPOS: DefCampo[] = [
     { nome: "titulo", rotulo: "Título", bilingue: true },
     { nome: "descricao", rotulo: "Descrição", tipo: "area", bilingue: true },
+    { nome: "situacao", rotulo: "Situação", bilingue: true, dica: "Etiqueta curta acima do título. Ex.: Em produção / In production. Vazio: sem etiqueta." },
+    { nome: "stack", rotulo: "Tecnologias", dica: "Separadas por vírgula. Ex.: C#, .NET Core, SQL Server" },
     { nome: "url", rotulo: "Link do projeto (botão Ver Trabalho)", tipo: "url", dica: "Vazio: o botão aparece desativado." },
+    { nome: "repositorio", rotulo: "Link do código (botão Ver código)", tipo: "url", dica: "GitHub, GitLab... Vazio: o botão não aparece." },
     { nome: "publicado", rotulo: "Mostrar no site", tipo: "bool" }
 ];
 
@@ -45,6 +48,39 @@ function ImagemDoProjeto({ projetoId, imagem, primeira, mover }: { projetoId: nu
     );
 }
 
+/**
+ * Imagem de fundo do projeto: paisagem 16:9, ajustada no editor de corte. Na landing
+ * ela fica bem apagada atrás da seção inteira enquanto o projeto está ativo.
+ */
+function FundoDoProjeto({ projeto }: { projeto: Projeto }) {
+    const { dados, recarregar } = usePainel();
+    const { executando, aviso, executar } = useAcao();
+    const fundo = projeto.fundo ? String(projeto.fundo) : null;
+
+    const gravar = (id: string | null, mensagem: string) => executar(async () => {
+        await api("PUT", `/api/colecoes/projetos/${projeto.id}`, { fundo: id });
+        await recarregar();
+    }, mensagem);
+
+    return (
+        <div className="campo" style={{ marginTop: "var(--espaco-3)" }}>
+            <span>Imagem de fundo (aparece bem apagada atrás da seção, como papel de parede)</span>
+            <Previa id={fundo} info={fundo ? dados.imagens[fundo] : undefined} larga alt="Imagem de fundo do projeto" />
+            <div className="botoes" style={{ marginTop: 0 }}>
+                <EnviarImagem larguras={[960, 1600]} proporcao={16 / 9} rotulo={fundo ? "Trocar fundo" : "Escolher fundo"}
+                              aoEnviar={async img => { await gravar(img.id, "Fundo salvo. Publique para atualizar o site."); }} />
+                {fundo && (
+                    <button type="button" className="botao botao-perigo" disabled={executando}
+                            onClick={() => confirm("Tirar a imagem de fundo deste projeto?") && gravar(null, "Fundo retirado.")}>
+                        Remover fundo
+                    </button>
+                )}
+            </div>
+            <Aviso aviso={aviso} />
+        </div>
+    );
+}
+
 function ImagensDoProjeto({ projeto }: { projeto: Projeto }) {
     const { recarregar } = usePainel();
     const { aviso, executar } = useAcao();
@@ -70,7 +106,7 @@ function ImagensDoProjeto({ projeto }: { projeto: Projeto }) {
                                      mover={d => mover(indice, d)} />
                 ))}
             </div>
-            <EnviarImagem larguras={[360, 560, 740]} rotulo="Adicionar imagem"
+            <EnviarImagem larguras={[360, 560, 740]} proporcao={370 / 512} rotulo="Adicionar imagem"
                           aoEnviar={async img => {
                               await api("POST", `/api/projetos/${projeto.id}/imagens`, { imagem_id: img.id, alt_pt: "", alt_en: "" });
                               await recarregar();
@@ -99,7 +135,12 @@ export default function PaginaProjetos() {
                                        {Boolean(item.exemplo) && <span className="selo selo-pendente"> exemplo</span>}
                                    </>
                                )}
-                               extras={item => <ImagensDoProjeto projeto={item as Projeto} />} />
+                               extras={item => (
+                                   <>
+                                       <ImagensDoProjeto projeto={item as Projeto} />
+                                       <FundoDoProjeto projeto={item as Projeto} />
+                                   </>
+                               )} />
             </section>
         </>
     );

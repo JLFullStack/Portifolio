@@ -58,6 +58,9 @@ jobs:
 
       - name: Exportar o conteúdo, gerar e publicar
         run: npm run deploy
+        env:
+          # Token automático do Actions, só para a consulta pública dos repositórios (scripts/exportar-github.mjs).
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Registrar o resultado no painel
         if: always() && env.PUBLICACAO != ''
