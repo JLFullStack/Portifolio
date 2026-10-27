@@ -11,33 +11,62 @@ import { ProjetosVitrine } from "./ProjetosVitrine";
  * o h2 fica só para leitores de tela.
  *
  * Todos os textos e cards vão no HTML; ProjetosVitrine só alterna qual está ativo.
- * Atrás do título, o número do projeto em tamanho gigante; os cards inativos
- * ficam inclinados em perspectiva e o ativo se endireita com um brilho.
+ * Atrás do título, o número do projeto em tamanho gigante; acima dele, a situação
+ * (Em produção...), e embaixo a stack e os links do projeto e do código. Os cards
+ * inativos ficam inclinados em perspectiva e o ativo se endireita com um brilho.
+ * Atrás da seção inteira, a imagem de fundo do projeto ativo, bem apagada (papel de parede).
+ * Clicar na imagem do card em destaque a amplia (ProjetosVitrine).
  */
 export function Projetos({ conteudo, idioma, d }: PropsSecao) {
     const projetos = conteudo.projetos.map((projeto, indice) => {
         const titulo = texto(projeto.titulo, idioma);
+        const situacao = texto(projeto.situacao, idioma);
 
         return {
             id: projeto.id,
+            titulo,
+            // Só projeto com imagem pode ser ampliado; o texto vai pronto (funções não passam para o cliente).
+            rotuloAmpliar: projeto.imagem ? d.ampliarImagem(titulo) : null,
+            // Fora da primeira dobra e decorativa: lazy, alt vazio e a versão pequena no celular.
+            fundo: projeto.fundo && (
+                <img src={src(projeto.fundo)} srcSet={srcset(projeto.fundo)} sizes="100vw"
+                     width={projeto.fundo.largura} height={projeto.fundo.altura}
+                     alt="" loading="lazy" decoding="async" />
+            ),
             info: (
                 <>
                     <span className="projeto-numero" aria-hidden="true">{String(indice + 1).padStart(2, "0")}</span>
+                    {situacao && <p className="projeto-situacao">{situacao}</p>}
                     <h3 className="projeto-titulo">{titulo}</h3>
                     <p className="projeto-descricao">{texto(projeto.descricao, idioma)}</p>
 
-                    {projeto.url ? (
-                        <a className="btn-acento" href={projeto.url} target="_blank" rel="noopener noreferrer">
-                            {d.verTrabalho}
-                            <Icone nome="fal:arrow-right" />
-                        </a>
-                    ) : (
-                        // Sem endereço: um botão inerte é mais honesto que um link que não leva a lugar nenhum.
-                        <button type="button" className="btn-acento" aria-disabled="true" title={d.linkPendente}>
-                            {d.verTrabalho}
-                            <Icone nome="fal:arrow-right" />
-                        </button>
+                    {projeto.stack.length > 0 && (
+                        <ul className="etiquetas" aria-label={d.tecnologias}>
+                            {projeto.stack.map(tecnologia => <li key={tecnologia}>{tecnologia}</li>)}
+                        </ul>
                     )}
+
+                    <div className="projeto-acoes">
+                        {projeto.url ? (
+                            <a className="btn-acento" href={projeto.url} target="_blank" rel="noopener noreferrer">
+                                {d.verTrabalho}
+                                <Icone nome="fal:arrow-right" />
+                            </a>
+                        ) : (
+                            // Sem endereço: um botão inerte é mais honesto que um link que não leva a lugar nenhum.
+                            <button type="button" className="btn-acento" aria-disabled="true" title={d.linkPendente}>
+                                {d.verTrabalho}
+                                <Icone nome="fal:arrow-right" />
+                            </button>
+                        )}
+
+                        {projeto.repositorio && (
+                            <a className="btn-contorno" href={projeto.repositorio} target="_blank" rel="noopener noreferrer">
+                                <Icone nome="fab:github" />
+                                {d.verCodigo}
+                            </a>
+                        )}
+                    </div>
                 </>
             ),
             card: (
@@ -64,13 +93,18 @@ export function Projetos({ conteudo, idioma, d }: PropsSecao) {
     });
 
     return (
-        <section id="projetos" className="secao projetos revelar">
+        // Sem .revelar na seção: o respiro do topo entrava na tela antes do conteúdo e a
+        // animação acabava antes de os cards aparecerem. Quem revela são o texto e a vitrine.
+        <section id="projetos" className="secao projetos">
             <div className="conteudo projetos-grade">
                 <h2 className="visualmente-oculto">{d.secaoProjetos}</h2>
 
                 <ProjetosVitrine
                     projetos={projetos}
                     rotuloVitrine={d.vitrineProjetos}
+                    rotuloFechar={d.fecharImagem}
+                    iconeAmpliar={<Icone nome="fal:search-plus" />}
+                    iconeFechar={<Icone nome="fal:times" />}
                     controles={
                         <ControlesFaixa idFaixa="projetos-faixa" passo="item"
                                         rotuloAnterior={d.projetoAnterior} rotuloProximo={d.proximoProjeto}

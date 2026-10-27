@@ -23,7 +23,12 @@ const ICONES = {
     fal: ["arrow-right", "bars", "chevron-left", "chevron-right", "download", "file-certificate", "times", "sign-in",
         // Ícones decorativos da landing: dados da biografia, grupos de habilidades e timelines.
         "id-card", "calendar-alt", "birthday-cake", "map-marker-alt", "mobile-alt", "envelope",
-        "laptop-code", "server", "database", "infinity", "layer-group", "code", "graduation-cap", "briefcase"],
+        "laptop-code", "server", "database", "infinity", "layer-group", "code", "graduation-cap", "briefcase",
+        // Navegação por seção (menu do topo e lateral), formulário de contato, GitHub e botão de topo.
+        "home", "user", "folder-open", "comments", "paper-plane", "star", "code-branch", "external-link", "check",
+        "circle-notch", "arrow-up", "inbox", "lock-alt", "at", "search-plus",
+        // Ícones que o painel oferece para os cards de Serviços.
+        "rocket", "sync-alt", "tools", "cloud", "shield-check", "chart-line", "cogs", "paint-brush"],
     fas: ["arrow-up", "moon", "sun", "user", "quote-left"],
     // Redes sociais: também são as opções do painel ao cadastrar uma rede.
     fab: ["linkedin-in", "facebook-f", "instagram", "github", "whatsapp", "skype", "twitter", "youtube", "behance", "dribbble", "medium", "telegram", "discord", "gitlab", "stack-overflow"]

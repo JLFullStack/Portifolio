@@ -2,10 +2,18 @@
 
 import type { ReactNode } from "react";
 
+// Folga para "chegou à ponta": o scroll-snap e o arredondamento de subpixel param a
+// rolagem a um ou dois pixels do limite exato.
+const FOLGA = 4;
+
 /**
  * As setas ‹ › de uma faixa de rolagem com scroll-snap (Projetos e Depoimentos).
  * `passo`: "item" rola um card (Projetos); "pagina" rola a largura visível da
  * faixa (Depoimentos: dois cards no desktop, um no celular).
+ *
+ * O carrossel é circular: no último item, › volta ao primeiro; no primeiro, ‹ vai
+ * ao último. Em Projetos, o respiro no fim da faixa (CSS) deixa o último card
+ * chegar à borda esquerda, então o fim da rolagem é ele ativo.
  */
 export function ControlesFaixa({ idFaixa, passo, rotuloAnterior, rotuloProximo, iconeAnterior, iconeProximo }: {
     idFaixa: string;
@@ -19,6 +27,18 @@ export function ControlesFaixa({ idFaixa, passo, rotuloAnterior, rotuloProximo, 
         const faixa = document.getElementById(idFaixa);
 
         if (!faixa) return;
+
+        const fim = faixa.scrollWidth - faixa.clientWidth;
+
+        if (direcao === 1 && faixa.scrollLeft >= fim - FOLGA) {
+            faixa.scrollTo({ left: 0, behavior: "smooth" });
+            return;
+        }
+
+        if (direcao === -1 && faixa.scrollLeft <= FOLGA) {
+            faixa.scrollTo({ left: fim, behavior: "smooth" });
+            return;
+        }
 
         let distancia = faixa.clientWidth;
 

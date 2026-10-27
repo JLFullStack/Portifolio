@@ -7,7 +7,7 @@
         "telefone": "+55 13 98144-4022",
         "whatsapp": "https://wa.me/5513981444022",
         "linkedin": "https://www.linkedin.com/in/lucas-ara%C3%BAjo-95b312181/",
-        "curriculo": "https://drive.google.com/file/d/1nFcJppo1Oi0R_pzhCFTUMQq9U6nOth4_/view",
+        "curriculo": { "pt": "https://drive.google.com/file/d/1nFcJppo1Oi0R_pzhCFTUMQq9U6nOth4_/view", "en": "" },
         "saudacao": { "pt": "Olá, meu nome é", "en": "Hello, my name is" },
         "profissao": { "pt": "Desenvolvedor Full-Stack", "en": "Full-Stack Developer" },
         "descricaoHero": {
@@ -17,22 +17,23 @@
         "biografia": [
             {
                 "pt": "Brasileiro, casado e com dois filhos. Ansioso para ingressar em uma organização com visão de futuro que promove a criatividade e adota os avanços tecnológicos. Em busca de uma função desafiadora em um ambiente dinâmico e colaborativo, onde possa aplicar minha proficiência técnica e paixão por entregar soluções de software de alta qualidade, aspiro projetar e implementar aplicativos escaláveis e eficientes que elevem as experiências do usuário e simplifiquem processos críticos de negócios garantindo a integração perfeita entre diversos sistemas.",
-                "en": "Brazilian, married and with two children. Looking forward to joining a forward-thinking organization that promotes creativity and embraces technological advancements. Seeking a challenging role in a dynamic and collaborative environment where I can apply my technical proficiency and passion for delivering high-quality software solutions, I aspire to design and implement scalable and efficient applications that elevate user experiences and simplify critical business processes ensuring perfect integration between different systems."
+                "en": "Brazilian, married, with two children. I look forward to joining a forward-thinking organization that fosters creativity and embraces technological innovation. I am seeking a challenging role in a dynamic, collaborative environment where I can apply my technical expertise and my passion for delivering high-quality software. I aspire to design and build scalable, efficient applications that elevate the user experience and streamline critical business processes, ensuring seamless integration across systems."
             },
             {
                 "pt": "Comprometido com o aprendizado contínuo e com as tecnologias emergentes, estou preparado para contribuir com minhas fortes habilidades de resolução de problemas e mentalidade colaborativa para impulsionar o sucesso da equipe de desenvolvimento e superar os objetivos organizacionais.",
-                "en": "Committed to continuous learning and emerging technologies, I am prepared to contribute my strong problem-solving skills and collaborative mindset to drive the development team's success and exceed organizational goals."
+                "en": "Committed to continuous learning and emerging technologies, I am ready to contribute strong problem-solving skills and a collaborative mindset to drive my development team's success and exceed organizational goals."
             }
         ],
         "endereco": { "pt": "Praia Grande, São Paulo, Brasil", "en": "Praia Grande, São Paulo, Brazil" },
         "chamadaConvite": { "pt": "Vamos trabalhar juntos!", "en": "Let's work together!" },
         "chamadaCitacao": {
             "pt": "“Os detalhes importam, vale a pena esperar para acertar”.",
-            "en": "“Details matter, it's worth waiting to get it right”."
+            "en": "“Details matter, it's worth waiting to get it right.”"
         },
         "chamadaAutor": "Steve Jobs",
         "fotoHero": { "base": "/imagens/perfil-hero", "larguras": [320, 480, 640, 832], "largura": 1086, "altura": 1448 },
-        "fotoBiografia": { "base": "/imagens/perfil-biografia", "larguras": [360, 700], "largura": 700, "altura": 700 }
+        "fotoBiografia": { "base": "/imagens/perfil-biografia", "larguras": [360, 700], "largura": 700, "altura": 700 },
+        "disponivel": true
     },
     "redes": [
         { "nome": "LinkedIn", "url": "https://www.linkedin.com/in/lucas-ara%C3%BAjo-95b312181/", "icone": "fab:linkedin-in" },
@@ -41,6 +42,44 @@
         { "nome": "GitHub", "url": "https://github.com/JLFullStack", "icone": "fab:github" },
         { "nome": "WhatsApp", "url": "https://wa.me/5513981444022", "icone": "fab:whatsapp" },
         { "nome": "Skype", "url": "skype:live:fuscalca?chat", "icone": "fab:skype" }
+    ],
+    "servicos": [
+        {
+            "icone": "fal:server",
+            "exemplo": true,
+            "titulo": { "pt": "APIs e integrações", "en": "APIs and integrations" },
+            "descricao": {
+                "pt": "APIs REST seguras e documentadas que conectam sistemas, bancos de dados e serviços externos.",
+                "en": "Secure, well-documented REST APIs that connect systems, databases, and external services."
+            }
+        },
+        {
+            "icone": "fal:laptop-code",
+            "exemplo": true,
+            "titulo": { "pt": "Sistemas web", "en": "Web applications" },
+            "descricao": {
+                "pt": "Aplicações web completas, do banco de dados à interface, com foco em desempenho e usabilidade.",
+                "en": "End-to-end web applications, from the database to the interface, built for performance and usability."
+            }
+        },
+        {
+            "icone": "fal:sync-alt",
+            "exemplo": true,
+            "titulo": { "pt": "Modernização de sistemas", "en": "System modernization" },
+            "descricao": {
+                "pt": "Evolução de sistemas legados para arquiteturas limpas, testáveis e fáceis de manter.",
+                "en": "Modernizing legacy systems into clean, testable, and maintainable architectures."
+            }
+        },
+        {
+            "icone": "fal:tools",
+            "exemplo": true,
+            "titulo": { "pt": "Manutenção e suporte", "en": "Maintenance and support" },
+            "descricao": {
+                "pt": "Correções, melhorias contínuas e acompanhamento para o sistema seguir estável em produção.",
+                "en": "Bug fixes, continuous improvements, and monitoring to keep your system stable in production."
+            }
+        }
     ],
     "projetos": [
         {
@@ -52,6 +91,9 @@
                 "en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla."
             },
             "url": null,
+            "repositorio": "https://github.com/JLFullStack",
+            "stack": ["C#", ".NET Core", "SQL Server"],
+            "situacao": { "pt": "Em produção", "en": "In production" },
             "imagem": null
         },
         {
@@ -63,6 +105,9 @@
                 "en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla."
             },
             "url": null,
+            "repositorio": "https://github.com/JLFullStack",
+            "stack": ["JavaScript", "HTML5", "CSS3"],
+            "situacao": { "pt": "Projeto pessoal", "en": "Personal project" },
             "imagem": null
         },
         {
@@ -74,6 +119,9 @@
                 "en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc maximus, nulla."
             },
             "url": null,
+            "repositorio": null,
+            "stack": ["C#", "ASP.NET", "Clean Architecture"],
+            "situacao": { "pt": "", "en": "" },
             "imagem": null
         }
     ],
@@ -123,12 +171,12 @@
         {
             "titulo": { "pt": "Outras", "en": "Others" },
             "itens": [
-                { "pt": "API Rest", "en": "Rest API" },
+                { "pt": "API Rest", "en": "REST API" },
                 "Clean Architecture",
                 "UML",
                 "Scrum",
-                { "pt": "Pacote Adobe", "en": "Adobe package" },
-                { "pt": "Pacote Office", "en": "Office package" }
+                { "pt": "Pacote Adobe", "en": "Adobe Creative Cloud" },
+                { "pt": "Pacote Office", "en": "Microsoft Office" }
             ]
         }
     ],
@@ -140,13 +188,13 @@
     ],
     "formacoes": [
         {
-            "periodo": { "pt": "Estudando - previsão, Janeiro de 2024", "en": "Studying - forecast January 2024" },
+            "periodo": { "pt": "Estudando - previsão, Janeiro de 2024", "en": "In progress – expected January 2024" },
             "titulo": { "pt": "Pós-Graduação em Engenharia DevOps", "en": "Postgraduate degree in DevOps Engineering" },
             "instituicao": { "pt": "Faculdade Focus (EAD)", "en": "Faculdade Focus (EAD)" }
         },
         {
             "periodo": { "pt": "Dezembro de 2014", "en": "December 2014" },
-            "titulo": { "pt": "Bacharel em Sistemas da Informação", "en": "Bachelor's Degree in Information Systems" },
+            "titulo": { "pt": "Bacharel em Sistemas da Informação", "en": "Bachelor's degree in Information Systems" },
             "instituicao": { "pt": "Faculdade do Litoral Sul Paulista (FALS)", "en": "Faculdade do Litoral Sul Paulista (FALS)" }
         }
     ],
@@ -158,18 +206,20 @@
             "endereco": { "pt": "Av. Presidente Kennedy, 9000 - Praia Grande, São Paulo, Brasil.", "en": "Av. Presidente Kennedy, 9000 - Praia Grande, São Paulo, Brazil." },
             "descricao": {
                 "pt": "Programador de Computador Full Stack. Atuando no processo de desenvolvimento e manutenção de layouts de sites web, utilizando as linguagens front-end Javascript, CSS3 e HTML5. Programando/mantendo aplicações Web e API’s Rest, utilizando as aplicações back-end ASP.NET C# e Banco SQL Server. Adotando os conceitos de Programação em Clean Architecture.",
-                "en": "Full-Stack Computer Programmer. Working in the process of development and maintenance of website layouts, using front-end languages Javascript, CSS3 and HTML5. Programming/maintaining Web applications and Rest API’s, using the ASP.NET C# back-end applications and SQL Server Database. Adopting the concepts of Programming in Clean Architecture."
-            }
+                "en": "Full-stack computer programmer. Developed and maintained website layouts on the front end with JavaScript, CSS3, and HTML5. Built and maintained web applications and REST APIs on the back end with ASP.NET (C#) and SQL Server, following Clean Architecture principles."
+            },
+            "stack": ["C#", "ASP.NET", "SQL Server", "JavaScript", "HTML5", "CSS3", "Clean Architecture"]
         },
         {
             "periodo": { "pt": "2013", "en": "2013" },
-            "cargo": { "pt": "Estagiário", "en": "Trainee" },
+            "cargo": { "pt": "Estagiário", "en": "Intern" },
             "empresa": { "pt": "Prefeitura da Estância Balneária de Praia Grande - Secretaria de Educação.", "en": "Prefeitura da Estância Balneária de Praia Grande - Secretaria de Educação." },
             "endereco": { "pt": "Av. Presidente Kennedy, 9000 - Praia Grande, São Paulo, Brasil.", "en": "Av. Presidente Kennedy, 9000 - Praia Grande, São Paulo, Brazil." },
             "descricao": {
                 "pt": "Estagiário no departamento de inclusão digital, executando como professor de informática para alunos de escola municipal e orientando os professores na utilização das aplicações, hardwares e softwares em laboratório de informática e salas de aula.",
-                "en": "Intern in the digital inclusion department, working as a professor of information technology for municipal school students and guiding teachers in the use of applications, hardware and software in computer labs and classrooms."
-            }
+                "en": "Intern in the digital inclusion department, teaching computer skills to municipal school students and helping teachers use applications, hardware, and software in computer labs and classrooms."
+            },
+            "stack": []
         }
     ]
 }

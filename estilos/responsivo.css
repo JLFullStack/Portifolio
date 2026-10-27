@@ -42,9 +42,34 @@
         justify-content: start;
     }
 
-    /* Projetos: o texto vai para cima e a faixa ocupa a largura toda */
+    /* Projetos em uma coluna: a vitrine vem primeiro e o texto do projeto ativo logo
+       abaixo das setas. Trocar de projeto e ler a descrição ficam na mesma tela (com o
+       texto em cima, era preciso rolar para cima e para baixo a cada troca). */
     .projetos-grade {
         grid-template-columns: minmax(0, 1fr);
+        gap: var(--espaco-3);
+    }
+
+    .projetos-vitrine {
+        order: -1;
+    }
+
+    /* menos vazio acima da vitrine, para o texto do projeto subir para a tela */
+    .secao.projetos {
+        padding-top: var(--espaco-4);
+    }
+
+    .projetos-faixa {
+        padding-top: var(--espaco-2);
+    }
+
+    .projetos-vitrine > .controles-carrossel {
+        margin-top: 0;
+    }
+
+    /* O texto agora fica embaixo: o véu da imagem de fundo escurece de cima para baixo */
+    .projetos-fundos::after {
+        background: linear-gradient(to bottom, transparent 25%, var(--cor-fundo) 80%);
     }
 
     /* Dois cards de depoimento lado a lado não cabem: um por página */
@@ -55,6 +80,17 @@
     /* Cinco cards de habilidade não cabem em tablet: passam a três */
     .habilidades-grade {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .servicos-grade,
+    .github-grade {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* Chamada final: o formulário desce para baixo do convite */
+    .chamada-card {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--espaco-4);
     }
 
     /* A palavra de fundo desce para trás do texto, que agora vem depois da foto */
@@ -79,6 +115,11 @@
 
     .cabecalho-controles {
         gap: var(--espaco-1);
+    }
+
+    /* No celular o contato fica no menu e na própria página */
+    .cabecalho-contato {
+        display: none;
     }
 
     .botao-topo {
@@ -143,8 +184,29 @@
     }
 
     .projeto-descricao {
+        margin: var(--espaco-2) 0;
+        font-size: 0.95rem;
         text-align: left;
         text-indent: 0;
+    }
+
+    /* Texto do projeto mais compacto, para caber junto com o card */
+    .projeto-titulo {
+        font-size: clamp(1.6rem, 1rem + 4vw, 2.25rem);
+    }
+
+    .projeto-numero {
+        font-size: 4.5rem;
+    }
+
+    .projeto-situacao {
+        margin-bottom: var(--espaco-1);
+    }
+
+    .projetos-vitrine .controle-faixa {
+        width: 2.75rem;
+        height: 2.75rem;
+        font-size: 1.1rem;
     }
 
     .depoimento-card {
@@ -164,9 +226,15 @@
         gap: var(--espaco-4);
     }
 
-    /* Coluna única de habilidades */
-    .habilidades-grade {
+    /* Coluna única de habilidades, serviços e repositórios */
+    .habilidades-grade,
+    .servicos-grade,
+    .github-grade {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    .github-topo {
+        align-items: flex-start;
     }
 
     .certificacao-card {
@@ -204,15 +272,17 @@
         text-align: left;
     }
 
-    /* Chamada final: o botão desce para baixo do texto */
     .chamada-card {
-        flex-direction: column;
-        align-items: stretch;
-        padding: var(--espaco-4) var(--espaco-3);
+        padding: var(--espaco-4) var(--espaco-2);
+        border-radius: 1.25rem;
     }
 
-    .chamada-botao {
-        justify-content: center;
+    .contato-formulario {
+        padding: var(--espaco-3) var(--espaco-2);
+    }
+
+    .contato-linha {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     /* Seis ícones de 3rem só cabem em uma fila com folga menor */

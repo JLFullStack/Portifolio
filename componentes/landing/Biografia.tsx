@@ -90,8 +90,8 @@ export function Biografia({ conteudo, idioma, d }: PropsSecao) {
             {numeros.length > 0 && (
                 <div className="conteudo">
                     <ul className="bio-numeros">
-                        {numeros.map(numero => (
-                            <li key={numero.rotulo} className="bio-numero revelar">
+                        {numeros.map((numero, indice) => (
+                            <li key={numero.rotulo} className="bio-numero revelar" style={{ "--indice": indice } as CSSProperties}>
                                 <strong className="texto-gradiente">{numero.valor}</strong>
                                 <span>{numero.rotulo}</span>
                             </li>

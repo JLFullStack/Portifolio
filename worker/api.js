@@ -8,31 +8,38 @@ import { pedirPublicacao } from "./publicar.js";
 
 const ID_IMAGEM = /^[0-9a-f]{16}$/;
 
-/** Campos editáveis de cada coleção: tipo "texto", "url", "icone", "bool" ou "grupo". */
+/** Campos editáveis de cada coleção: tipo "texto", "lista", "url", "icone", "bool", "grupo" ou "imagem-opcional". */
 const COLECOES = {
     redes_sociais: { nome: "texto", url: "url", icone: "icone" },
-    projetos: { titulo_pt: "texto", titulo_en: "texto", descricao_pt: "texto", descricao_en: "texto", url: "url", publicado: "bool" },
+    projetos: {
+        titulo_pt: "texto", titulo_en: "texto", descricao_pt: "texto", descricao_en: "texto", url: "url", repositorio: "url",
+        stack: "lista", situacao_pt: "texto", situacao_en: "texto", publicado: "bool", fundo: "imagem-opcional"
+    },
+    servicos: { icone: "icone", titulo_pt: "texto", titulo_en: "texto", descricao_pt: "texto", descricao_en: "texto" },
     grupos_habilidades: { titulo_pt: "texto", titulo_en: "texto" },
     habilidades: { grupo_id: "grupo", nome_pt: "texto", nome_en: "texto" },
     certificacoes: { sigla: "texto", descricao_pt: "texto", descricao_en: "texto" },
     formacoes: { periodo_pt: "texto", periodo_en: "texto", titulo_pt: "texto", titulo_en: "texto", instituicao_pt: "texto", instituicao_en: "texto" },
     experiencias: {
         periodo_pt: "texto", periodo_en: "texto", cargo_pt: "texto", cargo_en: "texto", empresa_pt: "texto", empresa_en: "texto",
-        endereco_pt: "texto", endereco_en: "texto", descricao_pt: "texto", descricao_en: "texto"
+        endereco_pt: "texto", endereco_en: "texto", descricao_pt: "texto", descricao_en: "texto", stack: "lista"
     }
 };
 
 /** Campos obrigatórios por coleção (o resto aceita vazio). */
-const OBRIGATORIOS = { redes_sociais: ["nome", "url", "icone"], habilidades: ["nome_pt"], certificacoes: ["sigla"] };
+const OBRIGATORIOS = { redes_sociais: ["nome", "url", "icone"], servicos: ["icone"], habilidades: ["nome_pt"], certificacoes: ["sigla"] };
+
+/** Currículo: PDF de até 1,9 MB (o D1 aceita 2 MB por registro). */
+const MAXIMO_CURRICULO = 1.9 * 1024 * 1024;
 
 const PERFIL = {
     nome_curto: "texto", nome_completo: "texto", nascimento: "data", email: "texto", telefone: "texto",
-    whatsapp: "url", linkedin: "url", curriculo: "url",
+    whatsapp: "url", linkedin: "url", curriculo_pt: "url", curriculo_en: "url",
     saudacao_pt: "texto", saudacao_en: "texto", profissao_pt: "texto", profissao_en: "texto",
     descricao_hero_pt: "texto", descricao_hero_en: "texto", biografia_pt: "texto", biografia_en: "texto",
     endereco_pt: "texto", endereco_en: "texto", chamada_convite_pt: "texto", chamada_convite_en: "texto",
     chamada_citacao_pt: "texto", chamada_citacao_en: "texto", chamada_autor: "texto",
-    foto_hero: "imagem", foto_biografia: "imagem"
+    foto_hero: "imagem", foto_biografia: "imagem", disponivel: "bool"
 };
 
 function exigir(usuario, papel) {
@@ -59,10 +66,14 @@ async function validarCampos(env, dados, campos, obrigatorios = []) {
         const obrigatorio = obrigatorios.includes(campo);
 
         if (tipo === "texto") valores[campo] = campoTexto(dados, campo, { obrigatorio });
+        // Lista separada por vírgula (stack): normaliza os espaços e descarta itens vazios.
+        else if (tipo === "lista") valores[campo] = campoTexto(dados, campo, { maximo: 500 }).split(",").map(item => item.trim()).filter(Boolean).join(", ");
         else if (tipo === "url") valores[campo] = campoUrl(dados, campo, { obrigatorio });
         else if (tipo === "bool") valores[campo] = dados[campo] ? 1 : 0;
         else if (tipo === "grupo") valores[campo] = campoInteiro(dados, campo);
         else if (tipo === "imagem") valores[campo] = await exigirImagem(env, dados[campo]);
+        // Imagem que pode ser retirada: null ou vazio grava NULL.
+        else if (tipo === "imagem-opcional") valores[campo] = dados[campo] ? await exigirImagem(env, dados[campo]) : null;
         else if (tipo === "icone") {
             if (!Object.hasOwn(ICONES, dados[campo])) throw new ErroHttp(400, "Ícone desconhecido.");
             valores[campo] = dados[campo];
@@ -80,12 +91,14 @@ const lerTodos = async (env, sql, ...parametros) => (await env.DB.prepare(sql).b
 
 /** Tudo o que o painel do administrador mostra. */
 async function painel(env) {
-    const [perfil, redes, projetos, projetoImagens, depoimentos, grupos, habilidades, certificacoes, formacoes, experiencias, usuarios, publicacoes, imagens] =
+    const [perfil, redes, projetos, projetoImagens, servicos, depoimentos, grupos, habilidades, certificacoes, formacoes, experiencias,
+        usuarios, publicacoes, mensagens, curriculos, imagens] =
         await Promise.all([
             env.DB.prepare("SELECT * FROM perfil WHERE id = 1").first(),
             lerTodos(env, "SELECT * FROM redes_sociais ORDER BY ordem, id"),
             lerTodos(env, "SELECT * FROM projetos ORDER BY ordem, id"),
             lerTodos(env, "SELECT * FROM projeto_imagens ORDER BY projeto_id, ordem"),
+            lerTodos(env, "SELECT * FROM servicos ORDER BY ordem, id"),
             lerTodos(env, `SELECT d.*, u.email AS email_usuario FROM depoimentos d LEFT JOIN usuarios u ON u.id = d.usuario_id
                             ORDER BY CASE d.situacao WHEN 'pendente' THEN 0 ELSE 1 END, d.ordem, d.id`),
             lerTodos(env, "SELECT * FROM grupos_habilidades ORDER BY ordem, id"),
@@ -99,6 +112,8 @@ async function painel(env) {
                              FROM usuarios u ORDER BY u.papel, u.nome`),
             lerTodos(env, `SELECT p.*, u.nome AS usuario FROM publicacoes p LEFT JOIN usuarios u ON u.id = p.usuario_id
                             ORDER BY p.id DESC LIMIT 10`),
+            lerTodos(env, "SELECT id, nome, email, interesse, texto, idioma, lida, enviada_em FROM mensagens ORDER BY id DESC LIMIT 200"),
+            lerTodos(env, "SELECT nome, tamanho, atualizado_em FROM arquivos WHERE nome LIKE 'curriculo_%'"),
             infoImagens(env)
         ]);
 
@@ -106,6 +121,7 @@ async function painel(env) {
         perfil,
         redes,
         projetos: projetos.map(p => ({ ...p, imagens: projetoImagens.filter(i => i.projeto_id === p.id) })),
+        servicos,
         depoimentos: depoimentos.map(d => ({ ...d, publicado: d.publicado ? JSON.parse(d.publicado) : null })),
         grupos: grupos.map(g => ({ ...g, itens: habilidades.filter(h => h.grupo_id === g.id) })),
         certificacoes,
@@ -113,8 +129,69 @@ async function painel(env) {
         experiencias,
         usuarios,
         publicacoes,
+        mensagens,
+        // { pt: { tamanho, atualizado_em } | null, en: ... }
+        curriculos: Object.fromEntries(["pt", "en"].map(idioma => [idioma, curriculos.find(c => c.nome === `curriculo_${idioma}`) ?? null])),
         imagens
     };
+}
+
+/** Mensagens do formulário de contato: marcar como lida/não lida e excluir. */
+async function mensagensAdmin(request, env, partes) {
+    const numero = Number(partes[0]);
+    if (!Number.isSafeInteger(numero)) throw new ErroHttp(404, "Mensagem não encontrada.");
+
+    if (request.method === "PUT") {
+        const { lida } = await lerJson(request);
+        await env.DB.prepare("UPDATE mensagens SET lida = ? WHERE id = ?").bind(lida ? 1 : 0, numero).run();
+        return json(200, { ok: true });
+    }
+
+    if (request.method === "DELETE") {
+        await env.DB.prepare("DELETE FROM mensagens WHERE id = ?").bind(numero).run();
+        return json(200, { ok: true });
+    }
+
+    throw new ErroHttp(405, "Método não permitido.");
+}
+
+/**
+ * Currículo em PDF de um idioma (curriculo_pt ou curriculo_en): o corpo do POST é o
+ * próprio arquivo (application/pdf). GET devolve o PDF para conferir no painel; o
+ * visitante baixa o arquivo estático gerado no build.
+ */
+async function curriculoAdmin(request, env, nome) {
+    if (request.method === "POST") {
+        if (!(request.headers.get("content-type") || "").startsWith("application/pdf")) throw new ErroHttp(415, "Envie um arquivo PDF.");
+
+        const dados = new Uint8Array(await request.arrayBuffer());
+        if (!dados.length) throw new ErroHttp(400, "Arquivo vazio.");
+        if (dados.length > MAXIMO_CURRICULO) throw new ErroHttp(413, "O PDF passa de 1,9 MB. Exporte com compressão e tente de novo.");
+        // Todo PDF começa com "%PDF-".
+        if (String.fromCharCode(...dados.subarray(0, 5)) !== "%PDF-") throw new ErroHttp(400, "O arquivo não é um PDF.");
+
+        await env.DB.prepare(`INSERT INTO arquivos (nome, tipo, tamanho, dados) VALUES (?, 'application/pdf', ?, ?)
+                              ON CONFLICT (nome) DO UPDATE SET tipo = excluded.tipo, tamanho = excluded.tamanho, dados = excluded.dados,
+                                                               atualizado_em = datetime('now')`)
+            .bind(nome, dados.length, dados).run();
+        return json(201, { ok: true });
+    }
+
+    if (request.method === "GET") {
+        const arquivo = await env.DB.prepare("SELECT dados FROM arquivos WHERE nome = ?").bind(nome).first();
+        if (!arquivo) throw new ErroHttp(404, "Nenhum currículo enviado.");
+
+        return new Response(new Uint8Array(arquivo.dados), {
+            headers: { "content-type": "application/pdf", "content-disposition": `inline; filename=${nome}.pdf`, "cache-control": "no-store" }
+        });
+    }
+
+    if (request.method === "DELETE") {
+        await env.DB.prepare("DELETE FROM arquivos WHERE nome = ?").bind(nome).run();
+        return json(200, { ok: true });
+    }
+
+    throw new ErroHttp(405, "Método não permitido.");
 }
 
 async function proximaOrdem(env, tabela, filtro = "", ...parametros) {
@@ -420,8 +497,10 @@ export async function tratarApi(request, url, env, usuario) {
     if (recurso === "projetos" && partes[1] === "imagens") return imagensDoProjeto(request, env, Number(partes[0]), partes.slice(2));
     if (recurso === "depoimentos") return depoimentosAdmin(request, env, partes);
     if (recurso === "usuarios") return usuariosAdmin(request, env, partes, url.origin);
+    if (recurso === "mensagens") return mensagensAdmin(request, env, partes);
+    if (recurso === "arquivos" && ["curriculo_pt", "curriculo_en"].includes(partes[0]) && !partes[1]) return curriculoAdmin(request, env, partes[0]);
 
-    if (recurso === "publicar" && request.method === "POST") return pedirPublicacao(env, usuario);
+    if (recurso === "publicar" && request.method === "POST") return pedirPublicacao(env, usuario, url);
 
     throw new ErroHttp(404, "Não encontrado.");
 }

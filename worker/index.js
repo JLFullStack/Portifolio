@@ -3,6 +3,7 @@
 // as rotas abaixo). Este Worker cuida da área restrita:
 //
 //   /auth/*         login, sessão, convites e troca de senha (auth.js)
+//   /contato        formulário de contato da landing, sem login (contato.js)
 //   /api/*          dados do painel e do depoente, imagens e publicação (api.js)
 //   /admin/*        páginas do painel: só o administrador
 //   /depoimento/*   página do depoente: qualquer pessoa logada
@@ -10,6 +11,7 @@
 // Métodos que alteram dados só são aceitos da própria origem (o cookie já é SameSite=Lax).
 import { tratarApi } from "./api.js";
 import { tratarAuth, usuarioDaSessao } from "./auth.js";
+import { tratarContato } from "./contato.js";
 import { ErroHttp, json } from "./http.js";
 
 const PAGINAS_ADMIN = /^\/admin(\/|$)/;
@@ -24,6 +26,8 @@ export default {
                 const origem = request.headers.get("origin");
                 if (!origem || new URL(origem).host !== url.host) return json(403, { mensagem: "Origem não permitida." });
             }
+
+            if (url.pathname === "/contato") return await tratarContato(request, env);
 
             const usuario = await usuarioDaSessao(request, env);
 

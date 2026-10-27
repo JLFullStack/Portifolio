@@ -23,6 +23,7 @@ const SECOES = [
     { href: "/admin/perfil", rotulo: "Perfil" },
     { href: "/admin/projetos", rotulo: "Projetos" },
     { href: "/admin/depoimentos", rotulo: "Depoimentos" },
+    { href: "/admin/mensagens", rotulo: "Mensagens" },
     { href: "/admin/secoes", rotulo: "Seções" },
     { href: "/admin/pessoas", rotulo: "Pessoas" },
     { href: "/admin/conta", rotulo: "Conta" }
@@ -49,18 +50,23 @@ export function PainelAdmin({ children }: { children: ReactNode }) {
     }, [executar, recarregar]);
 
     const pendentes = dados?.depoimentos.filter(d => d.situacao === "pendente").length ?? 0;
+    const novas = dados?.mensagens.filter(m => !m.lida).length ?? 0;
+    const contagem: Record<string, number> = { "/admin/depoimentos": pendentes, "/admin/mensagens": novas };
 
     return (
         <>
             <header className="painel-cabecalho">
                 <div className="conteudo">
-                    <p className="painel-marca">Painel <span>do portfólio</span></p>
+                    <a className="painel-marca" href="/admin">
+                        <span className="monograma" aria-hidden="true">LA</span>
+                        Painel <span>do portfólio</span>
+                    </a>
 
                     <nav className="painel-navegacao" aria-label="Seções do painel">
                         {SECOES.map(secao => (
                             <a key={secao.href} href={secao.href} aria-current={caminho === secao.href ? "page" : undefined}>
                                 {secao.rotulo}
-                                {secao.href === "/admin/depoimentos" && pendentes > 0 && <span className="selo selo-pendente">{pendentes}</span>}
+                                {contagem[secao.href] > 0 && <span className="selo selo-pendente">{contagem[secao.href]}</span>}
                             </a>
                         ))}
                     </nav>

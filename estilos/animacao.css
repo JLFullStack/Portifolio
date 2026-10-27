@@ -1,40 +1,103 @@
 /* #region Botão de voltar ao topo
 
    Circular, no canto inferior direito (BotaoTopo.tsx). Aparece com a classe
-   .ativo quando a página passa de 150px de rolagem.
+   .ativo depois de 150px de rolagem, girando e crescendo com uma mola. O anel em
+   gradiente mostra quanto da página já foi lida (--progresso, de 0 a 1, escrito
+   pelo componente). Ao passar o mouse o miolo se enche de gradiente e a seta
+   decola em laço; no clique (.decolando) ela sai pelo alto.
 
 */
 
 .botao-topo {
     position: fixed;
     right: var(--espaco-3);
-    bottom: 0;
-    z-index: 2;
-    width: 3rem;
-    height: 3rem;
+    bottom: var(--espaco-4);
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
     padding: 0;
+    overflow: hidden;
     border: 0;
     border-radius: 50%;
-    opacity: 0;
-    visibility: hidden;
-    font-size: var(--texto-lg);
+    background-color: var(--cor-cabecalho);
+    box-shadow: var(--sombra-card), inset 0 0 0 1px var(--cor-borda);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: var(--cor-acento);
+    font-size: 1.15rem;
     line-height: 1;
     cursor: pointer;
-    transition: all .6s;
-    background: var(--gradiente-acento);
-    color: var(--cor-acento-contraste);
-    box-shadow: var(--sombra-botao);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1.5rem) scale(0.5) rotate(-120deg);
+    transition:
+        opacity 0.35s ease,
+        visibility 0.35s ease,
+        transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.3s ease,
+        color 0.3s ease;
 }
 
     .botao-topo.ativo {
-        bottom: var(--espaco-4);
         opacity: 1;
         visibility: visible;
+        transform: none;
     }
 
-        .botao-topo.ativo:hover {
-            transform: translateY(-3px);
+    /* O miolo em gradiente, que cresce no hover */
+    .botao-topo::before {
+        content: "";
+        position: absolute;
+        inset: 5px;
+        border-radius: 50%;
+        background: var(--gradiente-acento);
+        transform: scale(0);
+        transition: transform 0.4s var(--curva-saida);
+    }
+
+.botao-topo-anel {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /* o traço começa no alto e corre no sentido horário */
+    transform: rotate(-90deg);
+}
+
+    .botao-topo-anel circle {
+        fill: none;
+        stroke-width: 2.5;
+    }
+
+.botao-topo-trilho {
+    stroke: var(--cor-borda-forte);
+}
+
+.botao-topo-progresso {
+    stroke: url(#botao-topo-gradiente);
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: calc(1 - var(--progresso, 0));
+    transition: stroke-dashoffset 0.15s linear;
+}
+
+.botao-topo-seta {
+    position: relative;
+    display: inline-flex;
+}
+
+@media (hover: hover) {
+    .botao-topo.ativo:hover {
+        box-shadow: var(--sombra-botao), inset 0 0 0 1px transparent;
+        color: var(--cor-acento-contraste);
+    }
+
+        .botao-topo.ativo:hover::before {
+            transform: scale(1);
         }
+}
 
 /* #endregion */
 
@@ -46,8 +109,12 @@
 
    - Entrada da hero: os textos sobem em sequência (--atraso). A foto, que é o
      LCP, nunca começa invisível.
-   - Revelar ao rolar (.revelar): animation-timeline: view(), sem JavaScript.
-     Navegador sem suporte mostra tudo direto.
+   - Revelar ao rolar (.revelar): RevelarAoRolar.tsx marca .visivel quando o
+     elemento já está na tela, e a entrada toca com duração fixa (escalonada
+     pelo --indice nos cards). Só esconde com .revelar-ativo no <html>: sem
+     JavaScript nada some.
+   - A linha das timelines se preenche com a rolagem (animation-timeline:
+     view()); navegador sem suporte mostra a linha cheia.
    - Decorativos contínuos: aurora, órbita, anel da biografia, etiquetas
      flutuando, letreiro, cursor do cargo e onda dos marcadores.
 
@@ -115,10 +182,6 @@
         animation: girar 14s linear infinite;
     }
 
-    .projeto-info.ativo {
-        animation: subir 0.5s var(--curva-saida) both;
-    }
-
     .linha-tempo-marcador::after {
         animation: pulsar 2.6s ease-out infinite;
     }
@@ -127,18 +190,77 @@
         animation: respirar 7s ease-in-out infinite alternate;
     }
 
-    @supports (animation-timeline: view()) {
-        .revelar {
-            animation: revelar linear both;
-            animation-timeline: view();
-            animation-range: entry 0% entry 80%;
-        }
+    /* Ponto do selo de disponível: uma onda verde a cada 2 s */
+    .selo-disponivel::before {
+        animation: onda-verde 2s ease-out infinite;
+    }
 
+    /* Menu lateral: os itens e o rodapé entram em sequência ao abrir */
+    .menu-navegacao[open] .lista-navegacao > li,
+    .menu-navegacao[open] .menu-rodape {
+        animation: entrar-menu 0.5s var(--curva-saida) both;
+        animation-delay: calc(120ms + var(--indice, 0) * 40ms);
+    }
+
+    /* Botão de topo: a seta decola em laço no hover e sai pelo alto no clique */
+    @media (hover: hover) {
+        .botao-topo.ativo:hover .botao-topo-seta {
+            animation: decolar-laco 0.9s var(--curva-saida);
+        }
+    }
+
+    .botao-topo.decolando .botao-topo-seta {
+        animation: decolar 0.7s cubic-bezier(0.5, 0, 0.75, 0) both;
+    }
+
+    /* Imagem ampliada do projeto: legenda e botão de fechar chegam depois da imagem */
+    .projeto-ampliado[open] .projeto-ampliado-legenda,
+    .projeto-ampliado[open] .projeto-ampliado-fechar {
+        animation: surgir-legenda 0.4s ease 0.45s backwards;
+    }
+
+    /* Confirmação do formulário de contato */
+    .contato-enviado-icone {
+        animation: estourar 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    .revelar-ativo .revelar:not(.visivel) {
+        opacity: 0;
+    }
+
+    .revelar-ativo .revelar.visivel {
+        animation: revelar 0.9s var(--curva-saida) both;
+        animation-delay: calc(var(--indice, 0) * 110ms);
+    }
+
+    /* Cards da vitrine: entram da direita em sequência quando a vitrine aparece.
+       Anima translate (o transform é da perspectiva 3D) e só com fill backwards:
+       depois de entrar, as transições de troca de projeto voltam a valer. */
+    .revelar-ativo .projetos-vitrine:not(.visivel) .projeto-card {
+        opacity: 0;
+    }
+
+    /* A imagem de fundo da seção só acende junto com a vitrine, não quando a borda
+       da seção desponta (ainda na Biografia). */
+    .revelar-ativo .projetos-grade:not(:has(.projetos-vitrine.visivel)) > .projetos-fundos {
+        opacity: 0;
+    }
+
+    .revelar-ativo .projetos-fundos {
+        transition: opacity 1.4s ease 0.3s;
+    }
+
+    .revelar-ativo .projetos-vitrine.visivel .projeto-card {
+        animation: entrar-card 0.9s var(--curva-saida) backwards;
+        animation-delay: calc(200ms + var(--indice, 0) * 120ms);
+    }
+
+    @supports (animation-timeline: view()) {
         /* A linha das timelines se preenche conforme a seção passa pela tela */
         .linha-tempo::after {
             animation: preencher linear both;
             animation-timeline: view();
-            animation-range: cover 15% cover 60%;
+            animation-range: cover 20% cover 65%;
         }
     }
 }
@@ -162,7 +284,21 @@
 @keyframes revelar {
     from {
         opacity: 0;
-        transform: translate(var(--desloc-x, 0), 2.5rem) scale(0.97);
+        transform: translate(var(--desloc-x, 0), 3rem) scale(0.96);
+    }
+}
+
+@keyframes surgir-legenda {
+    from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+    }
+}
+
+@keyframes entrar-card {
+    from {
+        opacity: 0;
+        translate: 5rem 0;
     }
 }
 
@@ -234,6 +370,36 @@
 
 @keyframes progresso {
     to { transform: scaleX(1); }
+}
+
+@keyframes onda-verde {
+    0% { box-shadow: 0 0 0 0 var(--cor-sucesso-borda); }
+    100% { box-shadow: 0 0 0 0.45rem transparent; }
+}
+
+@keyframes entrar-menu {
+    from {
+        opacity: 0;
+        transform: translateX(-1.5rem);
+    }
+}
+
+@keyframes decolar-laco {
+    0% { transform: none; }
+    45% { opacity: 0; transform: translateY(-180%); }
+    46% { opacity: 0; transform: translateY(180%); }
+    100% { opacity: 1; transform: none; }
+}
+
+@keyframes decolar {
+    to { opacity: 0; transform: translateY(-220%); }
+}
+
+@keyframes estourar {
+    from {
+        opacity: 0;
+        transform: scale(0.3);
+    }
 }
 
 /* #endregion Efeitos de movimento */

@@ -13,7 +13,7 @@
     // /en serve out/en.html; endereço inexistente recebe out/404.html com status 404.
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page",
-    "run_worker_first": ["/auth/*", "/api/*", "/admin", "/admin/*", "/depoimento", "/depoimento/*"]
+    "run_worker_first": ["/auth/*", "/api/*", "/contato", "/admin", "/admin/*", "/depoimento", "/depoimento/*"]
   },
   "d1_databases": [
     {

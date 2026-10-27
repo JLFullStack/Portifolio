@@ -10,15 +10,20 @@ export class ErroApi extends Error {
     }
 }
 
+/**
+ * Chama a API. `corpo`: objeto (vai em JSON), FormData, ou um arquivo (Blob/File),
+ * enviado como está, com o tipo dele (o currículo em PDF).
+ */
 export async function api<T = unknown>(metodo: string, caminho: string, corpo?: unknown): Promise<T> {
     const formulario = corpo instanceof FormData;
+    const arquivo = corpo instanceof Blob;
     let resposta: Response;
 
     try {
         resposta = await fetch(caminho, {
             method: metodo,
-            headers: corpo === undefined || formulario ? undefined : { "content-type": "application/json" },
-            body: corpo === undefined ? undefined : formulario ? corpo : JSON.stringify(corpo),
+            headers: corpo === undefined || formulario ? undefined : { "content-type": arquivo ? corpo.type : "application/json" },
+            body: corpo === undefined ? undefined : formulario || arquivo ? corpo : JSON.stringify(corpo),
             credentials: "same-origin"
         });
     } catch {
@@ -26,6 +31,11 @@ export async function api<T = unknown>(metodo: string, caminho: string, corpo?: 
     }
 
     const dados = await resposta.json().catch(() => ({}));
+
+    // No `npm run dev` só existe a landing: /auth e /api são do Worker (npm run preview).
+    if (resposta.status === 404 && process.env.NODE_ENV === "development") {
+        throw new ErroApi(404, "No npm run dev não há Worker. Rode npm run preview e abra http://127.0.0.1:8787/login.");
+    }
 
     if (!resposta.ok) {
         // Sessão expirada no meio do uso do painel: volta ao login e retorna depois.

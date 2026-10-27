@@ -22,8 +22,10 @@ const pt = {
 
     nav: {
         apresentacao: "Início",
+        servicos: "Serviços",
         biografia: "Biografia",
         projetos: "Projetos",
+        github: "GitHub",
         depoimentos: "Depoimentos",
         habilidades: "Habilidades",
         certificacoes: "Certificações",
@@ -33,6 +35,7 @@ const pt = {
     },
 
     secaoApresentacao: "Apresentação",
+    secaoServicos: "O que eu faço",
     secaoBiografia: "Biografia",
     secaoProjetos: "Projetos",
     secaoDepoimentos: "Depoimentos",
@@ -40,9 +43,15 @@ const pt = {
     secaoCertificacoes: "Certificações",
     secaoEducacao: "Educação",
     secaoExperiencia: "Experiência",
+    secaoGithub: "Código aberto",
+
+    /** Menu lateral e cabeçalho */
+    voltarAoInicio: "Voltar ao início",
+    menuRedes: "Redes sociais",
 
     baixarCv: "Download CV",
     heroContato: "Vamos conversar",
+    heroDisponivel: "Disponível para novos projetos",
     /** Palavra gigante e contornada ao fundo da hero (decorativa). */
     heroFundo: "PORTFÓLIO",
     fotoHeroAlt: "Lucas Araújo, desenvolvedor full-stack",
@@ -62,10 +71,14 @@ const pt = {
     numeroCertificacoes: "certificações",
 
     verTrabalho: "Ver Trabalho",
+    verCodigo: "Ver código",
+    tecnologias: "Tecnologias",
     imagemPendente: "Imagem",
     imagemProjetoAlt: (titulo: string) => `Imagem do projeto ${titulo}`,
     linkPendente: "Link do projeto ainda não definido",
     vitrineProjetos: "Vitrine de projetos",
+    ampliarImagem: (titulo: string) => `Ampliar a imagem de ${titulo}`,
+    fecharImagem: "Fechar imagem",
     projetoAnterior: "Projeto anterior",
     proximoProjeto: "Próximo projeto",
 
@@ -77,7 +90,28 @@ const pt = {
     empresa: "Empresa:",
     endereco: "Endereço:",
 
-    contato: "CONTATO",
+    servicoContato: "Quero este serviço",
+
+    githubRepositorios: "repositórios públicos",
+    githubEstrelas: "estrelas",
+    githubSeguidores: "seguidores",
+    githubVerPerfil: "Ver perfil no GitHub",
+    githubSemDescricao: "Sem descrição.",
+    /** {data} é a data do último push, já formatada. */
+    githubAtualizado: "Atualizado em {data}",
+
+    contatoDireto: "Ou fale direto comigo",
+    formTitulo: "Envie uma mensagem",
+    formNome: "Seu nome",
+    formEmail: "Seu e-mail",
+    formInteresse: "Assunto",
+    formOutro: "Outro assunto",
+    formMensagem: "Mensagem",
+    formEnviar: "Enviar mensagem",
+    formEnviando: "Enviando…",
+    formSucesso: "Mensagem enviada! Respondo o quanto antes.",
+    formErro: "Não foi possível enviar agora. Tente de novo ou fale comigo pelo WhatsApp.",
+    formIsca: "Deixe este campo vazio",
 
     /** {ano} é o ano atual, atualizado no navegador (AnoAtual.tsx). */
     copyright: "Copyright © {ano} Portifólio. Design By",
@@ -89,7 +123,7 @@ export type Dicionario = typeof pt;
 
 const en: Dicionario = {
     paginaTitulo: "Portfolio — José Lucas Alcântara de Araújo",
-    paginaDescricao: "Portfolio of Lucas Araújo, full-stack developer: projects, experience, education and testimonials.",
+    paginaDescricao: "Portfolio of Lucas Araújo, full-stack developer: projects, experience, education, and testimonials.",
 
     pularConteudo: "Skip to content",
     voltarAoTopo: "Back to top",
@@ -106,8 +140,10 @@ const en: Dicionario = {
 
     nav: {
         apresentacao: "Home",
+        servicos: "Services",
         biografia: "Biography",
         projetos: "Projects",
+        github: "GitHub",
         depoimentos: "Testimonials",
         habilidades: "Skills",
         certificacoes: "Certifications",
@@ -116,7 +152,8 @@ const en: Dicionario = {
         contato: "Contact"
     },
 
-    secaoApresentacao: "Presentation",
+    secaoApresentacao: "Introduction",
+    secaoServicos: "What I do",
     secaoBiografia: "Biography",
     secaoProjetos: "Projects",
     secaoDepoimentos: "Testimonials",
@@ -124,18 +161,23 @@ const en: Dicionario = {
     secaoCertificacoes: "Certifications",
     secaoEducacao: "Education",
     secaoExperiencia: "Experience",
+    secaoGithub: "Open source",
+
+    voltarAoInicio: "Back to top",
+    menuRedes: "Social media",
 
     baixarCv: "Download CV",
     heroContato: "Let's talk",
+    heroDisponivel: "Available for new projects",
     heroFundo: "PORTFOLIO",
     fotoHeroAlt: "Lucas Araújo, full-stack developer",
 
     bioNome: "Name:",
-    bioNascimento: "Birthday:",
+    bioNascimento: "Date of birth:",
     bioIdade: "Age:",
     bioEndereco: "Address:",
     bioTelefone: "Phone:",
-    bioEmail: "E-mail:",
+    bioEmail: "Email:",
     bioFotoAlt: "Portrait of Lucas Araújo",
     anos: "{n} years",
     numeroExperiencia: "years of experience",
@@ -144,10 +186,14 @@ const en: Dicionario = {
     numeroCertificacoes: "certifications",
 
     verTrabalho: "View Work",
+    verCodigo: "View code",
+    tecnologias: "Tech stack",
     imagemPendente: "Image",
-    imagemProjetoAlt: (titulo: string) => `${titulo} image`,
+    imagemProjetoAlt: (titulo: string) => `Screenshot of ${titulo}`,
     linkPendente: "Project link not set yet",
     vitrineProjetos: "Project showcase",
+    ampliarImagem: (titulo: string) => `Enlarge the image of ${titulo}`,
+    fecharImagem: "Close image",
     projetoAnterior: "Previous project",
     proximoProjeto: "Next project",
 
@@ -159,9 +205,29 @@ const en: Dicionario = {
     empresa: "Company:",
     endereco: "Address:",
 
-    contato: "CONTACT",
+    servicoContato: "I'm interested",
 
-    copyright: "Copyright © {ano} Portfolio. Design By",
+    githubRepositorios: "public repositories",
+    githubEstrelas: "stars",
+    githubSeguidores: "followers",
+    githubVerPerfil: "View GitHub profile",
+    githubSemDescricao: "No description.",
+    githubAtualizado: "Updated {data}",
+
+    contatoDireto: "Or reach me directly",
+    formTitulo: "Send a message",
+    formNome: "Your name",
+    formEmail: "Your email",
+    formInteresse: "Subject",
+    formOutro: "Something else",
+    formMensagem: "Message",
+    formEnviar: "Send message",
+    formEnviando: "Sending…",
+    formSucesso: "Message sent! I'll get back to you soon.",
+    formErro: "Your message couldn't be sent. Please try again or reach me on WhatsApp.",
+    formIsca: "Leave this field empty",
+
+    copyright: "Copyright © {ano} Portfolio. Designed by",
     assinaturaTitulo: "Lucas Araújo’s LinkedIn profile",
     entrar: "Sign in to the restricted area"
 };

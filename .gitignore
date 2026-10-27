@@ -10,7 +10,9 @@ next-env.d.ts
 
 # Conteúdo e imagens exportados do D1 no build (a fonte é o banco)
 conteudo/conteudo.json
+conteudo/github.json
 public/midia/
+public/curriculo-*.pdf
 
 # Arquivos locais que não podem ser publicados: o Font Awesome Pro tem licença
 # que proíbe redistribuição. scripts/gerar-icones.mjs lê de .local/font-awesome-pro/.

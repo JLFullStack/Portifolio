@@ -12,7 +12,7 @@ const SITUACAO = {
     falhou: { selo: "selo-recusado", texto: "Falhou" }
 } as const;
 
-/** Visão geral: números do conteúdo, depoimentos à espera e o botão Publicar. */
+/** Visão geral: números do conteúdo, depoimentos à espera, mensagens novas e o botão Publicar. */
 export default function VisaoGeral() {
     const { dados, recarregar } = usePainel();
     const { executando, aviso, executar } = useAcao();
@@ -36,6 +36,7 @@ export default function VisaoGeral() {
         { href: "/admin/projetos", valor: dados.projetos.filter(p => p.publicado).length, rotulo: "projetos publicados" },
         { href: "/admin/depoimentos", valor: dados.depoimentos.filter(d => d.publicado).length, rotulo: "depoimentos no site" },
         { href: "/admin/depoimentos", valor: pendentes.length, rotulo: "aguardando aprovação" },
+        { href: "/admin/mensagens", valor: dados.mensagens.filter(m => !m.lida).length, rotulo: "mensagens novas" },
         { href: "/admin/pessoas", valor: dados.usuarios.filter(u => u.papel === "depoente").length, rotulo: "pessoas convidadas" }
     ];
 

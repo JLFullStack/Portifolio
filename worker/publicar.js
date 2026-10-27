@@ -4,10 +4,20 @@
 //
 // Precisa do segredo GITHUB_TOKEN_PUBLICAR no Worker: token fine-grained do GitHub, só
 // deste repositório, com permissão "Contents: Read and write".
+//
+// No preview local (wrangler dev) não há o que disparar: o equivalente é npm run preview:local,
+// que exporta o D1 local e gera a landing de novo.
 import { ErroHttp, json } from "./http.js";
 import { limparImagensSemUso } from "./imagens.js";
 
-export async function pedirPublicacao(env, usuario) {
+const LOCAL = /^(localhost|127\.0\.0\.1)$/;
+
+export async function pedirPublicacao(env, usuario, url) {
+    if (LOCAL.test(url.hostname)) {
+        throw new ErroHttp(400, "No preview local o botão não publica. Para ver o conteúdo do banco local na landing, " +
+            "pare o preview (Ctrl+C) e rode npm run preview:local.");
+    }
+
     if (!env.GITHUB_TOKEN_PUBLICAR) {
         throw new ErroHttp(503, "A publicação ainda não foi configurada: falta o segredo GITHUB_TOKEN_PUBLICAR no Worker.");
     }

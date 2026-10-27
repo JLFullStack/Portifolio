@@ -1,6 +1,7 @@
 import { DICIONARIOS } from "@/dicionarios";
 import { lerConteudo, type Conteudo, type Idioma } from "@/lib/conteudo";
 import type { Dicionario } from "@/dicionarios";
+import type { NomeIcone } from "@/componentes/icones/dados";
 import { Apresentacao } from "./Apresentacao";
 import { Biografia } from "./Biografia";
 import { BotaoTopo } from "./BotaoTopo";
@@ -10,50 +11,61 @@ import { ChamadaFinal } from "./ChamadaFinal";
 import { Depoimentos } from "./Depoimentos";
 import { Educacao } from "./Educacao";
 import { Experiencia } from "./Experiencia";
+import { Github } from "./Github";
 import { Habilidades } from "./Habilidades";
 import { Projetos } from "./Projetos";
 import { Rodape } from "./Rodape";
+import { Servicos } from "./Servicos";
 import { Icone } from "@/componentes/icones/Icone";
 import { LuzCartoes } from "./LuzCartoes";
+import { RevelarAoRolar } from "./RevelarAoRolar";
 
 /** O que toda seção recebe: o conteúdo, o idioma da página e os textos fixos dele. */
 export type PropsSecao = { conteudo: Conteudo; idioma: Idioma; d: Dicionario };
 
 /**
  * A landing page de página única, na ordem do mockup.
- * Componente de servidor: vira HTML no build. Só os pedaços interativos (menu, tema,
- * carrosséis, voltar ao topo, brilho dos cards) são componentes de cliente. As
- * animações de entrada e de rolagem são só CSS (estilos/animacao.css).
+ * Componente de servidor: vira HTML no build. Só os pedaços interativos (menus, tema,
+ * carrosséis, voltar ao topo, brilho dos cards, revelar ao rolar, formulário de
+ * contato) são componentes de cliente. As animações em si são CSS (estilos/animacao.css).
  *
- * Seções sem conteúdo (nenhum projeto ou depoimento publicado) não aparecem, nem no menu.
+ * Seções sem conteúdo (nenhum projeto, depoimento ou serviço publicado, GitHub fora
+ * do ar no build) não aparecem, nem no menu.
  */
 export function Landing({ idioma }: { idioma: Idioma }) {
     const conteudo = lerConteudo();
     const d = DICIONARIOS[idioma];
     const props: PropsSecao = { conteudo, idioma, d };
 
+    const secao = (ancora: keyof Dicionario["nav"], icone: NomeIcone, mostrar = true): SecaoNavegacao[] =>
+        mostrar ? [{ ancora, rotulo: d.nav[ancora], icone: <Icone nome={icone} /> }] : [];
+
     const secoes: SecaoNavegacao[] = [
-        { ancora: "apresentacao", rotulo: d.nav.apresentacao },
-        { ancora: "biografia", rotulo: d.nav.biografia },
-        ...(conteudo.projetos.length ? [{ ancora: "projetos", rotulo: d.nav.projetos }] : []),
-        ...(conteudo.depoimentos.length ? [{ ancora: "depoimentos", rotulo: d.nav.depoimentos }] : []),
-        ...(conteudo.habilidades.length ? [{ ancora: "habilidades", rotulo: d.nav.habilidades }] : []),
-        ...(conteudo.certificacoes.length ? [{ ancora: "certificacoes", rotulo: d.nav.certificacoes }] : []),
-        ...(conteudo.formacoes.length ? [{ ancora: "educacao", rotulo: d.nav.educacao }] : []),
-        ...(conteudo.experiencias.length ? [{ ancora: "experiencia", rotulo: d.nav.experiencia }] : []),
-        { ancora: "contato", rotulo: d.nav.contato }
+        ...secao("apresentacao", "fal:home"),
+        ...secao("servicos", "fal:rocket", conteudo.servicos.length > 0),
+        ...secao("biografia", "fal:user"),
+        ...secao("projetos", "fal:folder-open", conteudo.projetos.length > 0),
+        ...secao("github", "fab:github", Boolean(conteudo.github)),
+        ...secao("depoimentos", "fal:comments", conteudo.depoimentos.length > 0),
+        ...secao("habilidades", "fal:laptop-code", conteudo.habilidades.length > 0),
+        ...secao("certificacoes", "fal:file-certificate", conteudo.certificacoes.length > 0),
+        ...secao("educacao", "fal:graduation-cap", conteudo.formacoes.length > 0),
+        ...secao("experiencia", "fal:briefcase", conteudo.experiencias.length > 0),
+        ...secao("contato", "fal:paper-plane")
     ];
 
     return (
         <>
             <a className="pular-conteudo" href="#conteudo-principal">{d.pularConteudo}</a>
 
-            <Cabecalho idioma={idioma} d={d} secoes={secoes} />
+            <Cabecalho conteudo={conteudo} idioma={idioma} d={d} secoes={secoes} />
 
             <main id="conteudo-principal">
                 <Apresentacao {...props} />
+                {conteudo.servicos.length > 0 && <Servicos {...props} />}
                 <Biografia {...props} />
                 {conteudo.projetos.length > 0 && <Projetos {...props} />}
+                {conteudo.github && <Github {...props} />}
                 {conteudo.depoimentos.length > 0 && <Depoimentos {...props} />}
                 {conteudo.habilidades.length > 0 && <Habilidades {...props} />}
                 {conteudo.certificacoes.length > 0 && <Certificacoes {...props} />}
@@ -65,9 +77,10 @@ export function Landing({ idioma }: { idioma: Idioma }) {
             <Rodape {...props} />
 
             <LuzCartoes />
+            <RevelarAoRolar />
 
             <BotaoTopo rotulo={d.voltarAoTopo}>
-                <Icone nome="fas:arrow-up" />
+                <Icone nome="fal:arrow-up" />
             </BotaoTopo>
         </>
     );

@@ -4,8 +4,8 @@ import { Icone } from "@/componentes/icones/Icone";
 import type { PropsSecao } from "./Landing";
 
 /**
- * Seção 2 do mockup: Hero. À esquerda a saudação, o nome, o cargo, a apresentação
- * e os botões; à direita a foto sobre um disco em gradiente, com uma órbita
+ * Seção 2 do mockup: Hero. À esquerda o selo de disponível (quando ligado no painel),
+ * a saudação, o nome, o cargo, a apresentação e os botões; à direita a foto sobre um disco em gradiente, com uma órbita
  * tracejada e as tecnologias principais flutuando em volta. Ao fundo, a aurora,
  * a grade de pontos, a palavra gigante contornada e três curvas finas em SVG inline
  * que se desenham na abertura. Embaixo, a faixa contínua com todas as tecnologias.
@@ -41,6 +41,9 @@ export function Apresentacao({ conteudo, idioma, d }: PropsSecao) {
 
             <div className="conteudo hero-grade">
                 <div className="hero-texto">
+                    {perfil.disponivel && (
+                        <p className="selo-disponivel entrada" style={{ "--atraso": 0 } as CSSProperties}>{d.heroDisponivel}</p>
+                    )}
                     <p className="hero-saudacao entrada" style={{ "--atraso": 0 } as CSSProperties}>
                         <span className="hero-aceno" aria-hidden="true">👋</span>
                         {texto(perfil.saudacao, idioma)}
@@ -55,7 +58,7 @@ export function Apresentacao({ conteudo, idioma, d }: PropsSecao) {
                         {texto(perfil.descricaoHero, idioma)}
                     </p>
                     <div className="hero-acoes entrada" style={{ "--atraso": 4 } as CSSProperties}>
-                        <a className="btn-acento" href={perfil.curriculo} target="_blank" rel="noopener noreferrer">
+                        <a className="btn-acento" href={texto(perfil.curriculo, idioma)} target="_blank" rel="noopener noreferrer">
                             <Icone nome="fal:download" />
                             {d.baixarCv}
                         </a>

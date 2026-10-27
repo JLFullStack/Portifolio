@@ -86,6 +86,20 @@
     --cor-borda-forte: #ffffff29;
     --cor-sombra: #00000066;
     --cor-foco: #7fd5ff;
+    /* Cores — estados (selo de disponível, avisos, formulário) */
+    --cor-sucesso: #4ade80;
+    --cor-sucesso-fundo: #4ade801f;
+    --cor-sucesso-borda: #4ade8059;
+    --cor-erro: #fb8a8a;
+    --cor-erro-fundo: #f871711f;
+    --cor-alerta: #fbbf24;
+    --cor-alerta-fundo: #fbbf2424;
+    /* Fundo escurecido atrás do menu lateral */
+    --cor-veu: #050a14a6;
+    /* Imagem de fundo do projeto ativo: só uma lembrança da imagem */
+    --opacidade-fundo-projeto: 0.22;
+    /* Fundo atrás da imagem ampliada de um projeto */
+    --cor-veu-ampliado: #050a14e0;
     /* Tipografia */
     --fonte-base: var(--fonte-inter), 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --fonte-assinatura: var(--fonte-ernestone), 'Segoe Script', cursive;
@@ -161,6 +175,16 @@
     --cor-borda-forte: #0f172a29;
     --cor-sombra: #0f172a33;
     --cor-foco: #01526f;
+    --cor-sucesso: #047857;
+    --cor-sucesso-fundo: #0478571a;
+    --cor-sucesso-borda: #04785759;
+    --cor-erro: #b91c1c;
+    --cor-erro-fundo: #b91c1c14;
+    --cor-alerta: #92400e;
+    --cor-alerta-fundo: #b4530914;
+    --cor-veu: #0f172a59;
+    --opacidade-fundo-projeto: 0.14;
+    --cor-veu-ampliado: #0f172acc;
     --sombra-brilho: 0 18px 44px -20px var(--cor-acento-solido);
 }
 
@@ -947,8 +971,28 @@ img {
     overflow: hidden;
 }
 
+/* Largura do card ativo: acompanha a largura da tela, mas também a altura. A altura
+   do card (proporção 370 × 512) mais o rótulo, as setas e o cabeçalho precisam caber
+   juntos na janela, inclusive em notebook de tela baixa: daí o limite por 100dvh. */
 .projetos-vitrine {
-    --largura-card: clamp(14rem, 24vw, 23rem);
+    --largura-card: max(12rem, min(clamp(14rem, 24vw, 23rem), (100dvh - 22rem) * 370 / 512));
+}
+
+/* Tela baixa (notebook): menos respiro em volta da vitrine, para card e setas caberem juntos */
+@media (max-height: 760px) and (min-width: 992px) {
+    .secao.projetos {
+        padding-block: var(--espaco-4);
+    }
+
+    /* menos respiro em cima, mas a folga do brilho embaixo continua */
+    .projetos-faixa {
+        padding-top: var(--espaco-3);
+        padding-bottom: calc(var(--espaco-3) + var(--espaco-4));
+    }
+
+    .projetos-vitrine > .controles-carrossel {
+        margin-top: var(--espaco-2);
+    }
 }
 
 .projetos-grade {
@@ -958,15 +1002,69 @@ img {
     gap: var(--espaco-4);
 }
 
-/* Os textos dos projetos ficam empilhados no mesmo lugar; só o ativo aparece.
-   Sem JavaScript, o primeiro continua visível. */
+/* Papel de parede: a imagem de fundo do projeto ativo cobre a seção inteira, bem
+   apagada, e se dissolve nas bordas. Troca com fade e uma leve aproximação. */
+.projetos-fundos {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+}
+
+    /* Véu que escurece o lado do texto, para a leitura nunca depender da foto */
+    .projetos-fundos::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, var(--cor-fundo) 0%, transparent 55%);
+        opacity: 0.85;
+    }
+
+.projeto-fundo {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.08);
+    transition: opacity 0.9s ease, transform 1.6s var(--curva-saida);
+}
+
+    .projeto-fundo.ativo {
+        opacity: var(--opacidade-fundo-projeto);
+        transform: none;
+    }
+
+    .projeto-fundo > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/* Os textos dos projetos ficam empilhados na mesma célula da grade: a coluna tem
+   sempre a altura do maior, então trocar de projeto não muda a altura da seção (com
+   display: none ela pulava). Só o ativo aparece, num cross-fade. visibility tira os
+   outros do leitor de tela e do Tab. O primeiro já vem ativo no HTML. */
+.projetos-info {
+    display: grid;
+}
+
 .projeto-info {
     position: relative;
-    display: none;
+    grid-area: 1 / 1;
+    align-self: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.75rem);
+    transition: opacity 0.45s ease, transform 0.55s var(--curva-saida), visibility 0s linear 0.45s;
 }
 
     .projeto-info.ativo {
-        display: block;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition: opacity 0.45s ease 0.1s, transform 0.55s var(--curva-saida) 0.1s, visibility 0s;
     }
 
 /* O número do projeto, gigante e contornado, atrás do título */
@@ -999,9 +1097,30 @@ img {
     color: transparent;
 }
 
+/* Situação do projeto (Em produção...), acima do título */
+.projeto-situacao {
+    position: relative;
+    display: inline-block;
+    margin: 0 0 var(--espaco-2);
+    padding: 0.2rem 0.75rem;
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-acento-fundo);
+    color: var(--cor-acento);
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.projeto-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-1);
+}
+
 .projeto-descricao {
     max-width: 46ch;
-    margin: var(--espaco-3) 0 var(--espaco-4);
+    margin: var(--espaco-3) 0;
     color: var(--cor-texto-suave);
     text-align: justify;
     text-indent: 1.5rem;
@@ -1013,13 +1132,19 @@ img {
     display: flex;
     gap: var(--espaco-4);
     align-items: center;
-    margin: 0;
+    /* overflow-x: auto recorta também na vertical: a folga embaixo (compensada pela
+       margem negativa, para o layout não mudar) é onde cabe o brilho do card ativo,
+       que antes era cortado reto e aparecia como um risco. */
+    margin: 0 0 calc(-1 * var(--espaco-4)) calc(-1 * var(--espaco-3));
     margin-right: calc(-1 * ((100vw - min(100vw, var(--largura-conteudo))) / 2 + var(--espaco-3)));
-    padding: var(--espaco-4) 0;
+    /* O mesmo vale à esquerda, onde o card ativo encosta: folga compensada pela
+       margem, e o snap para o card depois dela (scroll-padding). */
+    padding: var(--espaco-4) 0 calc(var(--espaco-4) * 2) var(--espaco-3);
     list-style: none;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
+    scroll-padding-inline-start: var(--espaco-3);
     scroll-behavior: smooth;
     /* os controles ‹ › fazem o papel da barra de rolagem */
     scrollbar-width: none;
@@ -1039,25 +1164,27 @@ img {
 
 /* Os cards inativos ficam inclinados em perspectiva, como numa vitrine 3D.
    O giro é pela borda esquerda: ela não sai do lugar, e é por ela que
-   ProjetosVitrine.tsx decide qual card está ativo. */
+   ProjetosVitrine.tsx decide qual card está ativo.
+   Todos têm a mesma largura: o ativo se destaca só por transform. Animar a
+   largura no meio da rolagem deslocava a faixa, o scroll-snap corrigia e a
+   vitrine tremia. */
 .projeto-card {
     flex: 0 0 auto;
-    width: clamp(13rem, 22vw, 21rem);
+    width: var(--largura-card);
     scroll-snap-align: start;
-    transform: perspective(1100px) rotateY(-16deg) scale(0.94);
+    transform: perspective(1100px) rotateY(-16deg) scale(0.86);
     transform-origin: left center;
-    transition: width 0.45s var(--curva-saida), opacity 0.45s ease, transform 0.45s var(--curva-saida);
+    transition: opacity 0.5s ease, transform 0.6s var(--curva-saida);
     opacity: 0.6;
 }
 
     .projeto-card:hover {
         opacity: 0.9;
-        transform: perspective(1100px) rotateY(-6deg) scale(0.97);
+        transform: perspective(1100px) rotateY(-6deg) scale(0.9);
     }
 
     /* O card ativo é maior, de frente e com brilho, como no mockup */
     .projeto-card.ativo {
-        width: var(--largura-card);
         opacity: 1;
         transform: none;
     }
@@ -1079,6 +1206,8 @@ img {
 .projeto-imagem {
     display: block;
     width: 100%;
+    /* o height do <img> (tamanho da foto original) venceria o aspect-ratio */
+    height: auto;
     aspect-ratio: 370 / 512;
     border: 1px solid var(--cor-borda-forte);
     border-radius: var(--raio);
@@ -1088,7 +1217,163 @@ img {
 }
 
     .projeto-card.ativo .projeto-imagem {
-        box-shadow: var(--sombra-brilho), 0 0 0 1px var(--cor-acento-suave);
+        box-shadow: 0 16px 40px -20px var(--cor-acento-solido), 0 0 0 1px var(--cor-acento-suave);
+    }
+
+/* Botão invisível sobre o card: no ativo, amplia a imagem (lupa no hover); nos
+   outros, traz o card para o destaque. */
+.projeto-card {
+    position: relative;
+}
+
+    /* Enquanto a imagem está ampliada, a do card some: parece que ela saiu dali */
+    .projeto-card.ampliando .projeto-imagem {
+        opacity: 0;
+    }
+
+.projeto-ampliar {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--raio);
+    background: transparent;
+    cursor: pointer;
+}
+
+    .projeto-card.ativo .projeto-ampliar {
+        cursor: zoom-in;
+    }
+
+.projeto-ampliar-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 1px solid var(--cor-borda-forte);
+    border-radius: 50%;
+    background-color: var(--cor-cabecalho);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--sombra-botao);
+    color: var(--cor-texto);
+    font-size: 1.25rem;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+    .projeto-card.ativo .projeto-ampliar:hover .projeto-ampliar-icone,
+    .projeto-card.ativo .projeto-ampliar:focus-visible .projeto-ampliar-icone {
+        opacity: 1;
+        transform: none;
+    }
+
+/* A imagem ampliada: diálogo de tela cheia (qualquer clique fecha), fundo
+   escurecido. A viagem do card até o centro é a animação FLIP do
+   ProjetosVitrine.tsx; aqui só o lugar final e os fades. */
+.projeto-ampliado {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--cor-texto);
+    overflow: hidden;
+    /* qualquer clique fecha: o cursor avisa */
+    cursor: zoom-out;
+}
+
+    .projeto-ampliado[open] {
+        display: grid;
+        place-items: center;
+    }
+
+    /* Véu sólido, sem backdrop-filter: desfocar a página inteira a cada quadro da
+       animação derrubava o fps (e a página atrás continua animada). */
+    .projeto-ampliado::backdrop {
+        background-color: var(--cor-veu-ampliado);
+        opacity: 1;
+        transition: opacity 0.4s ease;
+    }
+
+@starting-style {
+    .projeto-ampliado[open]::backdrop {
+        opacity: 0;
+    }
+}
+
+    .projeto-ampliado.fechando::backdrop {
+        opacity: 0;
+    }
+
+.projeto-ampliado-figura {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: var(--espaco-2);
+    margin: 0;
+}
+
+    /* Recebe só o foco inicial do diálogo (programático): não é um controle */
+    .projeto-ampliado-figura:focus {
+        outline: none;
+    }
+
+/* Mesma proporção do card: o tamanho final já é conhecido antes de a imagem maior chegar */
+.projeto-ampliado-imagem {
+    display: block;
+    /* 76dvh: sobra espaço para a legenda embaixo mesmo em tela baixa */
+    height: min(76dvh, calc(90vw * 512 / 370));
+    width: auto;
+    max-width: 90vw;
+    aspect-ratio: 370 / 512;
+    border-radius: 1.25rem;
+    object-fit: cover;
+    box-shadow: 0 40px 90px -30px var(--cor-sombra), 0 0 0 1px var(--cor-borda-forte), 0 0 80px -20px var(--cor-acento-solido);
+    transform-origin: 0 0;
+}
+
+.projeto-ampliado-legenda,
+.projeto-ampliado-fechar {
+    transition: opacity 0.3s ease;
+}
+
+.projeto-ampliado-legenda {
+    color: var(--cor-texto);
+    font-size: var(--texto-lg);
+    font-weight: var(--peso-display);
+    letter-spacing: -0.01em;
+}
+
+.projeto-ampliado-fechar {
+    position: absolute;
+    top: -0.75rem;
+    right: -0.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    background-color: var(--cor-cabecalho);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+    .projeto-ampliado-fechar > .icone {
+        transition: transform 0.35s var(--curva-saida);
+    }
+
+    .projeto-ampliado-fechar:hover > .icone {
+        transform: rotate(90deg);
+    }
+
+    .projeto-ampliado.fechando .projeto-ampliado-legenda,
+    .projeto-ampliado.fechando .projeto-ampliado-fechar {
+        opacity: 0;
     }
 
 /* Caixa "Imagem" enquanto o projeto não tem foto: o placeholder do mockup,
@@ -1526,11 +1811,11 @@ img {
 .chamada-card {
     position: relative;
     isolation: isolate;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
     align-items: center;
-    justify-content: space-between;
-    gap: var(--espaco-4);
-    max-width: 60rem;
+    gap: var(--espaco-5);
+    max-width: 72rem;
     margin-inline: auto;
     padding: var(--espaco-5) var(--espaco-5);
     overflow: hidden;
@@ -1590,9 +1875,53 @@ img {
         color: var(--cor-sobre-gradiente);
     }
 
-.chamada-botao {
-    flex: 0 0 auto;
+.chamada-direto {
+    margin: var(--espaco-4) 0 var(--espaco-2);
+    color: var(--cor-sobre-gradiente-suave);
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
 }
+
+.chamada-contatos {
+    display: grid;
+    justify-items: start;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .chamada-contatos > li:first-child {
+        margin-bottom: 0.25rem;
+    }
+
+.chamada-contato {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--cor-sobre-gradiente);
+    font-weight: var(--peso-forte);
+    overflow-wrap: anywhere;
+}
+
+    .chamada-contato > .icone {
+        flex: 0 0 auto;
+        box-sizing: content-box;
+        padding: 0.6rem;
+        border-radius: 50%;
+        background-color: var(--cor-sobre-gradiente-traco);
+        transition: transform 0.3s var(--curva-saida);
+    }
+
+    .chamada-contato:hover {
+        color: var(--cor-sobre-gradiente);
+    }
+
+        .chamada-contato:hover > .icone {
+            transform: scale(1.12) rotate(-8deg);
+        }
 
 /* #endregion Seção 10 — Chamada final */
 
@@ -1722,6 +2051,89 @@ img {
         height: 100%;
     }
 
+.cabecalho-inicio {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-1);
+}
+
+.cabecalho-marca:hover > .monograma,
+.cabecalho-marca:focus-visible > .monograma {
+    transform: rotate(-8deg) scale(1.06);
+}
+
+/* Seções principais no desktop, numa pílula de vidro. O ::before é a pílula em
+   gradiente da seção atual: NavegacaoTopo.tsx escreve --x e --largura. */
+.nav-topo {
+    display: none;
+}
+
+    .nav-topo > ul {
+        position: relative;
+        display: flex;
+        gap: 0.15rem;
+        margin: 0;
+        padding: 0.3rem;
+        border: 1px solid var(--cor-borda);
+        border-radius: var(--raio-pilula);
+        background-color: var(--cor-vidro);
+        list-style: none;
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+    }
+
+        .nav-topo > ul::before {
+            content: "";
+            position: absolute;
+            top: 0.3rem;
+            bottom: 0.3rem;
+            left: 0;
+            width: var(--largura, 0);
+            border-radius: var(--raio-pilula);
+            background: var(--gradiente-acento);
+            box-shadow: var(--sombra-botao);
+            opacity: 0;
+            transform: translateX(var(--x, 0));
+            transition: transform 0.45s var(--curva-saida), width 0.45s var(--curva-saida), opacity 0.3s ease;
+        }
+
+        .nav-topo > ul.com-ativo::before {
+            opacity: 1;
+        }
+
+    .nav-topo a {
+        position: relative;
+        display: block;
+        padding: 0.4rem 0.95rem;
+        border-radius: var(--raio-pilula);
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-sm);
+        font-weight: var(--peso-medio);
+        white-space: nowrap;
+        transition: color 0.25s ease;
+    }
+
+        .nav-topo a:hover {
+            color: var(--cor-texto);
+        }
+
+        .nav-topo a[aria-current] {
+            color: var(--cor-acento-contraste);
+        }
+
+@media (min-width: 1100px) {
+    .nav-topo {
+        display: block;
+    }
+
+    /* O menu lateral é só do celular e do tablet: aqui a navegação é a do topo.
+       .cabecalho na frente: a regra vem antes de .botao-icone (display: inline-flex)
+       no arquivo e, com a mesma especificidade, perderia para ela. */
+    .cabecalho .botao-menu {
+        display: none;
+    }
+}
+
 /* Barra de progresso da leitura, na borda de baixo do cabeçalho. Sem suporte
    a animation-timeline ela simplesmente não aparece (animacao.css). */
 .cabecalho-progresso {
@@ -1833,31 +2245,57 @@ img {
 
    <dialog> nativo (MenuNavegacao.tsx):
    showModal() já dá o fundo escurecido, prende o foco dentro do menu e fecha
-   com Esc. O painel desliza da esquerda.
+   com Esc. O painel desliza da esquerda sobre uma aurora e uma grade de
+   pontos; os itens entram em sequência (animacao.css).
 
 */
 
+/* Só existe abaixo de 1100px (no desktop a navegação é a do topo) e ocupa a tela
+   inteira, deslizando da esquerda. */
 .menu-navegacao {
     position: fixed;
-    inset: 0 auto 0 0;
-    width: 20rem;
-    max-width: 85vw;
+    inset: 0;
+    width: 100vw;
+    max-width: none;
     height: 100dvh;
     max-height: none;
     margin: 0;
     padding: 0;
+    overflow: hidden;
     border: 0;
-    border-right: 1px solid var(--cor-borda);
     background:
-        radial-gradient(28rem 20rem at 0% 100%, var(--cor-brilho-acento), transparent 70%),
+        radial-gradient(26rem 18rem at 0% 100%, var(--cor-brilho-acento), transparent 70%),
+        radial-gradient(20rem 16rem at 100% 0%, var(--cor-brilho-violeta), transparent 70%),
         var(--cor-superficie);
     color: var(--cor-texto);
     transform: translateX(-100%);
-    transition: transform 0.35s var(--curva-saida), overlay 0.35s ease allow-discrete, display 0.35s ease allow-discrete;
+    transition: transform 0.45s var(--curva-saida), overlay 0.45s ease allow-discrete, display 0.45s ease allow-discrete;
 }
 
     .menu-navegacao[open] {
+        display: flex;
+        flex-direction: column;
         transform: translateX(0);
+    }
+
+    /* Em tela larga (tablet), o conteúdo não estica: fica numa coluna central */
+    .menu-navegacao > * {
+        width: 100%;
+        max-width: 36rem;
+        margin-inline: auto;
+    }
+
+    /* grade de pontos ao fundo, sumindo para baixo */
+    .menu-navegacao::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background-image: radial-gradient(var(--cor-ponto) 1px, transparent 1.5px);
+        background-size: 22px 22px;
+        -webkit-mask-image: linear-gradient(to bottom, black, transparent 60%);
+        mask-image: linear-gradient(to bottom, black, transparent 60%);
+        pointer-events: none;
     }
 
 @starting-style {
@@ -1871,71 +2309,746 @@ img {
         overflow: hidden;
     }
 
+    /* O menu cobre a tela toda: o véu só escurece durante o deslize (sem desfoque, que
+       é caro no celular e nem apareceria) */
     .menu-navegacao::backdrop {
-        background-color: #00000080;
-        -webkit-backdrop-filter: blur(4px);
-        backdrop-filter: blur(4px);
+        background-color: var(--cor-veu);
+        opacity: 0;
+        transition: opacity 0.45s ease, overlay 0.45s ease allow-discrete, display 0.45s ease allow-discrete;
     }
+
+    .menu-navegacao[open]::backdrop {
+        opacity: 1;
+    }
+
+@starting-style {
+    .menu-navegacao[open]::backdrop {
+        opacity: 0;
+    }
+}
 
 .menu-cabecalho {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--espaco-2);
+    padding: var(--espaco-2) var(--espaco-3);
     border-bottom: 1px solid var(--cor-borda);
 }
 
-.menu-corpo {
-    padding: var(--espaco-2);
+.menu-marca {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
     .menu-navegacao .menu-titulo {
-        font-size: var(--texto-md);
-        font-weight: var(--peso-forte);
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
         color: var(--cor-texto-suave);
+        font-size: var(--texto-xs);
+        font-weight: var(--peso-forte);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
     }
 
+/* O X dá um quarto de volta ao passar o mouse */
+.menu-fechar > .icone {
+    transition: transform 0.35s var(--curva-saida);
+}
+
+.menu-fechar:hover > .icone {
+    transform: rotate(90deg);
+}
+
+.menu-corpo {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--espaco-2) var(--espaco-2);
+}
+
 .lista-navegacao {
+    display: grid;
+    gap: 0.15rem;
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-/* Cada link ganha uma barrinha em gradiente que cresce ao passar o mouse */
+/* Cada link: número, ícone num ladrilho, rótulo e a seta que aparece no hover */
 .link-navegacao {
-    display: flex;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.6rem 2.25rem minmax(0, 1fr) auto;
     align-items: center;
-    gap: 0;
-    padding: var(--espaco-1) 0;
+    gap: 0.6rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.875rem;
     color: var(--cor-texto);
-    font-size: var(--texto-lg);
-    font-weight: var(--peso-medio);
-    transition: color 0.2s ease, gap 0.3s var(--curva-saida);
+    font-size: 1.05rem;
+    font-weight: var(--peso-forte);
+    transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+    /* barra em gradiente da seção atual, na borda esquerda */
     .link-navegacao::before {
         content: "";
-        width: 0;
-        height: 2px;
-        border-radius: 2px;
+        position: absolute;
+        left: 0;
+        top: 22%;
+        bottom: 22%;
+        width: 3px;
+        border-radius: 3px;
         background: var(--gradiente-vivo);
-        transition: width 0.3s var(--curva-saida);
+        transform: scaleY(0);
+        transition: transform 0.3s var(--curva-saida);
     }
+
+.link-navegacao-numero {
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-xs);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    transition: color 0.25s ease;
+}
+
+.link-navegacao-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.65rem;
+    background-color: var(--cor-acento-fundo);
+    color: var(--cor-acento);
+    font-size: 0.95rem;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.35s var(--curva-saida), box-shadow 0.25s ease;
+}
+
+.link-navegacao-seta {
+    color: var(--cor-acento);
+    opacity: 0;
+    transform: translateX(-0.5rem);
+    transition: opacity 0.25s ease, transform 0.3s var(--curva-saida);
+}
 
     .link-navegacao:hover,
     .link-navegacao:focus-visible {
-        gap: 0.75rem;
+        background-color: var(--cor-vidro);
+        color: var(--cor-texto);
+    }
+
+        .link-navegacao:hover .link-navegacao-icone,
+        .link-navegacao:focus-visible .link-navegacao-icone {
+            background: var(--gradiente-acento);
+            box-shadow: var(--sombra-botao);
+            color: var(--cor-acento-contraste);
+            transform: rotate(-8deg) scale(1.06);
+        }
+
+        .link-navegacao:hover .link-navegacao-seta,
+        .link-navegacao:focus-visible .link-navegacao-seta {
+            opacity: 1;
+            transform: none;
+        }
+
+    /* A seção que está na tela */
+    .link-navegacao[aria-current] {
+        background-color: var(--cor-acento-fundo);
         color: var(--cor-acento);
     }
 
-        .link-navegacao:hover::before,
-        .link-navegacao:focus-visible::before {
-            width: 1.25rem;
+        .link-navegacao[aria-current]::before {
+            transform: scaleY(1);
+        }
+
+        .link-navegacao[aria-current] .link-navegacao-numero {
+            color: var(--cor-acento);
+        }
+
+        .link-navegacao[aria-current] .link-navegacao-icone {
+            background: var(--gradiente-acento);
+            color: var(--cor-acento-contraste);
+        }
+
+/* Rodapé do menu: selo, ações, redes */
+.menu-rodape {
+    display: grid;
+    gap: var(--espaco-2);
+    padding: var(--espaco-2) var(--espaco-3) var(--espaco-3);
+    border-top: 1px solid var(--cor-borda);
+}
+
+    .menu-rodape .selo-disponivel {
+        margin: 0;
+    }
+
+.menu-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-1);
+}
+
+    .menu-acoes > a {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 0.7rem 1rem;
+        font-size: var(--texto-sm);
+    }
+
+.menu-rotulo-redes {
+    margin: 0;
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.menu-redes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .menu-redes a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 1px solid var(--cor-borda-forte);
+        border-radius: 50%;
+        color: var(--cor-texto);
+        transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s var(--curva-saida);
+    }
+
+        .menu-redes a:hover,
+        .menu-redes a:focus-visible {
+            border-color: transparent;
+            background: var(--gradiente-acento);
+            box-shadow: var(--sombra-botao);
+            color: var(--cor-acento-contraste);
+            transform: translateY(-3px);
         }
 
 /* #endregion Menu de navegação */
+
+/* #region Selo de disponível, etiquetas e monograma */
+
+/* "Disponível para novos projetos": pílula verde com um ponto pulsando */
+.selo-disponivel {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    width: fit-content;
+    margin: 0 0 var(--espaco-2);
+    padding: 0.3rem 0.9rem 0.3rem 0.7rem;
+    border: 1px solid var(--cor-sucesso-borda);
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-sucesso-fundo);
+    color: var(--cor-sucesso);
+    font-size: var(--texto-sm);
+    font-weight: var(--peso-forte);
+}
+
+    .selo-disponivel::before {
+        content: "";
+        flex: 0 0 auto;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background-color: var(--cor-sucesso);
+        box-shadow: 0 0 0 0 var(--cor-sucesso-borda);
+    }
+
+/* Tecnologias de um projeto ou cargo, em pílulas no acento */
+.etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 var(--espaco-3);
+    padding: 0;
+    list-style: none;
+}
+
+    .etiquetas > li {
+        padding: 0.2rem 0.7rem;
+        border: 1px solid var(--cor-acento-suave);
+        border-radius: var(--raio-pilula);
+        background-color: var(--cor-acento-fundo);
+        color: var(--cor-acento);
+        font-size: var(--texto-xs);
+        font-weight: var(--peso-forte);
+    }
+
+    .linha-tempo-corpo > .etiquetas {
+        margin: var(--espaco-2) 0 0;
+    }
+
+/* Iniciais do nome num ladrilho em gradiente (cabeçalho e menu) */
+.monograma {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background: var(--gradiente-acento);
+    box-shadow: var(--sombra-botao);
+    color: var(--cor-acento-contraste);
+    font-size: 0.95rem;
+    font-weight: var(--peso-fantasma);
+    letter-spacing: -0.04em;
+    transition: transform 0.35s var(--curva-saida);
+}
+
+/* #endregion Selo de disponível, etiquetas e monograma */
+
+/* #region O que eu faço (serviços) */
+
+.servicos-grade {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--espaco-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* A borda em gradiente é o ::before (máscara que deixa só 1px): ela acende no hover.
+   O hover usa translate, porque o transform é da animação .revelar. */
+.servico-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--espaco-4) var(--espaco-3) var(--espaco-3);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+    transition: translate 0.35s var(--curva-saida), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+    .servico-card::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        padding: 1px;
+        border-radius: inherit;
+        background: var(--gradiente-vivo);
+        -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(black 0 0) content-box exclude, linear-gradient(black 0 0);
+        opacity: 0;
+        transition: opacity 0.35s ease;
+        pointer-events: none;
+    }
+
+    .servico-card:hover {
+        border-color: transparent;
+        box-shadow: var(--sombra-brilho);
+        translate: 0 -6px;
+    }
+
+        .servico-card:hover::before {
+            opacity: 1;
+        }
+
+.servico-numero {
+    position: absolute;
+    top: var(--espaco-2);
+    right: var(--espaco-3);
+    color: transparent;
+    -webkit-text-stroke: 1px var(--cor-acento-suave);
+    font-size: 2.75rem;
+    font-weight: var(--peso-fantasma);
+    line-height: 1;
+}
+
+.servico-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: var(--espaco-3);
+    border-radius: 1rem;
+    background: var(--gradiente-acento);
+    box-shadow: var(--sombra-botao);
+    color: var(--cor-acento-contraste);
+    font-size: 1.5rem;
+    transition: transform 0.4s var(--curva-saida);
+}
+
+    .servico-card:hover .servico-icone {
+        transform: rotate(-8deg) scale(1.08);
+    }
+
+.servico-titulo {
+    margin: 0 0 var(--espaco-1);
+    font-size: var(--texto-lg);
+}
+
+.servico-descricao {
+    flex: 1;
+    margin: 0 0 var(--espaco-3);
+    color: var(--cor-texto-suave);
+    font-size: 0.95rem;
+}
+
+.servico-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: fit-content;
+    font-size: var(--texto-sm);
+    font-weight: var(--peso-forte);
+}
+
+    .servico-link > .icone {
+        transition: transform 0.3s var(--curva-saida);
+    }
+
+    .servico-card:hover .servico-link > .icone {
+        transform: translateX(4px);
+    }
+
+/* #endregion O que eu faço (serviços) */
+
+/* #region Código aberto (GitHub) */
+
+.github-topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--espaco-3);
+    margin-bottom: var(--espaco-4);
+}
+
+    .github-topo > .titulo-secao {
+        margin: 0;
+    }
+
+.github-perfil {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espaco-3);
+}
+
+.github-numeros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-1) var(--espaco-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--cor-texto-suave);
+    font-size: var(--texto-sm);
+}
+
+    .github-numeros strong {
+        font-size: 1.5rem;
+        font-weight: var(--peso-display);
+    }
+
+.github-grade {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espaco-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .github-grade > li {
+        display: flex;
+    }
+
+/* O card inteiro é o link do repositório */
+.repositorio-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    padding: var(--espaco-3);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+    color: var(--cor-texto);
+    transition: translate 0.35s var(--curva-saida), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+    .repositorio-card:hover,
+    .repositorio-card:focus-visible {
+        border-color: var(--cor-acento-suave);
+        box-shadow: var(--sombra-brilho);
+        color: var(--cor-texto);
+        translate: 0 -4px;
+    }
+
+.repositorio-cabeca {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+}
+
+.repositorio-icone {
+    color: var(--cor-acento);
+}
+
+.repositorio-nome {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 1.05rem;
+    font-weight: var(--peso-forte);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.repositorio-sair {
+    color: var(--cor-acento);
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition: opacity 0.25s ease, transform 0.3s var(--curva-saida);
+}
+
+    .repositorio-card:hover .repositorio-sair,
+    .repositorio-card:focus-visible .repositorio-sair {
+        opacity: 1;
+        transform: none;
+    }
+
+/* Até três linhas de descrição: os cards ficam com a mesma altura */
+.repositorio-descricao {
+    display: -webkit-box;
+    flex: 1;
+    overflow: hidden;
+    color: var(--cor-texto-suave);
+    font-size: var(--texto-sm);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+}
+
+.repositorio-rodape {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1rem;
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-xs);
+}
+
+.repositorio-linguagem {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--cor-texto-suave);
+    font-weight: var(--peso-forte);
+}
+
+    .repositorio-linguagem::before {
+        content: "";
+        width: 0.65rem;
+        height: 0.65rem;
+        border-radius: 50%;
+        background-color: var(--cor-linguagem, var(--cor-acento-solido));
+    }
+
+.repositorio-data {
+    margin-left: auto;
+}
+
+/* #endregion Código aberto (GitHub) */
+
+/* #region Formulário de contato */
+
+/* Card claro por cima do painel em gradiente da chamada final */
+.contato-formulario {
+    position: relative;
+    display: grid;
+    gap: var(--espaco-2);
+    padding: var(--espaco-4);
+    border: 1px solid var(--cor-borda);
+    border-radius: 1.25rem;
+    background-color: var(--cor-superficie);
+    box-shadow: 0 30px 60px -30px var(--cor-sombra);
+    color: var(--cor-texto);
+}
+
+.contato-titulo {
+    margin: 0;
+    font-size: var(--texto-lg);
+    font-weight: var(--peso-display);
+}
+
+.contato-linha {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--espaco-2);
+}
+
+.contato-campo {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+    .contato-campo > span,
+    .contato-interesses > legend {
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-sm);
+        font-weight: var(--peso-forte);
+    }
+
+    .contato-campo input,
+    .contato-campo textarea {
+        width: 100%;
+        padding: 0.75rem 0.9rem;
+        border: 1px solid var(--cor-borda-forte);
+        border-radius: 0.75rem;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+        line-height: 1.4;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .contato-campo input:focus,
+        .contato-campo textarea:focus {
+            border-color: var(--cor-acento-solido);
+            outline: none;
+            box-shadow: 0 0 0 4px var(--cor-acento-fundo);
+        }
+
+    .contato-campo textarea {
+        min-height: 8rem;
+        resize: vertical;
+    }
+
+.contato-contador {
+    justify-self: end;
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-xs);
+}
+
+.contato-interesses {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+    .contato-interesses > legend {
+        margin-bottom: 0.5rem;
+        padding: 0;
+    }
+
+    .contato-interesses > div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+/* Cada assunto é um rádio vestido de pílula; o rádio continua focável */
+.pilula {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--cor-borda-forte);
+    border-radius: var(--raio-pilula);
+    color: var(--cor-texto-suave);
+    font-size: var(--texto-sm);
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+    .pilula > input {
+        position: absolute;
+        inset: 0;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .pilula:hover {
+        border-color: var(--cor-acento);
+        color: var(--cor-acento);
+    }
+
+    .pilula:has(input:focus-visible) {
+        outline: 2px solid var(--cor-foco);
+        outline-offset: 2px;
+    }
+
+    .pilula.ativa {
+        border-color: transparent;
+        background: var(--gradiente-acento);
+        color: var(--cor-acento-contraste);
+    }
+
+/* Campo-isca: existe no formulário, mas nunca aparece */
+.contato-isca {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.contato-enviar {
+    justify-content: center;
+    width: 100%;
+}
+
+    .contato-enviar:disabled {
+        opacity: 0.75;
+        cursor: progress;
+    }
+
+.contato-erro {
+    margin: 0;
+    padding: 0.6rem 0.85rem;
+    border-radius: 0.6rem;
+    background-color: var(--cor-erro-fundo);
+    color: var(--cor-erro);
+    font-size: var(--texto-sm);
+}
+
+.contato-enviado {
+    place-content: center;
+    justify-items: center;
+    min-height: 22rem;
+    text-align: center;
+}
+
+    .contato-enviado > p {
+        max-width: 28ch;
+        margin: 0;
+        font-size: var(--texto-lg);
+        font-weight: var(--peso-forte);
+    }
+
+.contato-enviado-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background-color: var(--cor-sucesso-fundo);
+    box-shadow: 0 0 0 8px var(--cor-sucesso-fundo);
+    color: var(--cor-sucesso);
+    font-size: 1.9rem;
+}
+
+/* #endregion Formulário de contato */
 
 /* #region Botões do Portifólio */
 
@@ -2009,6 +3122,12 @@ img {
             .btn-acento[aria-disabled="true"]:hover > .icone:last-child {
                 transform: none;
             }
+
+/* Variante compacta (cabeçalho) */
+.btn-pequeno {
+    padding: 0.55rem 1.1rem;
+    font-size: var(--texto-sm);
+}
 
 /* Botão secundário: pílula contornada */
 .btn-contorno {
