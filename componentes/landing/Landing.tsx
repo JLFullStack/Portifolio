@@ -14,6 +14,7 @@ import { Habilidades } from "./Habilidades";
 import { Projetos } from "./Projetos";
 import { Rodape } from "./Rodape";
 import { Icone } from "@/componentes/icones/Icone";
+import { LuzCartoes } from "./LuzCartoes";
 
 /** O que toda seção recebe: o conteúdo, o idioma da página e os textos fixos dele. */
 export type PropsSecao = { conteudo: Conteudo; idioma: Idioma; d: Dicionario };
@@ -21,7 +22,8 @@ export type PropsSecao = { conteudo: Conteudo; idioma: Idioma; d: Dicionario };
 /**
  * A landing page de página única, na ordem do mockup.
  * Componente de servidor: vira HTML no build. Só os pedaços interativos (menu, tema,
- * carrosséis, voltar ao topo) são componentes de cliente.
+ * carrosséis, voltar ao topo, brilho dos cards) são componentes de cliente. As
+ * animações de entrada e de rolagem são só CSS (estilos/animacao.css).
  *
  * Seções sem conteúdo (nenhum projeto ou depoimento publicado) não aparecem, nem no menu.
  */
@@ -61,6 +63,8 @@ export function Landing({ idioma }: { idioma: Idioma }) {
             </main>
 
             <Rodape {...props} />
+
+            <LuzCartoes />
 
             <BotaoTopo rotulo={d.voltarAoTopo}>
                 <Icone nome="fas:arrow-up" />

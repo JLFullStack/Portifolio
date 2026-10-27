@@ -11,8 +11,10 @@
 
 /* #region Tokens do Portifólio
 
-   Paleta amostrada diretamente do mockup do layout
-   (fundo #212934, superfície #2a303e, acento #03a9f4).
+   Identidade: noite azul-tinta com o ciano #03a9f4 (a cor da marca) como cor
+   principal. O violeta e os tons dos cards só a complementam: aparecem nas
+   pontas dos gradientes e nos halos, nunca no lugar dela. Os brilhos e as auroras são só
+   gradientes radiais: nenhuma imagem extra para baixar.
 
    Dois temas, um único conjunto de tokens:
      :root                    → tema escuro (padrão do produto)
@@ -28,28 +30,61 @@
 :root {
     color-scheme: dark;
     /* Cores — superfícies */
-    --cor-fundo: #212934;
-    --cor-superficie: #2a303e;
-    --cor-superficie-alta: #333b4c;
-    --cor-cabecalho: #212934f2;
-    /* Cores — acento (único, ciano)
+    --cor-fundo: #0b1120;
+    --cor-superficie: #131b2e;
+    --cor-superficie-alta: #1c263d;
+    --cor-cabecalho: #0b1120d9;
+    --cor-vidro: #ffffff0d;
+    /* Cores — acento
        --cor-acento        : texto, links e ícones (ajustado por tema para ter contraste)
-       --cor-acento-solido : preenchimentos (botões, régua, badge) — o ciano do mockup
-       --cor-acento-contraste : cor do texto por cima do preenchimento */
+       --cor-acento-solido : preenchimentos (régua, badge, painel) — o ciano da marca
+       --cor-acento-contraste : cor do texto por cima do preenchimento
+       --cor-violeta       : o segundo acento, ponta final dos gradientes */
     --cor-acento: #03a9f4;
     --cor-acento-solido: #03a9f4;
-    --cor-acento-hover: #1195d0;
+    --cor-acento-hover: #4fc3f7;
     --cor-acento-suave: #03a8f467;
+    --cor-acento-fundo: #03a9f41a;
     --cor-acento-contraste: #ffffff;
+    --cor-violeta: #8b5cf6;
+    --cor-rosa: #ec4899;
+    /* Tons dos cards de habilidades, um por grupo */
+    --tom-1: #03a9f4;
+    --tom-2: #a78bfa;
+    --tom-3: #f472b6;
+    --tom-4: #fbbf24;
+    --tom-5: #34d399;
+    /* Gradientes
+       --gradiente-acento : fundo de botão (texto branco por cima: tons com contraste)
+       --gradiente-vivo   : traços e decoração (linhas, anéis, barras)
+       --gradiente-texto  : títulos com background-clip: text */
+    --gradiente-acento: linear-gradient(120deg, #03a9f4 0%, #0288d1 100%);
+    --gradiente-vivo: linear-gradient(120deg, #03a9f4 0%, #4fc3f7 65%, #8b5cf6 100%);
+    --gradiente-texto: linear-gradient(100deg, #e1f5fe 0%, #4fc3f7 45%, #03a9f4 100%);
+    --gradiente-borda: linear-gradient(135deg, #03a9f480, #ffffff0f 50%, #8b5cf640);
+    --gradiente-chamada: linear-gradient(130deg, #0288d1 0%, #0277bd 55%, #4527a0 100%);
+    /* Brilhos (auroras, halos e sombras coloridas) */
+    --cor-brilho-acento: #03a9f433;
+    --cor-brilho-violeta: #8b5cf624;
+    --cor-luz: #ffffff0f;
+    --cor-reflexo: #ffffff40;
+    --cor-ponto: #ffffff17;
+    --cor-contorno: #ffffff12;
+    /* Por cima do painel em gradiente da chamada final (igual nos dois temas) */
+    --cor-sobre-gradiente: #ffffff;
+    --cor-sobre-gradiente-suave: #ffffffd9;
+    --cor-sobre-gradiente-traco: #ffffff26;
+    --cor-texto-botao-claro: #01579b;
     /* Cores — texto */
-    --cor-texto: #ffffff;
-    --cor-texto-suave: #b8bfc9;
-    --cor-texto-tenue: #868a90;
+    --cor-texto: #f1f5fb;
+    --cor-texto-suave: #aab4c5;
+    --cor-texto-tenue: #7d889c;
     /* Cores — traços */
     --cor-regua: var(--cor-acento-solido);
-    --cor-placeholder: #566069;
-    --cor-borda: #ffffff1f;
-    --cor-sombra: #0000002b;
+    --cor-placeholder: #2a3550;
+    --cor-borda: #ffffff14;
+    --cor-borda-forte: #ffffff29;
+    --cor-sombra: #00000066;
     --cor-foco: #7fd5ff;
     /* Tipografia */
     --fonte-base: var(--fonte-inter), 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -60,11 +95,13 @@
     --texto-lg: 1.25rem;
     --texto-titulo: clamp(1.75rem, 1.05rem + 2.4vw, 3rem);
     --texto-destaque: clamp(1.5rem, 0.95rem + 2.4vw, 2.75rem);
-    --texto-display: clamp(2.5rem, 0.4rem + 6.4vw, 5.75rem);
+    --texto-display: clamp(2.75rem, 0.4rem + 7vw, 6.25rem);
+    --texto-fantasma: clamp(3.5rem, 1.5rem + 8vw, 9rem);
     --peso-regular: 400;
     --peso-medio: 500;
     --peso-forte: 700;
     --peso-display: 800;
+    --peso-fantasma: 900;
     /* Espaçamento */
     --espaco-1: 0.5rem;
     --espaco-2: 1rem;
@@ -75,34 +112,56 @@
     /* Métricas de layout */
     --largura-conteudo: 1240px;
     --altura-cabecalho: 4.5rem;
-    --raio: 0.5rem;
-    --raio-pequeno: 0.375rem;
-    --sombra-card: 4px 4px 6px 1px var(--cor-sombra);
+    --raio: 0.875rem;
+    --raio-pequeno: 0.5rem;
+    --raio-pilula: 999px;
+    --sombra-card: 0 12px 32px -14px var(--cor-sombra);
+    --sombra-brilho: 0 18px 48px -18px var(--cor-acento-solido);
+    --sombra-botao: 0 12px 30px -12px var(--cor-acento-solido);
+    /* Movimento */
+    --curva-saida: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-/* Tema claro (fundo #f9fbfd, superfície #e9eef4).
+/* Tema claro: papel levemente azulado e cards brancos, com os mesmos acentos
+   escurecidos para manter o contraste de leitura.
    Só os valores mudam: nenhuma regra de componente precisa saber do tema. */
 :root[data-tema="claro"] {
     color-scheme: light;
-    --cor-fundo: #f9fbfd;
-    --cor-superficie: #e9eef4;
-    --cor-superficie-alta: #dbe3ec;
-    --cor-cabecalho: #f9fbfdf2;
-    /* Mesmo matiz ciano, escurecido: #03a9f4 sobre fundo claro não atinge
-       contraste de leitura. O preenchimento continua sendo o ciano do mockup. */
-    --cor-acento: #026d9c;
+    --cor-fundo: #f5f7fc;
+    --cor-superficie: #ffffff;
+    --cor-superficie-alta: #eef2f9;
+    --cor-cabecalho: #f5f7fcd9;
+    --cor-vidro: #ffffffb3;
+    --cor-acento: #0369a1;
     --cor-acento-solido: #03a9f4;
-    --cor-acento-hover: #01526f;
+    --cor-acento-hover: #0c4a6e;
     --cor-acento-suave: #03a8f43d;
+    --cor-acento-fundo: #0284c714;
     --cor-acento-contraste: #ffffff;
-    --cor-texto: #111820;
-    --cor-texto-suave: #47505c;
-    --cor-texto-tenue: #6b7482;
+    --cor-violeta: #7c3aed;
+    --cor-rosa: #db2777;
+    --tom-1: #0277bd;
+    --tom-2: #7c3aed;
+    --tom-3: #db2777;
+    --tom-4: #b45309;
+    --tom-5: #047857;
+    --gradiente-texto: linear-gradient(100deg, #01579b 0%, #0277bd 50%, #0288d1 100%);
+    --gradiente-borda: linear-gradient(135deg, #03a9f466, #0f172a0d 50%, #7c3aed33);
+    --cor-brilho-acento: #03a9f424;
+    --cor-brilho-violeta: #8b5cf61f;
+    --cor-luz: #03a9f412;
+    --cor-ponto: #0f172a14;
+    --cor-contorno: #0f172a12;
+    --cor-texto: #0f172a;
+    --cor-texto-suave: #45506a;
+    --cor-texto-tenue: #64708a;
     --cor-regua: var(--cor-acento-solido);
-    --cor-placeholder: #c4ccd6;
-    --cor-borda: #11182029;
-    --cor-sombra: #0000001f;
+    --cor-placeholder: #dbe3ef;
+    --cor-borda: #0f172a14;
+    --cor-borda-forte: #0f172a29;
+    --cor-sombra: #0f172a33;
     --cor-foco: #01526f;
+    --sombra-brilho: 0 18px 44px -20px var(--cor-acento-solido);
 }
 
 /* #endregion Tokens do Portifólio */
@@ -167,6 +226,13 @@ body {
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     transition: background-color .25s ease, color .25s ease;
+    /* numera os títulos de seção (01, 02...): seção oculta não deixa buraco */
+    counter-reset: secao;
+}
+
+::selection {
+    background-color: var(--cor-acento-solido);
+    color: var(--cor-acento-contraste);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -226,6 +292,16 @@ img {
         color: var(--cor-acento-contraste);
     }
 
+/* Texto pintado com o gradiente da marca (nome, destaques dos títulos, números) */
+.texto-gradiente {
+    background: var(--gradiente-texto);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
 /* #endregion Base */
 
 /* #region Estrutura da landing page */
@@ -239,8 +315,14 @@ img {
 }
 
 /* Toda <section> da landing. O scroll-margin-top compensa o cabeçalho fixo
-   para que a âncora não pare com o título escondido atrás dele. */
+   para que a âncora não pare com o título escondido atrás dele.
+   isolation: os decorativos de z-index negativo (textos-fantasma, halos)
+   ficam atrás do conteúdo, mas nunca atrás do fundo da página. O clip lateral
+   impede que eles criem rolagem horizontal. */
 .secao {
+    position: relative;
+    isolation: isolate;
+    overflow-x: clip;
     padding-block: var(--espaco-secao);
     scroll-margin-top: calc(var(--altura-cabecalho) + var(--espaco-2));
 }
@@ -250,53 +332,182 @@ img {
         padding-top: calc(var(--altura-cabecalho) + var(--espaco-4));
     }
 
-/* Título de seção: alinhado à esquerda, com régua fina ciano logo abaixo */
-.titulo-secao {
-    margin: 0 0 var(--espaco-4);
+/* Halos de cor que dão profundidade ao fundo, alternando os lados */
+.bio::before,
+#habilidades::before,
+#experiencia::before {
+    content: "";
+    position: absolute;
+    z-index: -2;
+    width: min(46rem, 90vw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    pointer-events: none;
 }
 
+.bio::before {
+    top: 10%;
+    left: -18rem;
+    background: radial-gradient(closest-side, var(--cor-brilho-acento), transparent);
+}
+
+#habilidades::before {
+    top: 0;
+    right: -20rem;
+    background: radial-gradient(closest-side, var(--cor-brilho-violeta), transparent);
+}
+
+#experiencia::before {
+    bottom: 0;
+    left: -20rem;
+    background: radial-gradient(closest-side, var(--cor-brilho-acento), transparent);
+}
+
+/* Título de seção: o número (contador) com um traço em gradiente, o h2 e,
+   atrás dele, o mesmo texto gigante e só contornado. */
+.titulo-secao {
+    position: relative;
+    margin: 0 0 var(--espaco-4);
+    counter-increment: secao;
+}
+
+    .titulo-secao::before {
+        content: counter(secao, decimal-leading-zero);
+        display: inline-block;
+        margin-bottom: var(--espaco-1);
+        padding-right: 3.25rem;
+        background: var(--gradiente-vivo) no-repeat right center / 2.5rem 2px;
+        color: var(--cor-acento);
+        font-size: var(--texto-sm);
+        font-weight: var(--peso-forte);
+        letter-spacing: 0.2em;
+    }
+
     .titulo-secao > h2 {
+        position: relative;
         margin: 0;
         font-size: var(--texto-titulo);
         font-weight: var(--peso-display);
         letter-spacing: -0.02em;
     }
 
-/* Régua fina entre seções. No mockup ela é recuada nas pontas: ocupa cerca de
-   85% da faixa de conteúdo, não a largura inteira. */
+.titulo-secao-fundo {
+    position: absolute;
+    z-index: -1;
+    left: -0.04em;
+    bottom: -0.3em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--cor-contorno);
+    font-size: var(--texto-fantasma);
+    font-weight: var(--peso-fantasma);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    white-space: nowrap;
+    text-transform: uppercase;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Régua fina entre seções, em gradiente que some nas pontas. No mockup ela é
+   recuada: ocupa cerca de 85% da faixa de conteúdo, não a largura inteira. */
 .separador-secao {
     width: 85%;
     height: 1px;
     border: 0;
     margin: 0 auto var(--espaco-5);
     opacity: 1;
-    background-color: var(--cor-regua);
+    background: linear-gradient(90deg, transparent, var(--cor-acento-solido) 25%, var(--cor-acento-solido) 75%, transparent);
 }
+
+/* Brilho que segue o ponteiro (posição gravada por LuzCartoes.tsx) */
+.cartao-luz {
+    position: relative;
+}
+
+    .cartao-luz::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(22rem circle at var(--luz-x, 50%) var(--luz-y, 50%), var(--cor-luz), transparent 60%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .cartao-luz:hover::after {
+        opacity: 1;
+    }
 
 /* #endregion Estrutura da landing page */
 
 /* #region Seção 2 — Hero */
 
 .hero {
-    position: relative;
-    /* as curvas sangram para fora da faixa de conteúdo e não podem gerar rolagem */
+    /* as curvas, a aurora e a palavra de fundo sangram para fora da faixa de
+       conteúdo e não podem gerar rolagem */
     overflow: hidden;
+    padding-bottom: var(--espaco-4);
+}
+
+/* Aurora: dois halos de cor e a grade de pontos, que some nas bordas */
+.hero-aurora {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+    .hero-aurora::before {
+        content: "";
+        position: absolute;
+        inset: -10%;
+        background:
+            radial-gradient(38rem 28rem at 78% 38%, var(--cor-brilho-acento), transparent 70%),
+            radial-gradient(30rem 22rem at 12% 18%, var(--cor-brilho-violeta), transparent 70%);
+    }
+
+    .hero-aurora::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(var(--cor-ponto) 1px, transparent 1.5px);
+        background-size: 28px 28px;
+        -webkit-mask-image: radial-gradient(ellipse 70% 60% at 60% 40%, black 10%, transparent 75%);
+        mask-image: radial-gradient(ellipse 70% 60% at 60% 40%, black 10%, transparent 75%);
+    }
+
+/* A palavra gigante, só contornada, atrás da composição */
+.hero-fundo {
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    bottom: 5.5rem;
+    transform: translateX(-50%);
+    color: transparent;
+    -webkit-text-stroke: 1px var(--cor-contorno);
+    font-size: clamp(5rem, 1rem + 15vw, 17rem);
+    font-weight: var(--peso-fantasma);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
 }
 
 /* Traçado decorativo ao fundo: fica atrás do conteúdo e fora do fluxo de foco */
 .hero-curvas {
     position: absolute;
     inset: 0;
-    z-index: 0;
+    z-index: -1;
     width: 100%;
     height: 100%;
-    opacity: 0.55;
+    opacity: 0.6;
     pointer-events: none;
 }
 
 .hero-grade {
     position: relative;
-    z-index: 1;
     display: grid;
     grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
     align-items: center;
@@ -304,18 +515,32 @@ img {
 }
 
 .hero-saudacao {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-1);
     margin: 0;
-    font-size: clamp(1.05rem, 0.85rem + 0.6vw, 1.5rem);
+    padding: 0.35rem 1rem 0.35rem 0.5rem;
+    border: 1px solid var(--cor-borda-forte);
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-vidro);
+    color: var(--cor-texto-suave);
+    font-size: clamp(0.95rem, 0.85rem + 0.35vw, 1.15rem);
+}
+
+.hero-aceno {
+    display: inline-block;
+    transform-origin: 70% 70%;
 }
 
 .hero-nome {
-    margin: 0.25rem 0 0;
+    margin: var(--espaco-2) 0 0;
     font-size: var(--texto-display);
     font-weight: var(--peso-display);
-    letter-spacing: -0.03em;
-    line-height: 1;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
 }
 
+/* O cargo termina num cursor piscando, como num terminal */
 .hero-profissao {
     margin: var(--espaco-1) 0 0;
     color: var(--cor-acento);
@@ -325,26 +550,175 @@ img {
     text-wrap: balance;
 }
 
+    .hero-profissao::after {
+        content: "";
+        display: inline-block;
+        width: 0.09em;
+        height: 0.95em;
+        margin-left: 0.15em;
+        vertical-align: -0.1em;
+        background-color: var(--cor-acento-solido);
+    }
+
 .hero-descricao {
     max-width: 48ch;
     margin: var(--espaco-3) 0 var(--espaco-4);
+    color: var(--cor-texto-suave);
+    font-size: 1.0625rem;
     text-align: justify;
     text-indent: 1.5rem;
+}
+
+.hero-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-2);
 }
 
 /* A largura fica no contêiner, não só na imagem: com largura apenas em % na
    imagem, a coluna encolhia até a foto carregar e o texto pulava (CLS). */
 .hero-foto {
+    position: relative;
+    isolation: isolate;
     justify-self: end;
     width: 100%;
     max-width: 26rem;
 }
 
     .hero-foto > img {
+        position: relative;
         display: block;
         width: 100%;
         height: auto;
+        /* as bordas da foto (braços e base cortados pelo quadro) se dissolvem
+           no disco e no fundo; a cabeça, no alto, fica inteira */
+        -webkit-mask-image: linear-gradient(to bottom, black 68%, transparent 98%), linear-gradient(to right, transparent, black 16%, black 84%, transparent);
+        -webkit-mask-composite: source-in;
+        mask-image: linear-gradient(to bottom, black 68%, transparent 98%), linear-gradient(to right, transparent, black 16%, black 84%, transparent);
+        mask-composite: intersect;
     }
+
+/* Disco em gradiente atrás da foto, com halo */
+.hero-disco {
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    bottom: 6%;
+    width: 92%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--gradiente-vivo);
+    box-shadow: 0 0 90px 10px var(--cor-brilho-acento), 0 0 50px var(--cor-brilho-violeta);
+    transform: translateX(-50%);
+}
+
+/* Órbita tracejada com um ponto de luz, girando em volta do disco */
+.hero-orbita {
+    position: absolute;
+    z-index: -1;
+    left: -6%;
+    /* concêntrica com o disco: a foto tem 3:4, então 10% da largura = 7,5% da altura */
+    bottom: -1.5%;
+    width: 112%;
+    aspect-ratio: 1;
+    border: 1px dashed var(--cor-borda-forte);
+    border-radius: 50%;
+}
+
+    .hero-orbita::after {
+        content: "";
+        position: absolute;
+        top: 14.6%;
+        left: 14.6%;
+        width: 0.75rem;
+        height: 0.75rem;
+        margin: -0.375rem;
+        border-radius: 50%;
+        background-color: var(--cor-acento-solido);
+        box-shadow: 0 0 14px 3px var(--cor-acento-solido);
+    }
+
+/* Etiquetas de vidro com as tecnologias, flutuando em volta da foto */
+.hero-etiquetas {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.hero-etiqueta {
+    position: absolute;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--cor-borda-forte);
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-vidro);
+    box-shadow: var(--sombra-card);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: var(--cor-texto);
+    font-size: var(--texto-sm);
+    font-weight: var(--peso-forte);
+    white-space: nowrap;
+}
+
+    .hero-etiqueta::before {
+        content: "";
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--gradiente-vivo);
+    }
+
+    .hero-etiqueta:nth-child(1) { top: 16%; left: -10%; }
+    .hero-etiqueta:nth-child(2) { top: 34%; right: -8%; }
+    .hero-etiqueta:nth-child(3) { bottom: 30%; left: -14%; }
+    .hero-etiqueta:nth-child(4) { bottom: 12%; right: -4%; }
+
+/* Letreiro contínuo com todas as tecnologias, de ponta a ponta da janela */
+.letreiro {
+    position: relative;
+    margin-top: var(--espaco-5);
+    padding-block: var(--espaco-2);
+    border-block: 1px solid var(--cor-borda);
+    background-color: var(--cor-vidro);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+
+.letreiro-trilho {
+    display: flex;
+    width: max-content;
+}
+
+.letreiro-lista {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--espaco-4);
+    margin: 0;
+    padding: 0 var(--espaco-4) 0 0;
+    list-style: none;
+}
+
+    .letreiro-lista > li {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--espaco-4);
+        color: var(--cor-texto-tenue);
+        font-size: var(--texto-lg);
+        font-weight: var(--peso-forte);
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+    }
+
+        .letreiro-lista > li::after {
+            content: "✦";
+            color: var(--cor-acento);
+            font-size: var(--texto-sm);
+        }
 
 /* #endregion Seção 2 — Hero */
 
@@ -362,17 +736,33 @@ img {
     justify-content: center;
 }
 
+/* O anel é a borda transparente; o gradiente que gira por trás dela é o ::before */
 .bio-anel {
     --diametro-anel: clamp(14rem, 8rem + 18vw, 22rem);
     --raio-anel: calc(var(--diametro-anel) / 2);
     --tamanho-icone-social: clamp(2.25rem, 1.85rem + 1.1vw, 2.75rem);
     position: relative;
+    isolation: isolate;
     width: var(--diametro-anel);
     height: var(--diametro-anel);
     padding: 0.5rem;
-    border: 4px solid var(--cor-acento-solido);
+    border: 4px solid transparent;
     border-radius: 50%;
+    box-shadow: 0 0 80px -10px var(--cor-brilho-acento);
 }
+
+    .bio-anel::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: -4px;
+        padding: 4px;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, var(--cor-acento-solido), var(--cor-acento-hover), var(--cor-violeta), var(--cor-acento-solido) 75%);
+        -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(black 0 0) content-box exclude, linear-gradient(black 0 0);
+    }
 
 .bio-foto {
     display: block;
@@ -390,7 +780,7 @@ img {
 
 /* Os seis ícones ficam no arco inferior, a 25° um do outro e centrados
    embaixo — a distribuição medida no mockup. O ângulo sai do --indice que o
-   componente escreve em cada item, então mexer na lista de Dados/Contato.cs
+   componente escreve em cada item, então mexer na lista de redes
    reposiciona o arco sem tocar no CSS. */
 .bio-rede {
     --angulo: calc(152.5deg - var(--indice) * 25deg);
@@ -414,17 +804,21 @@ img {
         background-color: var(--cor-fundo);
         color: var(--cor-texto);
         font-size: 1rem;
-        transition: background-color 0.2s ease, color 0.2s ease;
+        transition: background-color 0.2s ease, color 0.2s ease, transform 0.25s var(--curva-saida), box-shadow 0.25s ease;
     }
 
         .bio-rede > a:hover,
         .bio-rede > a:focus-visible {
-            background-color: var(--cor-acento-solido);
+            border-color: transparent;
+            background: var(--gradiente-acento);
             color: var(--cor-acento-contraste);
+            box-shadow: var(--sombra-botao);
+            transform: translateY(-4px) scale(1.08);
         }
 
 .bio-paragrafo {
     margin: 0 0 var(--espaco-2);
+    color: var(--cor-texto-suave);
     text-align: justify;
     text-indent: 1.5rem;
 }
@@ -437,34 +831,84 @@ img {
     grid-auto-flow: column;
     grid-template-rows: repeat(4, auto);
     justify-content: start;
-    gap: var(--espaco-1) var(--espaco-5);
+    gap: var(--espaco-2) var(--espaco-5);
     margin: var(--espaco-4) 0 0;
 }
 
 .bio-dado {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 0 0.4rem;
 }
 
     .bio-dado > dt {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
         font-weight: var(--peso-forte);
     }
 
     .bio-dado > dd {
         margin: 0;
+        color: var(--cor-texto-suave);
+    }
+
+.bio-dado-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--raio-pequeno);
+    background-color: var(--cor-acento-fundo);
+    color: var(--cor-acento);
+    font-size: 0.9rem;
+}
+
+/* Números da carreira, numa fileira de cards de vidro */
+.bio-numeros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--espaco-2);
+    margin: var(--espaco-5) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bio-numero {
+    padding: var(--espaco-3);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+    background-color: var(--cor-vidro);
+    text-align: center;
+}
+
+    .bio-numero > strong {
+        display: block;
+        font-size: clamp(2.25rem, 1.6rem + 2vw, 3.25rem);
+        font-weight: var(--peso-display);
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+    }
+
+    .bio-numero > span {
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-sm);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
 
 /* #endregion Seção 3 — Biografia */
 
 /* #region Controles ‹ › dos carrosséis */
 
-/* Mesmo par de setas nas duas seções: centralizado sob o conteúdo, fino e
-   sem moldura, como no mockup. */
+/* Mesmo par de setas nas duas seções, centralizado sob o conteúdo:
+   círculos contornados que se enchem de gradiente. */
 .controles-carrossel {
     display: flex;
     justify-content: center;
-    gap: var(--espaco-5);
+    gap: var(--espaco-3);
     margin-top: var(--espaco-4);
 }
 
@@ -472,22 +916,25 @@ img {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 3rem;
-    height: 3rem;
+    width: 3.25rem;
+    height: 3.25rem;
     padding: 0;
-    border: 0;
+    border: 1px solid var(--cor-borda-forte);
     border-radius: 50%;
-    background-color: transparent;
+    background-color: var(--cor-vidro);
     color: var(--cor-texto);
-    font-size: 1.75rem;
+    font-size: 1.25rem;
     line-height: 1;
     cursor: pointer;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s var(--curva-saida);
 }
 
     .controle-faixa:hover {
-        color: var(--cor-acento);
-        background-color: var(--cor-superficie);
+        border-color: transparent;
+        background: var(--gradiente-acento);
+        color: var(--cor-acento-contraste);
+        box-shadow: var(--sombra-botao);
+        transform: translateY(-2px);
     }
 
 /* #endregion Controles ‹ › dos carrosséis */
@@ -514,12 +961,28 @@ img {
 /* Os textos dos projetos ficam empilhados no mesmo lugar; só o ativo aparece.
    Sem JavaScript, o primeiro continua visível. */
 .projeto-info {
+    position: relative;
     display: none;
 }
 
     .projeto-info.ativo {
         display: block;
     }
+
+/* O número do projeto, gigante e contornado, atrás do título */
+.projeto-numero {
+    position: absolute;
+    z-index: -1;
+    top: -0.55em;
+    left: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--cor-borda-forte);
+    font-size: clamp(6rem, 3rem + 9vw, 12rem);
+    font-weight: var(--peso-fantasma);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    pointer-events: none;
+}
 
 .projeto-titulo {
     margin: 0;
@@ -528,13 +991,18 @@ img {
     font-size: clamp(2rem, 0.9rem + 3.4vw, 4rem);
     font-weight: var(--peso-display);
     letter-spacing: -0.02em;
-    line-height: 1;
+    line-height: 1.05;
     text-transform: uppercase;
+    background: var(--gradiente-texto);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .projeto-descricao {
     max-width: 46ch;
     margin: var(--espaco-3) 0 var(--espaco-4);
+    color: var(--cor-texto-suave);
     text-align: justify;
     text-indent: 1.5rem;
 }
@@ -547,7 +1015,7 @@ img {
     align-items: center;
     margin: 0;
     margin-right: calc(-1 * ((100vw - min(100vw, var(--largura-conteudo))) / 2 + var(--espaco-3)));
-    padding: var(--espaco-3) 0;
+    padding: var(--espaco-4) 0;
     list-style: none;
     overflow-x: auto;
     overscroll-behavior-x: contain;
@@ -569,40 +1037,70 @@ img {
         width: max(0px, calc(100% - var(--largura-card) - var(--espaco-4)));
     }
 
+/* Os cards inativos ficam inclinados em perspectiva, como numa vitrine 3D.
+   O giro é pela borda esquerda: ela não sai do lugar, e é por ela que
+   ProjetosVitrine.tsx decide qual card está ativo. */
 .projeto-card {
     flex: 0 0 auto;
     width: clamp(13rem, 22vw, 21rem);
     scroll-snap-align: start;
-    transition: width 0.35s ease, opacity 0.35s ease;
-    opacity: 0.75;
+    transform: perspective(1100px) rotateY(-16deg) scale(0.94);
+    transform-origin: left center;
+    transition: width 0.45s var(--curva-saida), opacity 0.45s ease, transform 0.45s var(--curva-saida);
+    opacity: 0.6;
 }
 
-    /* O card ativo é maior e em destaque, como no mockup */
+    .projeto-card:hover {
+        opacity: 0.9;
+        transform: perspective(1100px) rotateY(-6deg) scale(0.97);
+    }
+
+    /* O card ativo é maior, de frente e com brilho, como no mockup */
     .projeto-card.ativo {
         width: var(--largura-card);
         opacity: 1;
+        transform: none;
     }
 
 .projeto-rotulo {
     margin: 0 0 var(--espaco-1);
-    font-size: var(--texto-sm);
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
 }
+
+    .projeto-card.ativo .projeto-rotulo {
+        color: var(--cor-acento);
+    }
 
 .projeto-imagem {
     display: block;
     width: 100%;
     aspect-ratio: 370 / 512;
-    border-radius: var(--raio-pequeno);
+    border: 1px solid var(--cor-borda-forte);
+    border-radius: var(--raio);
     object-fit: cover;
     box-shadow: var(--sombra-card);
+    transition: box-shadow 0.45s ease;
 }
 
-/* Caixa cinza "Imagem" — o placeholder do próprio mockup */
+    .projeto-card.ativo .projeto-imagem {
+        box-shadow: var(--sombra-brilho), 0 0 0 1px var(--cor-acento-suave);
+    }
+
+/* Caixa "Imagem" enquanto o projeto não tem foto: o placeholder do mockup,
+   em gradiente suave */
 .projeto-imagem--vazia {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--cor-placeholder);
+    background:
+        radial-gradient(circle at 30% 20%, var(--cor-brilho-acento), transparent 60%),
+        radial-gradient(circle at 80% 90%, var(--cor-brilho-violeta), transparent 60%),
+        var(--cor-placeholder);
     color: var(--cor-texto-suave);
     font-size: var(--texto-lg);
 }
@@ -627,13 +1125,13 @@ img {
     grid-auto-flow: column;
     grid-auto-columns: calc((100% - (var(--por-pagina) - 1) * var(--espaco-3)) / var(--por-pagina));
     gap: var(--espaco-3);
-    margin: calc(-1 * var(--espaco-1));
-    padding: var(--espaco-1);
+    margin: calc(-1 * var(--espaco-2));
+    padding: var(--espaco-2);
     list-style: none;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--espaco-1);
+    scroll-padding-inline: var(--espaco-2);
     scroll-behavior: smooth;
     scrollbar-width: none;
 }
@@ -642,18 +1140,35 @@ img {
         display: none;
     }
 
+/* Borda em gradiente: duas camadas de fundo, a de dentro até o padding e a do
+   gradiente até a borda transparente. */
 .depoimento-card {
     scroll-snap-align: start;
     display: flex;
     align-items: center;
     gap: var(--espaco-3);
-    padding: var(--espaco-3);
+    padding: var(--espaco-4) var(--espaco-3) var(--espaco-3);
+    border: 1px solid transparent;
     border-radius: var(--raio);
-    background-color: var(--cor-superficie);
+    background:
+        linear-gradient(var(--cor-superficie), var(--cor-superficie)) padding-box,
+        var(--gradiente-borda) border-box;
     box-shadow: var(--sombra-card);
+    overflow: hidden;
 }
 
-/* No mockup o avatar domina o card: cerca de 150px em 1440. */
+/* Aspas grandes, apagadas, no canto do card */
+.depoimento-aspas {
+    position: absolute;
+    top: var(--espaco-2);
+    right: var(--espaco-3);
+    color: var(--cor-acento);
+    font-size: 3.5rem;
+    opacity: 0.18;
+}
+
+/* No mockup o avatar domina o card: cerca de 150px em 1440. O anel duplo
+   (fundo do card e acento) o separa do card. */
 .depoimento-avatar {
     --tamanho-avatar: clamp(5rem, 2.5rem + 6vw, 9rem);
     display: flex;
@@ -667,6 +1182,7 @@ img {
     color: var(--cor-acento);
     font-size: calc(var(--tamanho-avatar) * 0.42);
     overflow: hidden;
+    box-shadow: 0 0 0 3px var(--cor-superficie), 0 0 0 5px var(--cor-acento-solido), 0 0 36px var(--cor-brilho-acento);
 }
 
     .depoimento-avatar > img {
@@ -677,6 +1193,8 @@ img {
 
 .depoimento-texto {
     margin: 0;
+    color: var(--cor-texto-suave);
+    font-style: italic;
     text-align: justify;
 }
 
@@ -687,15 +1205,15 @@ img {
 }
 
 .depoimento-cargo {
-    color: var(--cor-texto-suave);
+    color: var(--cor-acento);
+    font-size: var(--texto-sm);
 }
 
 /* #endregion Seção 5 — Depoimentos */
 
 /* #region Seção 6 — Habilidades Profissionais */
 
-/* Cinco cards de mesma altura lado a lado. auto-fit + minmax faz a grade
-   reduzir o número de colunas sozinha antes mesmo do breakpoint. */
+/* Cinco cards de mesma altura lado a lado; o responsivo reduz as colunas. */
 .habilidades-grade {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -705,36 +1223,106 @@ img {
     list-style: none;
 }
 
+/* Cada card tem o seu tom: no ícone, no número, na barra do topo e no hover */
 .habilidades-card {
-    padding: var(--espaco-3) var(--espaco-2);
+    --tom: var(--tom-1);
+    overflow: hidden;
+    padding: var(--espaco-3) var(--espaco-3) var(--espaco-4);
+    border: 1px solid var(--cor-borda);
     border-radius: var(--raio);
     background-color: var(--cor-superficie);
     box-shadow: var(--sombra-card);
+    /* o hover usa translate, não transform: o transform é da animação .revelar */
+    transition: translate 0.35s var(--curva-saida), border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
+    .habilidades-card:nth-child(5n + 2) { --tom: var(--tom-2); }
+    .habilidades-card:nth-child(5n + 3) { --tom: var(--tom-3); }
+    .habilidades-card:nth-child(5n + 4) { --tom: var(--tom-4); }
+    .habilidades-card:nth-child(5n + 5) { --tom: var(--tom-5); }
+
+    .habilidades-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 3px;
+        background: linear-gradient(90deg, var(--tom), transparent);
+    }
+
+    .habilidades-card:hover {
+        border-color: color-mix(in srgb, var(--tom) 55%, transparent);
+        box-shadow: 0 22px 44px -22px var(--tom);
+        translate: 0 -6px;
+    }
+
+.habilidades-numero {
+    position: absolute;
+    top: var(--espaco-2);
+    right: var(--espaco-2);
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--tom) 55%, transparent);
+    font-size: 2.5rem;
+    font-weight: var(--peso-fantasma);
+    line-height: 1;
+}
+
+.habilidades-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: var(--espaco-2);
+    border-radius: 0.75rem;
+    background-color: color-mix(in srgb, var(--tom) 15%, transparent);
+    color: var(--tom);
+    font-size: 1.35rem;
+    transition: transform 0.35s var(--curva-saida);
+}
+
+    .habilidades-card:hover .habilidades-icone {
+        transform: rotate(-8deg) scale(1.08);
+    }
+
 .habilidades-titulo {
-    margin: 0 0 var(--espaco-3);
-    text-align: center;
+    margin: 0 0 var(--espaco-2);
     font-size: var(--texto-lg);
     font-weight: var(--peso-forte);
 }
 
+/* Itens em etiquetas */
 .habilidades-itens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
     margin: 0;
-    padding-left: var(--espaco-3);
-    /* lista aninhada usaria "circle" (vazado); o mockup tem disco cheio */
-    list-style-type: disc;
+    padding: 0;
+    list-style: none;
 }
 
     .habilidades-itens > li {
-        margin-bottom: 0.35rem;
+        padding: 0.2rem 0.65rem;
+        border: 1px solid var(--cor-borda);
+        border-radius: var(--raio-pilula);
+        background-color: var(--cor-superficie-alta);
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-sm);
+        transition: color 0.2s ease, border-color 0.2s ease;
     }
+
+        .habilidades-itens > li:hover {
+            border-color: var(--tom);
+            color: var(--cor-texto);
+        }
 
 /* #endregion Seção 6 — Habilidades Profissionais */
 
 /* #region Seção 7 — Certificação */
 
 .certificacoes-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr));
+    gap: var(--espaco-2);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -744,22 +1332,39 @@ img {
     display: flex;
     align-items: center;
     gap: var(--espaco-3);
-    /* no mockup o card ocupa cerca de 40% da faixa, não a largura toda */
-    max-width: 36rem;
     padding: var(--espaco-3);
+    border: 1px solid transparent;
     border-radius: var(--raio);
-    background-color: var(--cor-superficie);
+    background:
+        linear-gradient(var(--cor-superficie), var(--cor-superficie)) padding-box,
+        var(--gradiente-borda) border-box;
     box-shadow: var(--sombra-card);
+    transition: translate 0.35s var(--curva-saida), box-shadow 0.35s ease;
 }
 
+    .certificacao-card:hover {
+        box-shadow: var(--sombra-brilho);
+        translate: 0 -4px;
+    }
+
+/* Ladrilho em gradiente com o ícone do certificado */
 .certificacao-icone {
+    display: inline-flex;
     flex: 0 0 auto;
-    font-size: 3.25rem;
+    align-items: center;
+    justify-content: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 1rem;
+    background: var(--gradiente-acento);
+    box-shadow: var(--sombra-botao);
+    color: var(--cor-acento-contraste);
+    font-size: 2.1rem;
     line-height: 1;
 }
 
 .certificacao-sigla {
-    margin: 0 0 var(--espaco-1);
+    margin: 0 0 0.25rem;
     font-size: var(--texto-lg);
 }
 
@@ -774,7 +1379,7 @@ img {
 
 .linha-tempo {
     --meia-calha: var(--espaco-4);
-    --raio-marcador: 0.4375rem;
+    --raio-marcador: 1.25rem;
     position: relative;
     display: grid;
     gap: var(--espaco-5);
@@ -783,8 +1388,10 @@ img {
     list-style: none;
 }
 
-    /* A linha vertical central */
-    .linha-tempo::before {
+    /* A linha vertical central: o trilho apagado (::before) e o
+       preenchimento em gradiente (::after), que cresce com a rolagem. */
+    .linha-tempo::before,
+    .linha-tempo::after {
         content: "";
         position: absolute;
         /* no mockup a linha ultrapassa o primeiro e o último card */
@@ -792,62 +1399,112 @@ img {
         bottom: calc(-1 * var(--espaco-3));
         left: 50%;
         width: 2px;
-        transform: translateX(-50%);
-        background-color: var(--cor-acento-solido);
+        margin-left: -1px;
+        border-radius: 2px;
+    }
+
+    .linha-tempo::before {
+        background-color: var(--cor-borda-forte);
+    }
+
+    .linha-tempo::after {
+        background: linear-gradient(to bottom, var(--cor-acento-solido) 70%, var(--cor-violeta));
+        box-shadow: 0 0 12px var(--cor-acento-suave);
+        transform-origin: top;
     }
 
 .linha-tempo-item {
     position: relative;
     width: calc(50% - var(--meia-calha));
+    /* o card da esquerda entra pela esquerda, o da direita pela direita */
+    --desloc-x: -2.5rem;
 }
 
     /* Cards alternam os lados; a ordem no markup é a cronológica */
     .linha-tempo-item:nth-child(even) {
         margin-left: calc(50% + var(--meia-calha));
+        --desloc-x: 2.5rem;
     }
 
-    /* O marcador fica exatamente sobre a linha, no centro vertical do card */
-    .linha-tempo-item::before {
+/* O marcador, com o ícone da seção, fica sobre a linha no centro vertical do card */
+.linha-tempo-marcador {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--raio-marcador) * 2);
+    height: calc(var(--raio-marcador) * 2);
+    border: 2px solid var(--cor-acento-solido);
+    border-radius: 50%;
+    background-color: var(--cor-fundo);
+    box-shadow: 0 0 0 6px var(--cor-fundo), 0 0 24px var(--cor-acento-suave);
+    color: var(--cor-acento);
+    font-size: 0.95rem;
+    transform: translateY(-50%);
+}
+
+    /* Onda que pulsa a partir do marcador */
+    .linha-tempo-marcador::after {
         content: "";
         position: absolute;
-        top: 50%;
-        width: calc(var(--raio-marcador) * 2);
-        height: calc(var(--raio-marcador) * 2);
+        inset: -2px;
+        border: 2px solid var(--cor-acento-solido);
         border-radius: 50%;
-        background-color: var(--cor-acento-solido);
-        transform: translateY(-50%);
+        opacity: 0;
     }
 
-    .linha-tempo-item:nth-child(odd)::before {
+    .linha-tempo-item:nth-child(odd) > .linha-tempo-marcador {
         right: calc(-1 * (var(--meia-calha) + var(--raio-marcador)));
     }
 
-    .linha-tempo-item:nth-child(even)::before {
+    .linha-tempo-item:nth-child(even) > .linha-tempo-marcador {
         left: calc(-1 * (var(--meia-calha) + var(--raio-marcador)));
     }
 
 .linha-tempo-card {
     padding: var(--espaco-3);
+    border: 1px solid var(--cor-borda);
     border-radius: var(--raio);
     background-color: var(--cor-superficie);
     box-shadow: var(--sombra-card);
+    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s var(--curva-saida);
 }
 
+    .linha-tempo-card:hover {
+        border-color: var(--cor-acento-suave);
+        box-shadow: var(--sombra-brilho);
+        transform: translateY(-4px);
+    }
+
+/* O período vira uma pílula no acento */
 .linha-tempo-periodo {
-    margin: 0;
+    display: inline-block;
+    margin: 0 0 var(--espaco-1);
+    padding: 0.15rem 0.75rem;
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-acento-fundo);
+    color: var(--cor-acento);
+    font-size: var(--texto-sm);
+    font-weight: var(--peso-forte);
 }
 
 .linha-tempo-titulo {
     margin: 0;
-    color: var(--cor-acento);
     font-size: var(--texto-lg);
-    font-weight: var(--peso-regular);
+    font-weight: var(--peso-forte);
 }
 
 /* No mockup há um respiro claro entre o cargo e o bloco de detalhes */
 .linha-tempo-corpo {
-    margin-top: var(--espaco-3);
+    margin-top: var(--espaco-2);
+    color: var(--cor-texto-suave);
 }
+
+    .linha-tempo-corpo strong {
+        color: var(--cor-texto);
+    }
 
     .linha-tempo-corpo > p {
         margin: 0 0 var(--espaco-2);
@@ -865,34 +1522,64 @@ img {
 
 /* #region Seção 10 — Chamada final */
 
-/* No mockup o card ocupa pouco mais da metade da faixa e fica centrado */
+/* Painel em gradiente com um brilho e anéis concêntricos no canto */
 .chamada-card {
+    position: relative;
+    isolation: isolate;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--espaco-4);
-    max-width: 46rem;
+    max-width: 60rem;
     margin-inline: auto;
-    padding: var(--espaco-4);
-    border-radius: var(--raio);
-    background-color: var(--cor-superficie);
-    box-shadow: var(--sombra-card);
+    padding: var(--espaco-5) var(--espaco-5);
+    overflow: hidden;
+    border-radius: 1.5rem;
+    background: var(--gradiente-chamada);
+    box-shadow: 0 30px 70px -30px var(--cor-acento-solido);
+    color: var(--cor-sobre-gradiente);
 }
 
-/* Menor que --texto-destaque: no mockup o convite tem ~30px, e em pt-BR
-   "Vamos trabalhar juntos!" é mais longo que o texto em inglês. */
+    .chamada-card::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: -40%;
+        left: -10%;
+        width: 60%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, var(--cor-sobre-gradiente-traco), transparent);
+    }
+
+.chamada-aneis {
+    position: absolute;
+    z-index: -1;
+    top: -7rem;
+    right: -7rem;
+    width: 16rem;
+    aspect-ratio: 1;
+    border: 1px solid var(--cor-sobre-gradiente-traco);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3rem var(--cor-sobre-gradiente-traco), 0 0 0 6rem var(--cor-luz);
+    opacity: 0.6;
+}
+
 .chamada-convite {
     margin: 0 0 var(--espaco-3);
-    font-size: clamp(1.4rem, 0.9rem + 1.5vw, 2rem);
+    font-size: clamp(1.75rem, 1rem + 2.4vw, 2.75rem);
     font-weight: var(--peso-display);
+    letter-spacing: -0.02em;
 }
 
 .chamada-citacao {
     margin: 0;
+    color: var(--cor-sobre-gradiente-suave);
 }
 
     .chamada-citacao > blockquote {
         margin: 0;
+        font-style: italic;
     }
 
     /* A autoria fica alinhada à direita, sob o fim da citação */
@@ -900,6 +1587,7 @@ img {
         margin-top: 0.25rem;
         text-align: right;
         font-weight: var(--peso-forte);
+        color: var(--cor-sobre-gradiente);
     }
 
 .chamada-botao {
@@ -910,42 +1598,55 @@ img {
 
 /* #region Seção 11 — Rodapé */
 
-/* Faixa de ponta a ponta da janela; só o miolo respeita a largura de leitura. */
+/* Faixa de ponta a ponta da janela; só o miolo respeita a largura de leitura.
+   Um filete em gradiente marca o topo. */
 .rodape {
+    position: relative;
     padding-block: var(--espaco-4);
     background-color: var(--cor-superficie);
     text-align: center;
 }
 
+    .rodape::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--cor-acento-solido) 40%, var(--cor-acento-solido) 70%, var(--cor-violeta), transparent);
+    }
+
 .rodape-redes {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--espaco-3);
+    gap: var(--espaco-2);
     margin: 0 0 var(--espaco-3);
     padding: 0;
     list-style: none;
 }
 
-    /* Círculos apenas contornados no acento, como no mockup — diferente dos
-       ícones da biografia, que têm preenchimento. */
+    /* Círculos apenas contornados, como no mockup — diferente dos ícones da
+       biografia, que têm preenchimento. */
     .rodape-redes a {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 3rem;
         height: 3rem;
-        border: 2px solid var(--cor-acento-solido);
+        border: 1px solid var(--cor-borda-forte);
         border-radius: 50%;
         color: var(--cor-texto);
         font-size: var(--texto-lg);
-        transition: background-color 0.2s ease, color 0.2s ease;
+        transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s var(--curva-saida);
     }
 
         .rodape-redes a:hover,
         .rodape-redes a:focus-visible {
-            background-color: var(--cor-acento-solido);
+            border-color: transparent;
+            background: var(--gradiente-acento);
             color: var(--cor-acento-contraste);
+            box-shadow: var(--sombra-botao);
+            transform: translateY(-4px);
         }
 
 .rodape-copyright {
@@ -955,6 +1656,7 @@ img {
     justify-content: center;
     gap: 0 var(--espaco-1);
     margin: 0;
+    color: var(--cor-texto-suave);
 }
 
 /* A assinatura usa a Ernestone: é o propósito dela no projeto. Como a fonte
@@ -963,7 +1665,10 @@ img {
     font-family: var(--fonte-assinatura);
     font-size: 2rem;
     line-height: 1;
-    color: var(--cor-texto);
+    background: var(--gradiente-texto);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
     .rodape-assinatura:hover,
@@ -1001,11 +1706,12 @@ img {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-    /* Ganha fundo sólido depois que a página rola (classe aplicada em app.js) */
+    /* Ganha fundo de vidro depois que a página rola (classe aplicada em CabecalhoFixo.tsx) */
     .cabecalho.rolado {
         background-color: var(--cor-cabecalho);
         box-shadow: 0 1px 0 0 var(--cor-borda);
-        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(14px) saturate(140%);
+        backdrop-filter: blur(14px) saturate(140%);
     }
 
     .cabecalho > .conteudo {
@@ -1015,6 +1721,19 @@ img {
         gap: var(--espaco-2);
         height: 100%;
     }
+
+/* Barra de progresso da leitura, na borda de baixo do cabeçalho. Sem suporte
+   a animation-timeline ela simplesmente não aparece (animacao.css). */
+.cabecalho-progresso {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--gradiente-vivo);
+    transform: scaleX(0);
+    transform-origin: left;
+}
 
 .cabecalho-controles {
     display: flex;
@@ -1030,26 +1749,39 @@ img {
     width: 2.5rem;
     height: 2.5rem;
     padding: 0;
-    border: 0;
-    border-radius: var(--raio-pequeno);
-    background-color: transparent;
+    border: 1px solid var(--cor-borda);
+    border-radius: 50%;
+    background-color: var(--cor-vidro);
     color: var(--cor-texto);
-    font-size: var(--texto-lg);
+    font-size: 1.05rem;
     line-height: 1;
     cursor: pointer;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.3s var(--curva-saida);
 }
 
     .botao-icone:hover {
+        border-color: var(--cor-acento-suave);
         color: var(--cor-acento);
-        background-color: var(--cor-superficie);
     }
 
-/* Alternador de idioma PT | EN */
+    /* o sol/lua dá meia-volta ao passar o mouse */
+    .botao-icone:hover > .icone-tema {
+        transform: rotate(40deg);
+    }
+
+.icone-tema {
+    transition: transform 0.4s var(--curva-saida);
+}
+
+/* Alternador de idioma PT | EN, numa pílula */
 .alternador-idioma {
     display: inline-flex;
     align-items: center;
-    gap: var(--espaco-1);
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-vidro);
 }
 
 .botao-idioma {
@@ -1057,11 +1789,11 @@ img {
     min-width: 2.25rem;
     text-align: center;
     text-decoration: none;
-    padding: 0.25rem var(--espaco-1);
-    border: 1px solid transparent;
-    border-radius: var(--raio-pequeno);
+    padding: 0.2rem var(--espaco-1);
+    border: 0;
+    border-radius: var(--raio-pilula);
     background-color: transparent;
-    color: var(--cor-texto);
+    color: var(--cor-texto-suave);
     font-family: inherit;
     font-size: var(--texto-xs);
     font-weight: var(--peso-forte);
@@ -1076,7 +1808,7 @@ img {
 
     .botao-idioma.ativo,
     .botao-idioma.ativo:hover {
-        background-color: var(--cor-acento-solido);
+        background: var(--gradiente-acento);
         color: var(--cor-acento-contraste);
     }
 
@@ -1116,10 +1848,12 @@ img {
     padding: 0;
     border: 0;
     border-right: 1px solid var(--cor-borda);
-    background-color: var(--cor-superficie);
+    background:
+        radial-gradient(28rem 20rem at 0% 100%, var(--cor-brilho-acento), transparent 70%),
+        var(--cor-superficie);
     color: var(--cor-texto);
     transform: translateX(-100%);
-    transition: transform 0.3s ease, overlay 0.3s ease allow-discrete, display 0.3s ease allow-discrete;
+    transition: transform 0.35s var(--curva-saida), overlay 0.35s ease allow-discrete, display 0.35s ease allow-discrete;
 }
 
     .menu-navegacao[open] {
@@ -1139,6 +1873,8 @@ img {
 
     .menu-navegacao::backdrop {
         background-color: #00000080;
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
     }
 
 .menu-cabecalho {
@@ -1167,40 +1903,91 @@ img {
     padding: 0;
 }
 
+/* Cada link ganha uma barrinha em gradiente que cresce ao passar o mouse */
 .link-navegacao {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0;
     padding: var(--espaco-1) 0;
     color: var(--cor-texto);
     font-size: var(--texto-lg);
     font-weight: var(--peso-medio);
+    transition: color 0.2s ease, gap 0.3s var(--curva-saida);
 }
+
+    .link-navegacao::before {
+        content: "";
+        width: 0;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--gradiente-vivo);
+        transition: width 0.3s var(--curva-saida);
+    }
 
     .link-navegacao:hover,
     .link-navegacao:focus-visible {
+        gap: 0.75rem;
         color: var(--cor-acento);
     }
+
+        .link-navegacao:hover::before,
+        .link-navegacao:focus-visible::before {
+            width: 1.25rem;
+        }
 
 /* #endregion Menu de navegação */
 
 /* #region Botões do Portifólio */
 
+/* Botão principal: pílula em gradiente, com sombra colorida e um reflexo que
+   atravessa o botão ao passar o mouse. */
 .btn-acento {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: var(--espaco-1);
-    padding: 0.75rem var(--espaco-3);
+    padding: 0.85rem 1.6rem;
+    overflow: hidden;
     border: 0;
-    border-radius: var(--raio-pequeno);
-    background-color: var(--cor-acento-solido);
+    border-radius: var(--raio-pilula);
+    background: var(--gradiente-acento);
+    box-shadow: var(--sombra-botao);
     color: var(--cor-acento-contraste);
     font-weight: var(--peso-forte);
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: transform 0.25s var(--curva-saida), box-shadow 0.25s ease;
 }
 
+    .btn-acento::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(110deg, transparent 30%, var(--cor-reflexo) 50%, transparent 70%);
+        transform: translateX(-110%);
+        transition: transform 0.7s ease;
+        pointer-events: none;
+    }
+
     .btn-acento:hover {
-        background-color: var(--cor-acento-hover);
         color: var(--cor-acento-contraste);
+        transform: translateY(-2px);
+        box-shadow: 0 18px 36px -12px var(--cor-acento-solido);
+    }
+
+        .btn-acento:hover::after {
+            transform: translateX(110%);
+        }
+
+    .btn-acento > .icone,
+    .btn-contorno > .icone,
+    .btn-claro > .icone-seta {
+        transition: transform 0.25s var(--curva-saida);
+    }
+
+    .btn-acento:hover > .icone:last-child,
+    .btn-contorno:hover > .icone:last-child,
+    .btn-claro:hover > .icone-seta {
+        transform: translateX(4px);
     }
 
     /* Projeto sem link definido: o botão fica inerte, com a explicação no title */
@@ -1210,8 +1997,59 @@ img {
     }
 
         .btn-acento[aria-disabled="true"]:hover {
-            background-color: var(--cor-acento-solido);
+            transform: none;
+            box-shadow: var(--sombra-botao);
         }
+
+            .btn-acento[aria-disabled="true"]:hover::after,
+            .btn-acento[aria-disabled="true"]:hover > .icone:last-child {
+                transform: translateX(-110%);
+            }
+
+            .btn-acento[aria-disabled="true"]:hover > .icone:last-child {
+                transform: none;
+            }
+
+/* Botão secundário: pílula contornada */
+.btn-contorno {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-1);
+    padding: 0.85rem 1.6rem;
+    border: 1px solid var(--cor-borda-forte);
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-vidro);
+    color: var(--cor-texto);
+    font-weight: var(--peso-forte);
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+    .btn-contorno:hover {
+        border-color: var(--cor-acento);
+        background-color: var(--cor-acento-fundo);
+        color: var(--cor-acento);
+    }
+
+/* Botão branco sobre o painel em gradiente da chamada final */
+.btn-claro {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--espaco-1);
+    padding: 0.95rem 1.75rem;
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-sobre-gradiente);
+    box-shadow: 0 14px 30px -12px var(--cor-sombra);
+    color: var(--cor-texto-botao-claro);
+    font-weight: var(--peso-display);
+    letter-spacing: 0.04em;
+    transition: transform 0.25s var(--curva-saida), box-shadow 0.25s ease;
+}
+
+    .btn-claro:hover {
+        color: var(--cor-texto-botao-claro);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 20px 40px -14px var(--cor-sombra);
+    }
 
 /* #endregion Botões do Portifólio */
 
@@ -1223,15 +2061,21 @@ img {
     gap: var(--espaco-2);
     min-height: 100dvh;
     padding: var(--espaco-3);
+    background:
+        radial-gradient(36rem 26rem at 70% 30%, var(--cor-brilho-acento), transparent 70%),
+        radial-gradient(30rem 22rem at 20% 80%, var(--cor-brilho-violeta), transparent 70%);
     text-align: center;
 }
 
 .pagina-erro-codigo {
     margin: 0;
-    color: var(--cor-acento);
     font-size: var(--texto-display);
     font-weight: var(--peso-display);
     line-height: 1;
+    background: var(--gradiente-texto);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 .pagina-erro h1 {
@@ -1254,4 +2098,3 @@ img {
 }
 
 /* #endregion Página não encontrada (404) */
-

@@ -20,8 +20,11 @@ const pacote = process.argv[2] ?? join(raiz, ".local", "font-awesome-pro", "pro-
 const ARQUIVOS = { fal: "light.js", fas: "solid.js", fab: "brands.js" };
 
 const ICONES = {
-    fal: ["arrow-right", "bars", "chevron-left", "chevron-right", "download", "file-certificate", "times", "sign-in"],
-    fas: ["arrow-up", "moon", "sun", "user"],
+    fal: ["arrow-right", "bars", "chevron-left", "chevron-right", "download", "file-certificate", "times", "sign-in",
+        // Ícones decorativos da landing: dados da biografia, grupos de habilidades e timelines.
+        "id-card", "calendar-alt", "birthday-cake", "map-marker-alt", "mobile-alt", "envelope",
+        "laptop-code", "server", "database", "infinity", "layer-group", "code", "graduation-cap", "briefcase"],
+    fas: ["arrow-up", "moon", "sun", "user", "quote-left"],
     // Redes sociais: também são as opções do painel ao cadastrar uma rede.
     fab: ["linkedin-in", "facebook-f", "instagram", "github", "whatsapp", "skype", "twitter", "youtube", "behance", "dribbble", "medium", "telegram", "discord", "gitlab", "stack-overflow"]
 };

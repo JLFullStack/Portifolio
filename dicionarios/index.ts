@@ -42,6 +42,9 @@ const pt = {
     secaoExperiencia: "Experiência",
 
     baixarCv: "Download CV",
+    heroContato: "Vamos conversar",
+    /** Palavra gigante e contornada ao fundo da hero (decorativa). */
+    heroFundo: "PORTFÓLIO",
     fotoHeroAlt: "Lucas Araújo, desenvolvedor full-stack",
 
     bioNome: "Nome:",
@@ -53,6 +56,10 @@ const pt = {
     bioFotoAlt: "Retrato de Lucas Araújo",
     /** {n} é a idade, calculada no navegador (Idade.tsx). */
     anos: "{n} anos",
+    numeroExperiencia: "anos de experiência",
+    numeroTecnologias: "tecnologias",
+    numeroFormacoes: "formações",
+    numeroCertificacoes: "certificações",
 
     verTrabalho: "Ver Trabalho",
     imagemPendente: "Imagem",
@@ -119,6 +126,8 @@ const en: Dicionario = {
     secaoExperiencia: "Experience",
 
     baixarCv: "Download CV",
+    heroContato: "Let's talk",
+    heroFundo: "PORTFOLIO",
     fotoHeroAlt: "Lucas Araújo, full-stack developer",
 
     bioNome: "Name:",
@@ -129,6 +138,10 @@ const en: Dicionario = {
     bioEmail: "E-mail:",
     bioFotoAlt: "Portrait of Lucas Araújo",
     anos: "{n} years",
+    numeroExperiencia: "years of experience",
+    numeroTecnologias: "technologies",
+    numeroFormacoes: "degrees",
+    numeroCertificacoes: "certifications",
 
     verTrabalho: "View Work",
     imagemPendente: "Image",

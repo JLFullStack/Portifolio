@@ -8,6 +8,7 @@ import type { PropsSecao } from "./Landing";
 /**
  * Seção 5 do mockup: Depoimentos. Dois cards por vez no desktop (um no celular),
  * numa faixa com scroll-snap: avatar à esquerda, depoimento à direita, nome e profissão.
+ * Cards com borda em gradiente e aspas grandes ao fundo.
  *
  * O depoimento aparece no idioma da página quando há tradução; sem ela, no
  * idioma em que a pessoa escreveu. Nesse caso o lang do texto avisa o leitor de tela.
@@ -18,13 +19,15 @@ export function Depoimentos({ conteudo, idioma, d }: PropsSecao) {
             <div className="conteudo">
                 <TituloSecao texto={d.secaoDepoimentos} />
 
-                <ul className="depoimentos-faixa" id="depoimentos-faixa" tabIndex={0} aria-label={d.secaoDepoimentos}>
+                <ul className="depoimentos-faixa revelar" id="depoimentos-faixa" tabIndex={0} aria-label={d.secaoDepoimentos}>
                     {conteudo.depoimentos.map(depoimento => {
                         const traduzido = Boolean(depoimento.texto[idioma]);
                         const idiomaTexto = traduzido ? idioma : depoimento.idiomaOriginal;
 
                         return (
-                            <li key={depoimento.id} className="depoimento-card">
+                            <li key={depoimento.id} className="depoimento-card cartao-luz">
+                                <Icone nome="fas:quote-left" className="depoimento-aspas" />
+
                                 <div className="depoimento-avatar">
                                     {depoimento.foto ? (
                                         <img src={src(depoimento.foto)} srcSet={srcset(depoimento.foto)} sizes="9rem"

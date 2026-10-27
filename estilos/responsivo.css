@@ -57,8 +57,10 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .certificacao-card {
-        max-width: none;
+    /* A palavra de fundo desce para trás do texto, que agora vem depois da foto */
+    .hero-fundo {
+        bottom: auto;
+        top: 38%;
     }
 }
 
@@ -91,6 +93,42 @@
 
     .hero-foto {
         max-width: 16rem;
+    }
+
+    /* Em volta da foto estreita só cabem etiquetas menores e mais próximas */
+    .hero-etiqueta {
+        padding: 0.3rem 0.65rem;
+        font-size: var(--texto-xs);
+    }
+
+        .hero-etiqueta:nth-child(1) { left: -18%; }
+        .hero-etiqueta:nth-child(2) { right: -16%; }
+        .hero-etiqueta:nth-child(3) { left: -20%; }
+        .hero-etiqueta:nth-child(4) { right: -12%; }
+
+    .hero-acoes > a {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+
+    .letreiro {
+        margin-top: var(--espaco-4);
+    }
+
+    .letreiro-lista > li {
+        font-size: var(--texto-md);
+    }
+
+    .bio-numeros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .bio-numero {
+        padding: var(--espaco-2);
+    }
+
+    .titulo-secao-fundo {
+        font-size: clamp(2.75rem, 1rem + 9vw, 4.5rem);
     }
 
     /* Uma coluna só: os seis campos empilham */
@@ -139,22 +177,25 @@
     /* As timelines colapsam: a linha vai para a esquerda e todos os cards
        ficam do mesmo lado. A alternância só existe no desktop. */
     .linha-tempo {
-        --recuo-linha: 3rem;
+        --recuo-linha: 3.5rem;
         gap: var(--espaco-4);
     }
 
-        .linha-tempo::before {
+        .linha-tempo::before,
+        .linha-tempo::after {
             left: var(--raio-marcador);
         }
 
+    /* todos os cards entram pela direita, do lado em que estão */
     .linha-tempo-item,
     .linha-tempo-item:nth-child(even) {
+        --desloc-x: 1.5rem;
         width: auto;
         margin-left: var(--recuo-linha);
     }
 
-        .linha-tempo-item:nth-child(odd)::before,
-        .linha-tempo-item:nth-child(even)::before {
+        .linha-tempo-item:nth-child(odd) > .linha-tempo-marcador,
+        .linha-tempo-item:nth-child(even) > .linha-tempo-marcador {
             left: calc(-1 * var(--recuo-linha));
             right: auto;
         }
@@ -167,7 +208,7 @@
     .chamada-card {
         flex-direction: column;
         align-items: stretch;
-        padding: var(--espaco-3);
+        padding: var(--espaco-4) var(--espaco-3);
     }
 
     .chamada-botao {

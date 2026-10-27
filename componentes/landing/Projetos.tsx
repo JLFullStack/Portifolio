@@ -11,15 +11,18 @@ import { ProjetosVitrine } from "./ProjetosVitrine";
  * o h2 fica só para leitores de tela.
  *
  * Todos os textos e cards vão no HTML; ProjetosVitrine só alterna qual está ativo.
+ * Atrás do título, o número do projeto em tamanho gigante; os cards inativos
+ * ficam inclinados em perspectiva e o ativo se endireita com um brilho.
  */
 export function Projetos({ conteudo, idioma, d }: PropsSecao) {
-    const projetos = conteudo.projetos.map(projeto => {
+    const projetos = conteudo.projetos.map((projeto, indice) => {
         const titulo = texto(projeto.titulo, idioma);
 
         return {
             id: projeto.id,
             info: (
                 <>
+                    <span className="projeto-numero" aria-hidden="true">{String(indice + 1).padStart(2, "0")}</span>
                     <h3 className="projeto-titulo">{titulo}</h3>
                     <p className="projeto-descricao">{texto(projeto.descricao, idioma)}</p>
 
@@ -61,7 +64,7 @@ export function Projetos({ conteudo, idioma, d }: PropsSecao) {
     });
 
     return (
-        <section id="projetos" className="secao projetos">
+        <section id="projetos" className="secao projetos revelar">
             <div className="conteudo projetos-grade">
                 <h2 className="visualmente-oculto">{d.secaoProjetos}</h2>
 
