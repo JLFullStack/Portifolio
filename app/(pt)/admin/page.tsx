@@ -3,13 +3,16 @@
 import { useEffect } from "react";
 import { api } from "@/lib/api";
 import { dataHora } from "@/lib/painel";
+import type { NomeIcone } from "@/componentes/icones/dados";
+import { Icone } from "@/componentes/icones/Icone";
 import { Aviso, useAcao } from "@/componentes/painel/Campos";
+import { Avatar } from "@/componentes/painel/Avatar";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
 
 const SITUACAO = {
-    pedida: { selo: "selo-pendente", texto: "Em andamento" },
-    concluida: { selo: "selo-aprovado", texto: "Publicada" },
-    falhou: { selo: "selo-recusado", texto: "Falhou" }
+    pedida: { selo: "selo-pendente", texto: "Em andamento", icone: "fal:hourglass-half" },
+    concluida: { selo: "selo-aprovado", texto: "Publicada", icone: "fal:check-circle" },
+    falhou: { selo: "selo-recusado", texto: "Falhou", icone: "fal:exclamation-circle" }
 } as const;
 
 /** Visão geral: números do conteúdo, depoimentos à espera, mensagens novas e o botão Publicar. */
@@ -32,12 +35,12 @@ export default function VisaoGeral() {
         await recarregar();
     }, "Publicação iniciada. O site é atualizado em 2 a 4 minutos.");
 
-    const numeros = [
-        { href: "/admin/projetos", valor: dados.projetos.filter(p => p.publicado).length, rotulo: "projetos publicados" },
-        { href: "/admin/depoimentos", valor: dados.depoimentos.filter(d => d.publicado).length, rotulo: "depoimentos no site" },
-        { href: "/admin/depoimentos", valor: pendentes.length, rotulo: "aguardando aprovação" },
-        { href: "/admin/mensagens", valor: dados.mensagens.filter(m => !m.lida).length, rotulo: "mensagens novas" },
-        { href: "/admin/pessoas", valor: dados.usuarios.filter(u => u.papel === "depoente").length, rotulo: "pessoas convidadas" }
+    const numeros: { href: string; valor: number; rotulo: string; icone: NomeIcone }[] = [
+        { href: "/admin/projetos", valor: dados.projetos.filter(p => p.publicado).length, rotulo: "projetos publicados", icone: "fal:folder-open" },
+        { href: "/admin/depoimentos", valor: dados.depoimentos.filter(d => d.publicado).length, rotulo: "depoimentos no site", icone: "fal:comments" },
+        { href: "/admin/depoimentos", valor: pendentes.length, rotulo: "aguardando aprovação", icone: "fal:hourglass-half" },
+        { href: "/admin/mensagens", valor: dados.mensagens.filter(m => !m.lida).length, rotulo: "mensagens novas", icone: "fal:inbox" },
+        { href: "/admin/pessoas", valor: dados.usuarios.filter(u => u.papel === "depoente").length, rotulo: "pessoas convidadas", icone: "fal:users" }
     ];
 
     return (
@@ -49,14 +52,19 @@ export default function VisaoGeral() {
 
             <div className="resumo-numeros">
                 {numeros.map(n => (
-                    <a key={n.rotulo} href={n.href}><strong>{n.valor}</strong><span>{n.rotulo}</span></a>
+                    <a key={n.rotulo} href={n.href}>
+                        <span className="resumo-icone"><Icone nome={n.icone} /></span>
+                        <strong>{n.valor}</strong>
+                        <span>{n.rotulo}</span>
+                    </a>
                 ))}
             </div>
 
-            <section className="cartao">
+            <section className="cartao cartao-publicar">
                 <header>
-                    <h2>Publicar o site</h2>
+                    <h2><Icone nome="fal:rocket" /> Publicar o site</h2>
                     <button type="button" className="botao botao-primario" disabled={executando || emAndamento} onClick={publicar}>
+                        <Icone nome={emAndamento ? "fal:circle-notch" : "fal:rocket"} className={emAndamento ? "girando" : undefined} />
                         {emAndamento ? "Publicando…" : "Publicar alterações"}
                     </button>
                 </header>
@@ -67,41 +75,59 @@ export default function VisaoGeral() {
                 <Aviso aviso={aviso} />
 
                 {dados.publicacoes.length > 0 && (
-                    <div className="rolagem-horizontal">
-                        <table className="tabela">
-                            <thead>
-                                <tr><th>Pedida em</th><th>Por</th><th>Situação</th><th>Concluída em</th></tr>
-                            </thead>
-                            <tbody>
-                                {dados.publicacoes.map(p => (
-                                    <tr key={p.id}>
-                                        <td>{dataHora(p.pedida_em)}</td>
-                                        <td>{p.usuario ?? "—"}</td>
-                                        <td>
-                                            <span className={`selo ${SITUACAO[p.situacao].selo}`}>{SITUACAO[p.situacao].texto}</span>
-                                            {p.detalhe && <small> {p.detalhe}</small>}
-                                        </td>
-                                        <td>{dataHora(p.concluida_em)}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <>
+                        <h3 className="subtitulo-cartao"><Icone nome="fal:history" /> Últimas publicações</h3>
+                        <ol className="linha-tempo">
+                            {dados.publicacoes.map(p => {
+                                const situacao = SITUACAO[p.situacao];
+
+                                return (
+                                    <li key={p.id} className={`linha-tempo-item linha-tempo-${p.situacao}`}>
+                                        <span className="linha-tempo-marca"><Icone nome={situacao.icone} /></span>
+                                        <div className="linha-tempo-corpo">
+                                            <div className="linha-tempo-topo">
+                                                <span className={`selo ${situacao.selo}`}>{situacao.texto}</span>
+                                                <span className="linha-tempo-quem">por {p.usuario ?? "—"}</span>
+                                            </div>
+                                            <dl className="linha-tempo-datas">
+                                                <div><dt>Pedida</dt><dd>{dataHora(p.pedida_em)}</dd></div>
+                                                <div><dt>Concluída</dt><dd>{dataHora(p.concluida_em)}</dd></div>
+                                            </dl>
+                                            {p.detalhe && <small className="linha-tempo-detalhe">{p.detalhe}</small>}
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ol>
+                    </>
                 )}
             </section>
 
             {pendentes.length > 0 && (
                 <section className="cartao">
                     <header>
-                        <h2>Depoimentos aguardando aprovação</h2>
-                        <a className="botao" href="/admin/depoimentos">Revisar</a>
+                        <h2><Icone nome="fal:hourglass-half" /> Depoimentos aguardando aprovação <span className="selo selo-pendente">{pendentes.length}</span></h2>
                     </header>
-                    <ul className="itens">
-                        {pendentes.map(d => (
-                            <li key={d.id} className="item"><div className="item-corpo" style={{ paddingTop: "0.85rem" }}>
-                                <strong>{d.nome}</strong> · enviado em {dataHora(d.enviado_em)}
-                            </div></li>
-                        ))}
+                    <ul className="pendentes">
+                        {pendentes.map(d => {
+                            const texto = d.idioma_original === "en" ? d.texto_en : d.texto_pt;
+                            const profissao = d.idioma_original === "en" ? d.profissao_en : d.profissao_pt;
+
+                            return (
+                                <li key={d.id}>
+                                    <a className="pendente" href={`/admin/depoimentos#depoimento-${d.id}`}>
+                                        <Avatar nome={d.nome} foto={d.foto} info={d.foto ? dados.imagens[d.foto] : undefined} />
+                                        <span className="pendente-corpo">
+                                            <strong>{d.nome}</strong>
+                                            {profissao && <small>{profissao}</small>}
+                                            {texto && <span className="pendente-trecho"><Icone nome="fas:quote-left" /> {texto}</span>}
+                                            <small className="pendente-data"><Icone nome="fal:calendar-alt" /> Enviado em {dataHora(d.enviado_em)} · {d.idioma_original.toUpperCase()}</small>
+                                        </span>
+                                        <span className="pendente-acao">Revisar <Icone nome="fal:arrow-right" /></span>
+                                    </a>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </section>
             )}

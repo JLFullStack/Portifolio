@@ -28,7 +28,12 @@ const ICONES = {
         "home", "user", "folder-open", "comments", "paper-plane", "star", "code-branch", "external-link", "check",
         "circle-notch", "arrow-up", "inbox", "lock-alt", "at", "search-plus",
         // Ícones que o painel oferece para os cards de Serviços.
-        "rocket", "sync-alt", "tools", "cloud", "shield-check", "chart-line", "cogs", "paint-brush"],
+        "rocket", "sync-alt", "tools", "cloud", "shield-check", "chart-line", "cogs", "paint-brush",
+        // Painel: abas, botões de ação, imagens e avisos.
+        "tachometer-alt", "users", "user-cog", "sign-out", "arrow-down", "arrow-left", "crop-alt", "image", "camera",
+        "trash-alt", "save", "upload", "plus", "link", "copy", "file-pdf", "crosshairs", "search-minus", "envelope-open",
+        "reply", "history", "key", "ban", "eye", "eye-slash", "check-circle", "exclamation-circle", "info-circle",
+        "hourglass-half", "quote-right"],
     fas: ["arrow-up", "moon", "sun", "user", "quote-left"],
     // Redes sociais: também são as opções do painel ao cadastrar uma rede.
     fab: ["linkedin-in", "facebook-f", "instagram", "github", "whatsapp", "skype", "twitter", "youtube", "behance", "dribbble", "medium", "telegram", "discord", "gitlab", "stack-overflow"]

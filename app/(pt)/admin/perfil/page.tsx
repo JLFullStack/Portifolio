@@ -3,8 +3,9 @@
 import { useRef, useState, type FormEvent } from "react";
 import { api } from "@/lib/api";
 import { dataHora } from "@/lib/painel";
-import { AreaTexto, Aviso, Campo, CampoBilingue, Entrada, useAcao, type Bilingue } from "@/componentes/painel/Campos";
-import { EnviarImagem, Previa } from "@/componentes/painel/Imagens";
+import { Aviso, Campo, CampoBilingue, Entrada, useAcao, type Bilingue } from "@/componentes/painel/Campos";
+import { Icone } from "@/componentes/icones/Icone";
+import { CampoImagem } from "@/componentes/painel/Imagens";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
 
 const SIMPLES = ["nome_curto", "nome_completo", "nascimento", "email", "telefone", "whatsapp", "linkedin", "curriculo_pt", "curriculo_en", "chamada_autor", "foto_hero", "foto_biografia"];
@@ -43,7 +44,11 @@ function Curriculo({ idioma }: { idioma: "pt" | "en" }) {
 
     return (
         <div className="campo arquivo-curriculo">
-            <span>Em {IDIOMAS[idioma]} <span className="selo">{idioma.toUpperCase()}</span></span>
+            <span className="arquivo-curriculo-titulo">
+                <span className="arquivo-curriculo-icone"><Icone nome="fal:file-pdf" /></span>
+                Em {IDIOMAS[idioma]}
+                {atual ? <span className="selo selo-aprovado">PDF enviado</span> : <span className="selo">{idioma.toUpperCase()}</span>}
+            </span>
             <p className="cartao-nota">
                 {atual
                     ? <>PDF de {(atual.tamanho / 1024).toFixed(0)} KB, enviado em {dataHora(atual.atualizado_em)}. O Download CV {idioma === "pt" ? "em português" : "em inglês"} abre este arquivo.</>
@@ -51,13 +56,13 @@ function Curriculo({ idioma }: { idioma: "pt" | "en" }) {
             </p>
             <div className="botoes">
                 <label className="botao botao-primario enviar-imagem">
-                    {executando ? "Enviando…" : atual ? "Trocar PDF" : "Enviar PDF"}
+                    <Icone nome="fal:upload" /> {executando ? "Enviando…" : atual ? "Trocar PDF" : "Enviar PDF"}
                     <input ref={entrada} type="file" accept="application/pdf" disabled={executando} onChange={e => enviar(e.target.files?.[0])} />
                 </label>
                 {atual && (
                     <>
-                        <a className="botao" href={caminho} target="_blank" rel="noopener">Ver PDF atual</a>
-                        <button type="button" className="botao botao-perigo" disabled={executando} onClick={remover}>Remover</button>
+                        <a className="botao" href={caminho} target="_blank" rel="noopener"><Icone nome="fal:external-link" /> Ver PDF</a>
+                        <button type="button" className="botao botao-perigo" disabled={executando} onClick={remover}><Icone nome="fal:trash-alt" /> Remover</button>
                     </>
                 )}
             </div>
@@ -105,26 +110,22 @@ export default function PaginaPerfil() {
             <p className="painel-subtitulo">Seus dados e os textos fixos da landing. Campo vazio num idioma usa o texto do outro.</p>
 
             <section className="cartao">
-                <h2>Fotos</h2>
-                <div className="imagens">
-                    <div className="campo">
-                        <span>Foto do topo (recortada, fundo transparente fica melhor)</span>
-                        <Previa id={perfil.foto_hero} info={imagens[perfil.foto_hero]} alt="Foto do topo" />
-                        <EnviarImagem larguras={[320, 480, 640, 832]} rotulo="Trocar foto do topo"
-                                      aoEnviar={img => { setImagens(i => ({ ...i, [img.id]: img })); mudar("foto_hero", img.id); }} />
-                    </div>
-                    <div className="campo">
-                        <span>Foto da biografia (recortada em círculo)</span>
-                        <Previa id={perfil.foto_biografia} info={imagens[perfil.foto_biografia]} redonda alt="Foto da biografia" />
-                        <EnviarImagem larguras={[360, 700]} proporcao={1} redonda rotulo="Trocar foto da biografia"
-                                      aoEnviar={img => { setImagens(i => ({ ...i, [img.id]: img })); mudar("foto_biografia", img.id); }} />
-                    </div>
+                <h2><Icone nome="fal:camera" /> Fotos</h2>
+                <p className="cartao-nota">Depois de escolher, ajuste a posição e o zoom. A foto nova só vale depois de salvar o perfil.</p>
+                <div className="fotos-perfil">
+                    <CampoImagem rotulo="Foto do topo" dica="Recortada, com fundo transparente. Mantém a proporção da própria foto."
+                                 id={perfil.foto_hero || null} info={imagens[perfil.foto_hero]} formato="livre"
+                                 larguras={[320, 480, 640, 832]} rotuloEnviar="Trocar foto"
+                                 aoEnviar={img => { setImagens(i => ({ ...i, [img.id]: img })); mudar("foto_hero", img.id); }} />
+                    <CampoImagem rotulo="Foto da biografia" dica="Aparece recortada em círculo."
+                                 id={perfil.foto_biografia || null} info={imagens[perfil.foto_biografia]} formato="redonda"
+                                 larguras={[360, 700]} proporcao={1} rotuloEnviar="Trocar foto"
+                                 aoEnviar={img => { setImagens(i => ({ ...i, [img.id]: img })); mudar("foto_biografia", img.id); }} />
                 </div>
-                <p className="cartao-nota" style={{ marginTop: "var(--espaco-2)" }}>A foto nova só vale depois de salvar o perfil.</p>
             </section>
 
             <section className="cartao">
-                <h2>Identificação e contato</h2>
+                <h2><Icone nome="fal:id-card" /> Identificação e contato</h2>
                 <div className="campos-duas">
                     {texto("nome_curto", "Nome em destaque")}
                     {texto("nome_completo", "Nome completo")}
@@ -136,20 +137,18 @@ export default function PaginaPerfil() {
                     {texto("curriculo_pt", "Currículo (PT)", "url", "Download CV da página em português, enquanto não houver PDF enviado abaixo.")}
                     {texto("curriculo_en", "Currículo (EN)", "url", "Download CV da página em inglês. Vazio: usa o do português.")}
                 </div>
-                <label className="opcoes interruptor" style={{ marginTop: "var(--espaco-2)" }}>
-                    <span>
-                        <input type="checkbox" checked={Boolean(Number(perfil.disponivel))}
-                               onChange={e => mudar("disponivel", e.target.checked ? "1" : "0")} />
-                        {" "}Mostrar o selo <strong>Disponível para novos projetos</strong> no topo e no menu
-                    </span>
+                <label className="interruptor interruptor-destaque">
+                    <input type="checkbox" role="switch" checked={Boolean(Number(perfil.disponivel))}
+                           onChange={e => mudar("disponivel", e.target.checked ? "1" : "0")} />
+                    <span>Mostrar o selo <strong>Disponível para novos projetos</strong> no topo e no menu</span>
                 </label>
-                <div className="campos" style={{ marginTop: "var(--espaco-2)" }}>
+                <div className="campos">
                     <CampoBilingue rotulo="Endereço" valor={bilingue("endereco")} aoMudar={mudarBilingue("endereco")} />
                 </div>
             </section>
 
             <section className="cartao">
-                <h2>Currículo em PDF</h2>
+                <h2><Icone nome="fal:file-pdf" /> Currículo em PDF</h2>
                 <p className="cartao-nota">Um arquivo por idioma. Com PDF enviado, o Download CV daquele idioma abre o arquivo do próprio site.</p>
                 <div className="campos-duas">
                     <Curriculo idioma="pt" />
@@ -158,7 +157,7 @@ export default function PaginaPerfil() {
             </section>
 
             <section className="cartao">
-                <h2>Apresentação (topo)</h2>
+                <h2><Icone nome="fal:home" /> Apresentação (topo)</h2>
                 <div className="campos">
                     <CampoBilingue rotulo="Saudação" valor={bilingue("saudacao")} aoMudar={mudarBilingue("saudacao")} />
                     <CampoBilingue rotulo="Profissão" valor={bilingue("profissao")} aoMudar={mudarBilingue("profissao")} />
@@ -167,26 +166,28 @@ export default function PaginaPerfil() {
             </section>
 
             <section className="cartao">
-                <h2>Biografia</h2>
+                <h2><Icone nome="fal:user" /> Biografia</h2>
                 <CampoBilingue rotulo="Texto" area linhas={10} dica="Separe os parágrafos com uma linha em branco."
                                valor={bilingue("biografia")} aoMudar={mudarBilingue("biografia")} />
             </section>
 
             <section className="cartao">
-                <h2>Chamada final</h2>
+                <h2><Icone nome="fal:paper-plane" /> Chamada final</h2>
                 <div className="campos">
                     <CampoBilingue rotulo="Convite" valor={bilingue("chamada_convite")} aoMudar={mudarBilingue("chamada_convite")} />
                     <CampoBilingue rotulo="Citação" area linhas={2} valor={bilingue("chamada_citacao")} aoMudar={mudarBilingue("chamada_citacao")} />
                     <Campo rotulo="Autor da citação">
-                        <AreaTexto rows={1} style={{ minHeight: "auto" }} value={perfil.chamada_autor ?? ""} onChange={e => mudar("chamada_autor", e.target.value)} />
+                        <Entrada value={perfil.chamada_autor ?? ""} onChange={e => mudar("chamada_autor", e.target.value)} />
                     </Campo>
                 </div>
             </section>
 
-            <div className="botoes">
-                <button type="submit" className="botao botao-primario" disabled={executando}>{executando ? "Salvando…" : "Salvar perfil"}</button>
+            <div className="barra-salvar">
+                <Aviso aviso={aviso} />
+                <button type="submit" className="botao botao-primario" disabled={executando}>
+                    <Icone nome="fal:save" /> {executando ? "Salvando…" : "Salvar perfil"}
+                </button>
             </div>
-            <Aviso aviso={aviso} />
         </form>
     );
 }

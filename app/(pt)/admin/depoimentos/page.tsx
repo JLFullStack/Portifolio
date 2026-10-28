@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { dataHora, type Depoimento } from "@/lib/painel";
+import { Icone } from "@/componentes/icones/Icone";
+import { Avatar } from "@/componentes/painel/Avatar";
 import { Aviso, Campo, CampoBilingue, Entrada, useAcao } from "@/componentes/painel/Campos";
-import { EnviarImagem, Previa } from "@/componentes/painel/Imagens";
+import { BotoesOrdem } from "@/componentes/painel/EditorColecao";
+import { CampoImagem } from "@/componentes/painel/Imagens";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
 
 const SITUACAO = {
-    pendente: { selo: "selo-pendente", texto: "Aguardando aprovação" },
-    aprovado: { selo: "selo-aprovado", texto: "Aprovado" },
-    recusado: { selo: "selo-recusado", texto: "Recusado" }
+    pendente: { selo: "selo-pendente", texto: "Aguardando aprovação", icone: "fal:hourglass-half" },
+    aprovado: { selo: "selo-aprovado", texto: "Aprovado", icone: "fal:check-circle" },
+    recusado: { selo: "selo-recusado", texto: "Recusado", icone: "fal:ban" }
 } as const;
 
 /**
@@ -18,7 +21,10 @@ const SITUACAO = {
  * Salvar, Aprovar (salva e publica esta versão no próximo Publicar), Recusar,
  * Tirar do site e Excluir.
  */
-function CartaoDepoimento({ depoimento, mover }: { depoimento: Depoimento; mover: (d: -1 | 1) => void }) {
+function CartaoDepoimento({ depoimento, ordem }: {
+    depoimento: Depoimento;
+    ordem?: { mover: (d: -1 | 1) => void; primeiro: boolean; ultimo: boolean };
+}) {
     const { dados, recarregar } = usePainel();
     const [nome, setNome] = useState(depoimento.nome);
     const [idioma, setIdioma] = useState(depoimento.idioma_original);
@@ -27,6 +33,7 @@ function CartaoDepoimento({ depoimento, mover }: { depoimento: Depoimento; mover
     const [foto, setFoto] = useState(depoimento.foto);
     const [imagens, setImagens] = useState(dados.imagens);
     const { executando, aviso, executar } = useAcao();
+    const situacao = SITUACAO[depoimento.situacao];
 
     const corpo = () => ({
         nome, idioma_original: idioma, foto,
@@ -45,50 +52,51 @@ function CartaoDepoimento({ depoimento, mover }: { depoimento: Depoimento; mover
     }, "Aprovado. Publique para atualizar o site.");
     const outro = idioma === "pt" ? "en" : "pt";
     const semTraducao = !texto[outro] || !profissao[outro];
+    const profissaoOriginal = profissao[idioma] || profissao[outro];
 
     return (
-        <details className="item" open={depoimento.situacao === "pendente"}>
+        <details id={`depoimento-${depoimento.id}`} className={`item depoimento depoimento-${depoimento.situacao}`}
+                 open={depoimento.situacao === "pendente"}>
             <summary>
-                <span className="item-titulo">
-                    {depoimento.nome}
-                    {depoimento.email_usuario && <small style={{ color: "var(--cor-texto-tenue)" }}> · {depoimento.email_usuario}</small>}
+                <Avatar nome={nome} foto={foto} info={foto ? imagens[foto] : undefined} />
+                <span className="item-cabeca">
+                    <span className="item-titulo">{depoimento.nome}</span>
+                    <span className="item-subtitulo">{profissaoOriginal || depoimento.email_usuario || "Sem profissão"}</span>
+                    <span className="item-selos">
+                        <span className={`selo ${situacao.selo}`}><Icone nome={situacao.icone} /> {situacao.texto}</span>
+                        {depoimento.publicado && <span className="selo selo-aprovado"><Icone nome="fal:eye" /> no site</span>}
+                        {Boolean(depoimento.exemplo) && <span className="selo selo-pendente">exemplo</span>}
+                    </span>
                 </span>
-                {Boolean(depoimento.exemplo) && <span className="selo selo-pendente">exemplo</span>}
-                {depoimento.publicado && <span className="selo selo-aprovado">no site</span>}
-                <span className={`selo ${SITUACAO[depoimento.situacao].selo}`}>{SITUACAO[depoimento.situacao].texto}</span>
-                {depoimento.publicado && (
-                    <>
-                        <button type="button" className="botao botao-icone-pequeno" aria-label="Subir" onClick={e => { e.preventDefault(); mover(-1); }}>↑</button>
-                        <button type="button" className="botao botao-icone-pequeno" aria-label="Descer" onClick={e => { e.preventDefault(); mover(1); }}>↓</button>
-                    </>
-                )}
+                {ordem && <BotoesOrdem {...ordem} />}
             </summary>
 
             <div className="item-corpo">
-                <p className="cartao-nota">
-                    Enviado em {dataHora(depoimento.enviado_em)}
-                    {depoimento.aprovado_em && ` · última aprovação em ${dataHora(depoimento.aprovado_em)}`}
-                    {depoimento.publicado && depoimento.situacao !== "aprovado" && " · a versão aprovada antes continua no site até você aprovar esta."}
-                </p>
+                <ul className="depoimento-historico">
+                    <li><Icone nome="fal:paper-plane" /> Enviado em {dataHora(depoimento.enviado_em)}</li>
+                    {depoimento.aprovado_em && <li><Icone nome="fal:check" /> Última aprovação em {dataHora(depoimento.aprovado_em)}</li>}
+                    {depoimento.email_usuario && <li><Icone nome="fal:envelope" /> {depoimento.email_usuario}</li>}
+                </ul>
+                {depoimento.publicado && depoimento.situacao !== "aprovado" && (
+                    <p className="aviso aviso-info"><Icone nome="fal:info-circle" /><span>A versão aprovada antes continua no site até você aprovar esta.</span></p>
+                )}
 
-                <div className="imagens" style={{ alignItems: "flex-start" }}>
-                    <div className="campo">
-                        <Previa id={foto} info={foto ? imagens[foto] : undefined} redonda alt={nome} />
-                        <EnviarImagem larguras={[160, 320]} proporcao={1} redonda rotulo="Trocar foto"
-                                      aoEnviar={img => { setImagens(i => ({ ...i, [img.id]: img })); setFoto(img.id); }} />
-                        {foto && <button type="button" className="botao botao-perigo" onClick={() => setFoto(null)}>Remover foto</button>}
-                    </div>
+                <div className="depoimento-grade">
+                    <CampoImagem rotulo="Foto" id={foto} info={foto ? imagens[foto] : undefined} formato="redonda"
+                                 larguras={[160, 320]} proporcao={1} rotuloEnviar={foto ? "Trocar" : "Escolher foto"}
+                                 aoEnviar={img => { setImagens(i => ({ ...i, [img.id]: img })); setFoto(img.id); }}
+                                 aoRemover={() => setFoto(null)} />
 
-                    <div className="campos" style={{ flex: "1 1 18rem", minWidth: 0 }}>
+                    <div className="campos">
                         <div className="campos-duas">
                             <Campo rotulo="Nome">
                                 <Entrada value={nome} maxLength={120} onChange={e => setNome(e.target.value)} />
                             </Campo>
                             <fieldset className="campo">
                                 <legend>Idioma em que foi escrito</legend>
-                                <div className="opcoes">
-                                    <label><input type="radio" checked={idioma === "pt"} onChange={() => setIdioma("pt")} /> Português</label>
-                                    <label><input type="radio" checked={idioma === "en"} onChange={() => setIdioma("en")} /> Inglês</label>
+                                <div className="segmentado">
+                                    <label><input type="radio" checked={idioma === "pt"} onChange={() => setIdioma("pt")} /><span>Português</span></label>
+                                    <label><input type="radio" checked={idioma === "en"} onChange={() => setIdioma("en")} /><span>Inglês</span></label>
                                 </div>
                             </fieldset>
                         </div>
@@ -98,22 +106,34 @@ function CartaoDepoimento({ depoimento, mover }: { depoimento: Depoimento; mover
                     </div>
                 </div>
 
-                <div className="botoes">
-                    <button type="button" className="botao botao-primario" disabled={executando} onClick={aprovar}>Aprovar</button>
-                    <button type="button" className="botao" disabled={executando} onClick={salvar}>Salvar sem aprovar</button>
-                    {depoimento.situacao === "pendente" && (
-                        <button type="button" className="botao" disabled={executando}
-                                onClick={() => acao(() => api("POST", `/api/depoimentos/${depoimento.id}/recusar`), "Recusado.")}>Recusar</button>
-                    )}
-                    {depoimento.publicado && (
-                        <button type="button" className="botao" disabled={executando}
-                                onClick={() => acao(() => api("POST", `/api/depoimentos/${depoimento.id}/ocultar`), "Tirado do site. Publique para valer.")}>
-                            Tirar do site
+                <div className="botoes botoes-depoimento">
+                    <span className="botoes-grupo">
+                        <button type="button" className="botao botao-perigo" disabled={executando}
+                                onClick={() => confirm(`Excluir o depoimento de ${depoimento.nome}?`) &&
+                                    acao(() => api("DELETE", `/api/depoimentos/${depoimento.id}`), "Excluído.")}>
+                            <Icone nome="fal:trash-alt" /> Excluir
                         </button>
-                    )}
-                    <button type="button" className="botao botao-perigo" disabled={executando}
-                            onClick={() => confirm(`Excluir o depoimento de ${depoimento.nome}?`) &&
-                                acao(() => api("DELETE", `/api/depoimentos/${depoimento.id}`), "Excluído.")}>Excluir</button>
+                        {depoimento.situacao === "pendente" && (
+                            <button type="button" className="botao" disabled={executando}
+                                    onClick={() => acao(() => api("POST", `/api/depoimentos/${depoimento.id}/recusar`), "Recusado.")}>
+                                <Icone nome="fal:ban" /> Recusar
+                            </button>
+                        )}
+                        {depoimento.publicado && (
+                            <button type="button" className="botao" disabled={executando}
+                                    onClick={() => acao(() => api("POST", `/api/depoimentos/${depoimento.id}/ocultar`), "Tirado do site. Publique para valer.")}>
+                                <Icone nome="fal:eye-slash" /> Tirar do site
+                            </button>
+                        )}
+                    </span>
+                    <span className="botoes-grupo">
+                        <button type="button" className="botao" disabled={executando} onClick={salvar}>
+                            <Icone nome="fal:save" /> Salvar sem aprovar
+                        </button>
+                        <button type="button" className="botao botao-primario" disabled={executando} onClick={aprovar}>
+                            <Icone nome="fal:check" /> Aprovar
+                        </button>
+                    </span>
                 </div>
                 <Aviso aviso={aviso} />
             </div>
@@ -125,6 +145,16 @@ export default function PaginaDepoimentos() {
     const { dados, recarregar } = usePainel();
     const { aviso, executar } = useAcao();
     const noSite = dados.depoimentos.filter(d => d.publicado);
+    const pendentes = dados.depoimentos.filter(d => d.situacao === "pendente").length;
+
+    // Vindo da visão geral (#depoimento-<id>): abre e mostra o depoimento escolhido.
+    useEffect(() => {
+        const alvo = location.hash ? document.getElementById(location.hash.slice(1)) : null;
+        if (alvo instanceof HTMLDetailsElement) {
+            alvo.open = true;
+            alvo.scrollIntoView({ block: "start" });
+        }
+    }, []);
 
     // A ordem só importa entre os que estão no site.
     const mover = (depoimento: Depoimento, direcao: -1 | 1) => {
@@ -147,14 +177,33 @@ export default function PaginaDepoimentos() {
                 Quem você convidou (em Pessoas) escreve o depoimento no próprio idioma. Complete a tradução, aprove e publique.
             </p>
 
+            <div className="resumo-linha">
+                <span className="selo selo-pendente"><Icone nome="fal:hourglass-half" /> {pendentes} aguardando</span>
+                <span className="selo selo-aprovado"><Icone nome="fal:eye" /> {noSite.length} no site</span>
+                <span className="selo"><Icone nome="fal:comments" /> {dados.depoimentos.length} no total</span>
+            </div>
+
             <Aviso aviso={aviso} />
             {dados.depoimentos.length === 0 ? (
-                <p className="cartao">Nenhum depoimento ainda. Convide alguém em Pessoas.</p>
+                <div className="cartao vazio">
+                    <span className="vazio-icone"><Icone nome="fal:comments" /></span>
+                    <p>Nenhum depoimento ainda.</p>
+                    <a className="botao botao-primario" href="/admin/pessoas"><Icone nome="fal:users" /> Convidar alguém</a>
+                </div>
             ) : (
-                <div className="itens">
-                    {dados.depoimentos.map(d => (
-                        <CartaoDepoimento key={`${d.id}-${d.situacao}-${d.enviado_em}`} depoimento={d} mover={direcao => mover(d, direcao)} />
-                    ))}
+                <div className="itens depoimentos">
+                    {dados.depoimentos.map(d => {
+                        const indice = noSite.indexOf(d);
+
+                        return (
+                            <CartaoDepoimento key={`${d.id}-${d.situacao}-${d.enviado_em}`} depoimento={d}
+                                              ordem={indice < 0 ? undefined : {
+                                                  mover: direcao => mover(d, direcao),
+                                                  primeiro: indice === 0,
+                                                  ultimo: indice === noSite.length - 1
+                                              }} />
+                        );
+                    })}
                 </div>
             )}
         </>

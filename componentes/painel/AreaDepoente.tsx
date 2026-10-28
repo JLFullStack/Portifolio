@@ -5,7 +5,8 @@ import { api } from "@/lib/api";
 import type { InfoImagem } from "@/lib/painel";
 import { sair, TrocarSenha } from "./Acesso";
 import { AreaTexto, Aviso, Campo, Entrada, useAcao } from "./Campos";
-import { EnviarImagem, Previa } from "./Imagens";
+import { Icone } from "@/componentes/icones/Icone";
+import { CampoImagem } from "./Imagens";
 
 type MeuDepoimento = {
     usuario: { nome: string; email: string };
@@ -81,8 +82,12 @@ export function AreaDepoente() {
                         Portfólio <span>Lucas Araújo</span>
                     </a>
                     <div className="painel-acoes-topo">
-                        <a className="botao" href="/">{portugues ? "Ver portfólio" : "View portfolio"}</a>
-                        <button type="button" className="botao" onClick={sair}>{portugues ? "Sair" : "Sign out"}</button>
+                        <a className="botao" href="/" title={portugues ? "Ver portfólio" : "View portfolio"}>
+                            <Icone nome="fal:external-link" /><span className="rotulo-opcional">{portugues ? "Ver portfólio" : "View portfolio"}</span>
+                        </a>
+                        <button type="button" className="botao" onClick={sair} title={portugues ? "Sair" : "Sign out"}>
+                            <Icone nome="fal:sign-out" /><span className="rotulo-opcional">{portugues ? "Sair" : "Sign out"}</span>
+                        </button>
                     </div>
                 </div>
             </header>
@@ -112,9 +117,9 @@ export function AreaDepoente() {
                             <div className="campos">
                                 <fieldset className="campo">
                                     <legend>Idioma do depoimento · Testimonial language</legend>
-                                    <div className="opcoes">
-                                        <label><input type="radio" name="idioma" checked={portugues} onChange={() => setIdioma("pt")} /> Português</label>
-                                        <label><input type="radio" name="idioma" checked={!portugues} onChange={() => setIdioma("en")} /> English</label>
+                                    <div className="segmentado">
+                                        <label><input type="radio" name="idioma" checked={portugues} onChange={() => setIdioma("pt")} /><span>Português</span></label>
+                                        <label><input type="radio" name="idioma" checked={!portugues} onChange={() => setIdioma("en")} /><span>English</span></label>
                                     </div>
                                 </fieldset>
 
@@ -133,27 +138,18 @@ export function AreaDepoente() {
                                                value={texto} onChange={e => setTexto(e.target.value)} />
                                 </Campo>
 
-                                <div className="campo">
-                                    <span>{portugues ? "Sua foto (opcional)" : "Your photo (optional)"}</span>
-                                    <div className="imagens">
-                                        <Previa id={foto?.id ?? null} info={foto?.info} redonda alt={nome} />
-                                        <div>
-                                            <EnviarImagem larguras={[160, 320]} proporcao={1} redonda idioma={idioma} rotulo={portugues ? "Escolher foto" : "Choose photo"}
-                                                          aoEnviar={imagem => setFoto({ id: imagem.id, info: imagem })} />
-                                            {foto && (
-                                                <div className="botoes">
-                                                    <button type="button" className="botao botao-perigo" onClick={() => setFoto(null)}>
-                                                        {portugues ? "Remover foto" : "Remove photo"}
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
+                                <CampoImagem rotulo={portugues ? "Sua foto (opcional)" : "Your photo (optional)"}
+                                             dica={portugues ? "Ajuste a posição e o zoom depois de escolher." : "Adjust position and zoom after choosing."}
+                                             id={foto?.id ?? null} info={foto?.info} formato="redonda" idioma={idioma}
+                                             larguras={[160, 320]} proporcao={1}
+                                             rotuloEnviar={foto ? (portugues ? "Trocar foto" : "Replace photo") : (portugues ? "Escolher foto" : "Choose photo")}
+                                             aoEnviar={imagem => setFoto({ id: imagem.id, info: imagem })}
+                                             aoRemover={() => setFoto(null)} />
                             </div>
 
                             <div className="botoes">
                                 <button type="submit" className="botao botao-primario" disabled={envio.executando}>
+                                    <Icone nome="fal:paper-plane" />
                                     {envio.executando ? (portugues ? "Enviando…" : "Sending…") : (portugues ? "Enviar para aprovação" : "Send for approval")}
                                 </button>
                             </div>

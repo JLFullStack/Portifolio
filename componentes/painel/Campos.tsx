@@ -2,6 +2,7 @@
 
 import { useCallback, useState, type InputHTMLAttributes, type ReactNode, type TextareaHTMLAttributes } from "react";
 import { ErroApi } from "@/lib/api";
+import { Icone } from "@/componentes/icones/Icone";
 
 /** Rótulo + controle + dica, empilhados. */
 export function Campo({ rotulo, dica, children }: { rotulo: string; dica?: ReactNode; children: ReactNode }) {
@@ -62,12 +63,15 @@ export function CampoBilingue({ rotulo, valor, aoMudar, area = false, linhas = 4
 
 export type EstadoAviso = { tipo: "sucesso" | "erro" | "info"; texto: string } | null;
 
+const ICONE_AVISO = { sucesso: "fal:check-circle", erro: "fal:exclamation-circle", info: "fal:info-circle" } as const;
+
 export function Aviso({ aviso }: { aviso: EstadoAviso }) {
     if (!aviso) return null;
 
     return (
         <p className={`aviso aviso-${aviso.tipo}`} role={aviso.tipo === "erro" ? "alert" : "status"}>
-            {aviso.texto}
+            <Icone nome={ICONE_AVISO[aviso.tipo]} />
+            <span>{aviso.texto}</span>
         </p>
     );
 }

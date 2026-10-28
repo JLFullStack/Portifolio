@@ -56,8 +56,9 @@ function Formulario({ campos, valores, mudar }: { campos: DefCampo[]; valores: V
 
                 if (campo.tipo === "bool") {
                     return (
-                        <label key={campo.nome} className="opcoes">
-                            <span><input type="checkbox" checked={Boolean(valor)} onChange={e => mudar(campo.nome, e.target.checked ? 1 : 0)} /> {campo.rotulo}</span>
+                        <label key={campo.nome} className="interruptor">
+                            <input type="checkbox" role="switch" checked={Boolean(valor)} onChange={e => mudar(campo.nome, e.target.checked ? 1 : 0)} />
+                            <span>{campo.rotulo}</span>
                         </label>
                     );
                 }
@@ -66,7 +67,7 @@ function Formulario({ campos, valores, mudar }: { campos: DefCampo[]; valores: V
                     return (
                         <Campo key={campo.nome} rotulo={campo.rotulo} dica={campo.dica}>
                             <span className="opcoes">
-                                <select className="entrada" style={{ maxWidth: "16rem" }} value={String(valor)} onChange={e => mudar(campo.nome, e.target.value)}>
+                                <select className="entrada entrada-curta" value={String(valor)} onChange={e => mudar(campo.nome, e.target.value)}>
                                     {opcoesIcone(campo.tipo).map(nome => <option key={nome} value={nome}>{nome.slice(4)}</option>)}
                                 </select>
                                 {Object.hasOwn(ICONES, String(valor)) && <span className="previa-icone"><Icone nome={String(valor) as keyof typeof ICONES} /></span>}
@@ -87,13 +88,28 @@ function Formulario({ campos, valores, mudar }: { campos: DefCampo[]; valores: V
     );
 }
 
-function ItemColecao({ tabela, item, campos, titulo, extras, mover }: {
+/** Setas de ordem de um item, no cabeçalho dele (o clique não abre nem fecha o item). */
+export function BotoesOrdem({ mover, primeiro, ultimo }: { mover: (direcao: -1 | 1) => void; primeiro: boolean; ultimo: boolean }) {
+    return (
+        <span className="item-ordem">
+            <button type="button" className="botao botao-redondo" aria-label="Subir" title="Subir" disabled={primeiro}
+                    onClick={e => { e.preventDefault(); mover(-1); }}><Icone nome="fal:arrow-up" /></button>
+            <button type="button" className="botao botao-redondo" aria-label="Descer" title="Descer" disabled={ultimo}
+                    onClick={e => { e.preventDefault(); mover(1); }}><Icone nome="fal:arrow-down" /></button>
+        </span>
+    );
+}
+
+function ItemColecao({ tabela, item, campos, titulo, selos, extras, mover, primeiro, ultimo }: {
     tabela: string;
     item: Linha;
     campos: DefCampo[];
     titulo: ReactNode;
+    selos?: ReactNode;
     extras?: ReactNode;
     mover: (direcao: -1 | 1) => void;
+    primeiro: boolean;
+    ultimo: boolean;
 }) {
     const { recarregar } = usePainel();
     const [valores, setValores] = useState(() => valoresIniciais(campos, item));
@@ -116,17 +132,21 @@ function ItemColecao({ tabela, item, campos, titulo, extras, mover }: {
         <li>
             <details className="item">
                 <summary>
-                    <span className="item-titulo">{titulo}</span>
-                    <button type="button" className="botao botao-icone-pequeno" aria-label="Subir"
-                            onClick={e => { e.preventDefault(); mover(-1); }}>↑</button>
-                    <button type="button" className="botao botao-icone-pequeno" aria-label="Descer"
-                            onClick={e => { e.preventDefault(); mover(1); }}>↓</button>
+                    <span className="item-cabeca">
+                        <span className="item-titulo">{titulo}</span>
+                        {selos && <span className="item-selos">{selos}</span>}
+                    </span>
+                    <BotoesOrdem mover={mover} primeiro={primeiro} ultimo={ultimo} />
                 </summary>
                 <div className="item-corpo">
                     <Formulario campos={campos} valores={valores} mudar={(coluna, valor) => setValores(v => ({ ...v, [coluna]: valor }))} />
                     <div className="botoes">
-                        <button type="button" className="botao botao-primario" disabled={executando} onClick={salvar}>Salvar</button>
-                        <button type="button" className="botao botao-perigo" disabled={executando} onClick={excluir}>Excluir</button>
+                        <button type="button" className="botao botao-perigo" disabled={executando} onClick={excluir}>
+                            <Icone nome="fal:trash-alt" /> Excluir
+                        </button>
+                        <button type="button" className="botao botao-primario" disabled={executando} onClick={salvar}>
+                            <Icone nome="fal:save" /> {executando ? "Salvando…" : "Salvar"}
+                        </button>
                     </div>
                     <Aviso aviso={aviso} />
                     {extras}
@@ -157,11 +177,13 @@ function NovoItem({ tabela, campos, rotulo, valoresFixos }: { tabela: string; ca
     return (
         <li>
             <details className="item item-novo" open={aberto} onToggle={e => setAberto(e.currentTarget.open)}>
-                <summary><span className="item-titulo">+ {rotulo}</span></summary>
+                <summary><span className="item-cabeca"><span className="item-titulo">{rotulo}</span></span></summary>
                 <div className="item-corpo">
                     <Formulario campos={campos} valores={valores} mudar={(coluna, valor) => setValores(v => ({ ...v, [coluna]: valor }))} />
                     <div className="botoes">
-                        <button type="button" className="botao botao-primario" disabled={executando} onClick={criar}>Adicionar</button>
+                        <button type="button" className="botao botao-primario" disabled={executando} onClick={criar}>
+                            <Icone nome="fal:plus" /> Adicionar
+                        </button>
                     </div>
                     <Aviso aviso={aviso} />
                 </div>
@@ -173,12 +195,14 @@ function NovoItem({ tabela, campos, rotulo, valoresFixos }: { tabela: string; ca
 /**
  * Lista editável de uma coleção do banco (worker/api.js, COLECOES): cada item abre um
  * formulário com Salvar, Excluir e as setas de ordem; no fim, o formulário de um novo.
+ * `resumo` é o título do item no cabeçalho; `selos`, as etiquetas embaixo dele.
  */
-export function EditorColecao({ tabela, itens, campos, resumo, rotuloNovo, extras, valoresFixos, recurso }: {
+export function EditorColecao({ tabela, itens, campos, resumo, selos, rotuloNovo, extras, valoresFixos, recurso }: {
     tabela: string;
     itens: Linha[];
     campos: DefCampo[];
     resumo: (item: Linha) => ReactNode;
+    selos?: (item: Linha) => ReactNode;
     rotuloNovo: string;
     extras?: (item: Linha) => ReactNode;
     valoresFixos?: Valores;
@@ -206,7 +230,8 @@ export function EditorColecao({ tabela, itens, campos, resumo, rotuloNovo, extra
             <ul className="itens">
                 {itens.map((item, indice) => (
                     <ItemColecao key={`${item.id}-${item.ordem}`} tabela={tabela} item={item} campos={campos} titulo={resumo(item)}
-                                 extras={extras?.(item)} mover={direcao => mover(indice, direcao)} />
+                                 selos={selos?.(item)} extras={extras?.(item)} mover={direcao => mover(indice, direcao)}
+                                 primeiro={indice === 0} ultimo={indice === itens.length - 1} />
                 ))}
                 <NovoItem tabela={tabela} campos={campos} rotulo={rotuloNovo} valoresFixos={valoresFixos} />
             </ul>

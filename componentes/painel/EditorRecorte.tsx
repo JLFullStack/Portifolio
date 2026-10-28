@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { Icone } from "@/componentes/icones/Icone";
 
 /** Retângulo da imagem original (em pixels dela) que vai virar a imagem enviada. */
 export type Recorte = { x: number; y: number; largura: number; altura: number };
@@ -13,6 +14,8 @@ const TEXTOS = {
         titulo: "Ajustar a imagem",
         dica: "Arraste para escolher a parte que aparece. Use o controle, a roda do mouse ou dois dedos para o zoom.",
         zoom: "Zoom",
+        menos: "Afastar",
+        mais: "Aproximar",
         centralizar: "Centralizar",
         cancelar: "Cancelar",
         usar: "Usar esta parte",
@@ -23,6 +26,8 @@ const TEXTOS = {
         titulo: "Adjust the image",
         dica: "Drag to choose the part that shows. Use the slider, the mouse wheel, or two fingers to zoom.",
         zoom: "Zoom",
+        menos: "Zoom out",
+        mais: "Zoom in",
         centralizar: "Center",
         cancelar: "Cancel",
         usar: "Use this part",
@@ -36,7 +41,8 @@ type Medida = { largura: number; altura: number };
 
 /**
  * Editor de enquadramento, como o do Instagram: a moldura tem a proporção de destino
- * (370 × 512 nos projetos, círculo nas fotos de perfil) e a imagem se move e aproxima
+ * (370 × 512 nos projetos, círculo nas fotos de perfil; sem `proporcao`, a da própria
+ * imagem, como na foto recortada do topo) e a imagem se move e aproxima
  * por baixo dela. Arrastar move; controle deslizante, roda do mouse, pinça com dois
  * dedos ou + e − fazem o zoom, sempre em torno do ponto indicado. A imagem nunca
  * deixa a moldura com vão vazio.
@@ -46,8 +52,8 @@ type Medida = { largura: number; altura: number };
  */
 export function EditorRecorte({ url, proporcao, redonda = false, larguraIdeal, idioma = "pt", aoConfirmar, aoCancelar }: {
     url: string;
-    /** largura ÷ altura da moldura */
-    proporcao: number;
+    /** largura ÷ altura da moldura; sem ela, a proporção da própria imagem */
+    proporcao?: number;
     redonda?: boolean;
     /** a maior largura que o site usa: abaixo dela, o aviso de nitidez */
     larguraIdeal: number;
@@ -64,6 +70,8 @@ export function EditorRecorte({ url, proporcao, redonda = false, larguraIdeal, i
     const [natural, setNatural] = useState<Medida | null>(null);
     const [caixa, setCaixa] = useState<Medida | null>(null);
     const [vista, setVista] = useState<Vista>({ zoom: 1, x: 0, y: 0 });
+
+    const razao = proporcao ?? (natural ? natural.largura / natural.altura : 1);
 
     // Escala em que a imagem cobre a moldura exatamente (zoom 1).
     const base = natural && caixa ? Math.max(caixa.largura / natural.largura, caixa.altura / natural.altura) : 1;
@@ -231,7 +239,7 @@ export function EditorRecorte({ url, proporcao, redonda = false, larguraIdeal, i
             <p className="cartao-nota">{t.dica}</p>
 
             <div ref={moldura} className={redonda ? "recorte-moldura recorte-redonda" : "recorte-moldura"}
-                 style={{ aspectRatio: proporcao, width: `min(100%, calc(58dvh * ${proporcao}))` }}
+                 style={{ aspectRatio: razao, width: `min(100%, calc(52dvh * ${razao}))` }}
                  tabIndex={0} role="application" aria-label={t.moldura}
                  onPointerDown={apertar} onPointerMove={arrastar} onPointerUp={soltar} onPointerCancel={soltar}
                  onKeyDown={teclar}>
@@ -244,18 +252,28 @@ export function EditorRecorte({ url, proporcao, redonda = false, larguraIdeal, i
                 <span className="recorte-grade" aria-hidden="true" />
             </div>
 
-            <label className="campo recorte-zoom">
-                <span>{t.zoom}</span>
-                <input type="range" min={1} max={ZOOM_MAXIMO} step={0.01} value={vista.zoom}
+            <div className="recorte-zoom">
+                <button type="button" className="botao botao-redondo" aria-label={t.menos} title={t.menos}
+                        disabled={vista.zoom <= 1} onClick={() => zoomEm(z => z / 1.2)}>
+                    <Icone nome="fal:search-minus" />
+                </button>
+                <input type="range" min={1} max={ZOOM_MAXIMO} step={0.01} value={vista.zoom} aria-label={t.zoom}
                        onChange={evento => zoomEm(() => Number(evento.target.value))} />
-            </label>
+                <button type="button" className="botao botao-redondo" aria-label={t.mais} title={t.mais}
+                        disabled={vista.zoom >= ZOOM_MAXIMO} onClick={() => zoomEm(z => z * 1.2)}>
+                    <Icone nome="fal:search-plus" />
+                </button>
+                <output className="recorte-percentual">{Math.round(vista.zoom * 100)}%</output>
+            </div>
 
             {pequena && <p className="aviso aviso-info">{t.pequena(pequena)}</p>}
 
             <div className="botoes">
-                <button type="button" className="botao botao-primario" disabled={!atual} onClick={() => atual && aoConfirmar(atual)}>{t.usar}</button>
-                <button type="button" className="botao" onClick={centralizar}>{t.centralizar}</button>
-                <button type="button" className="botao" onClick={aoCancelar}>{t.cancelar}</button>
+                <button type="button" className="botao" onClick={aoCancelar}><Icone nome="fal:times" /> {t.cancelar}</button>
+                <button type="button" className="botao" onClick={centralizar}><Icone nome="fal:crosshairs" /> {t.centralizar}</button>
+                <button type="button" className="botao botao-primario" disabled={!atual} onClick={() => atual && aoConfirmar(atual)}>
+                    <Icone nome="fal:check" /> {t.usar}
+                </button>
             </div>
         </dialog>
     );

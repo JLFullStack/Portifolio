@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { api } from "@/lib/api";
 import type { ImagemProjeto, Linha, Projeto } from "@/lib/painel";
+import { Icone } from "@/componentes/icones/Icone";
 import { Aviso, CampoBilingue, useAcao } from "@/componentes/painel/Campos";
 import { EditorColecao, type DefCampo } from "@/componentes/painel/EditorColecao";
-import { EnviarImagem, Previa } from "@/componentes/painel/Imagens";
+import { CampoImagem, EnviarImagem } from "@/componentes/painel/Imagens";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
+import type { ImagemEnviada } from "@/componentes/painel/redimensionar";
 
 const CAMPOS: DefCampo[] = [
     { nome: "titulo", rotulo: "Título", bilingue: true },
@@ -18,33 +20,63 @@ const CAMPOS: DefCampo[] = [
     { nome: "publicado", rotulo: "Mostrar no site", tipo: "bool" }
 ];
 
-/** Uma imagem do projeto: prévia, texto alternativo PT/EN e as ações. */
-function ImagemDoProjeto({ projetoId, imagem, primeira, mover }: { projetoId: number; imagem: ImagemProjeto; primeira: boolean; mover: (d: -1 | 1) => void }) {
+const LARGURAS_CARD = [360, 560, 740];
+
+/** Uma imagem do projeto: prévia, trocar e ajustar, ordem, texto alternativo PT/EN e remover. */
+function ImagemDoProjeto({ projetoId, imagem, posicao, primeira, ultima, mover }: {
+    projetoId: number;
+    imagem: ImagemProjeto;
+    posicao: number;
+    primeira: boolean;
+    ultima: boolean;
+    mover: (d: -1 | 1) => void;
+}) {
     const { dados, recarregar } = usePainel();
     const [alt, setAlt] = useState({ pt: imagem.alt_pt, en: imagem.alt_en });
     const { executando, aviso, executar } = useAcao();
+    const caminho = `/api/projetos/${projetoId}/imagens/${imagem.imagem_id}`;
+
+    // Trocar e Ajustar põem a imagem nova no lugar desta, com a mesma descrição e posição.
+    const substituir = (nova: ImagemEnviada) => executar(async () => {
+        if (nova.id === imagem.imagem_id) return;
+
+        const ids = (dados.projetos.find(p => p.id === projetoId)?.imagens ?? [])
+            .map(i => i.imagem_id === imagem.imagem_id ? nova.id : i.imagem_id);
+
+        await api("POST", `/api/projetos/${projetoId}/imagens`, { imagem_id: nova.id, alt_pt: alt.pt, alt_en: alt.en });
+        await api("DELETE", caminho);
+        await api("POST", `/api/projetos/${projetoId}/imagens/ordem`, { ids });
+        await recarregar();
+    }, "Imagem atualizada.");
 
     return (
-        <div className="campo" style={{ width: "15rem" }}>
-            <Previa id={imagem.imagem_id} info={dados.imagens[imagem.imagem_id]} alt={alt.pt} />
-            {primeira && <span className="selo selo-aprovado" style={{ justifySelf: "start" }}>Imagem do card</span>}
-            <CampoBilingue rotulo="Descrição da imagem (acessibilidade)" valor={alt} aoMudar={setAlt} />
-            <div className="botoes">
-                <button type="button" className="botao" disabled={executando}
-                        onClick={() => executar(async () => {
-                            await api("PUT", `/api/projetos/${projetoId}/imagens/${imagem.imagem_id}`, { alt_pt: alt.pt, alt_en: alt.en });
-                            await recarregar();
-                        }, "Salvo.")}>Salvar</button>
-                <button type="button" className="botao botao-icone-pequeno" aria-label="Antes" onClick={() => mover(-1)}>←</button>
-                <button type="button" className="botao botao-icone-pequeno" aria-label="Depois" onClick={() => mover(1)}>→</button>
-                <button type="button" className="botao botao-perigo" disabled={executando}
-                        onClick={() => confirm("Tirar esta imagem do projeto?") && executar(async () => {
-                            await api("DELETE", `/api/projetos/${projetoId}/imagens/${imagem.imagem_id}`);
-                            await recarregar();
-                        })}>Remover</button>
-            </div>
-            <Aviso aviso={aviso} />
-        </div>
+        <li>
+            <CampoImagem id={imagem.imagem_id} info={dados.imagens[imagem.imagem_id]} formato="retrato"
+                         larguras={LARGURAS_CARD} proporcao={370 / 512} rotuloEnviar="Trocar"
+                         selo={<span className={primeira ? "galeria-posicao galeria-capa" : "galeria-posicao"}>{primeira ? "Capa do card" : `${posicao}ª imagem`}</span>}
+                         aoEnviar={async nova => { await substituir(nova); }}
+                         aoRemover={() => confirm("Tirar esta imagem do projeto?") && executar(async () => {
+                             await api("DELETE", caminho);
+                             await recarregar();
+                         })}>
+                <div className="galeria-ordem">
+                    <button type="button" className="botao botao-redondo" aria-label="Mover para antes" title="Mover para antes"
+                            disabled={primeira} onClick={() => mover(-1)}><Icone nome="fal:arrow-left" /></button>
+                    <span>Ordem</span>
+                    <button type="button" className="botao botao-redondo" aria-label="Mover para depois" title="Mover para depois"
+                            disabled={ultima} onClick={() => mover(1)}><Icone nome="fal:arrow-right" /></button>
+                </div>
+                <CampoBilingue rotulo="Descrição da imagem (acessibilidade)" valor={alt} aoMudar={setAlt} />
+                <div className="botoes">
+                    <button type="button" className="botao" disabled={executando}
+                            onClick={() => executar(async () => {
+                                await api("PUT", caminho, { alt_pt: alt.pt, alt_en: alt.en });
+                                await recarregar();
+                            }, "Descrição salva.")}><Icone nome="fal:save" /> Salvar descrição</button>
+                </div>
+                <Aviso aviso={aviso} />
+            </CampoImagem>
+        </li>
     );
 }
 
@@ -54,7 +86,7 @@ function ImagemDoProjeto({ projetoId, imagem, primeira, mover }: { projetoId: nu
  */
 function FundoDoProjeto({ projeto }: { projeto: Projeto }) {
     const { dados, recarregar } = usePainel();
-    const { executando, aviso, executar } = useAcao();
+    const { aviso, executar } = useAcao();
     const fundo = projeto.fundo ? String(projeto.fundo) : null;
 
     const gravar = (id: string | null, mensagem: string) => executar(async () => {
@@ -63,19 +95,13 @@ function FundoDoProjeto({ projeto }: { projeto: Projeto }) {
     }, mensagem);
 
     return (
-        <div className="campo" style={{ marginTop: "var(--espaco-3)" }}>
-            <span>Imagem de fundo (aparece bem apagada atrás da seção, como papel de parede)</span>
-            <Previa id={fundo} info={fundo ? dados.imagens[fundo] : undefined} larga alt="Imagem de fundo do projeto" />
-            <div className="botoes" style={{ marginTop: 0 }}>
-                <EnviarImagem larguras={[960, 1600]} proporcao={16 / 9} rotulo={fundo ? "Trocar fundo" : "Escolher fundo"}
-                              aoEnviar={async img => { await gravar(img.id, "Fundo salvo. Publique para atualizar o site."); }} />
-                {fundo && (
-                    <button type="button" className="botao botao-perigo" disabled={executando}
-                            onClick={() => confirm("Tirar a imagem de fundo deste projeto?") && gravar(null, "Fundo retirado.")}>
-                        Remover fundo
-                    </button>
-                )}
-            </div>
+        <div className="bloco-imagens">
+            <h3><Icone nome="fal:image" /> Imagem de fundo</h3>
+            <CampoImagem dica="Aparece bem apagada atrás da seção, como papel de parede, enquanto o projeto está ativo."
+                         id={fundo} info={fundo ? dados.imagens[fundo] : undefined} formato="larga"
+                         larguras={[960, 1600]} proporcao={16 / 9} rotuloEnviar={fundo ? "Trocar fundo" : "Escolher fundo"}
+                         aoEnviar={async img => { await gravar(img.id, "Fundo salvo. Publique para atualizar o site."); }}
+                         aoRemover={() => confirm("Tirar a imagem de fundo deste projeto?") && gravar(null, "Fundo retirado.")} />
             <Aviso aviso={aviso} />
         </div>
     );
@@ -98,15 +124,19 @@ function ImagensDoProjeto({ projeto }: { projeto: Projeto }) {
     };
 
     return (
-        <div className="campo" style={{ marginTop: "var(--espaco-3)" }}>
-            <span>Imagens do projeto (a primeira aparece no card da landing)</span>
-            <div className="imagens">
-                {projeto.imagens.map((imagem, indice) => (
-                    <ImagemDoProjeto key={imagem.imagem_id} projetoId={projeto.id} imagem={imagem} primeira={indice === 0}
-                                     mover={d => mover(indice, d)} />
-                ))}
-            </div>
-            <EnviarImagem larguras={[360, 560, 740]} proporcao={370 / 512} rotulo="Adicionar imagem"
+        <div className="bloco-imagens">
+            <h3><Icone nome="fal:camera" /> Imagens do projeto <span className="selo">{projeto.imagens.length}</span></h3>
+            <p className="cartao-nota">A primeira é a capa do card na landing. Use as setas para mudar a ordem.</p>
+            {projeto.imagens.length > 0 && (
+                <ul className="galeria">
+                    {projeto.imagens.map((imagem, indice) => (
+                        <ImagemDoProjeto key={imagem.imagem_id} projetoId={projeto.id} imagem={imagem} posicao={indice + 1}
+                                         primeira={indice === 0} ultima={indice === projeto.imagens.length - 1}
+                                         mover={d => mover(indice, d)} />
+                    ))}
+                </ul>
+            )}
+            <EnviarImagem larguras={LARGURAS_CARD} proporcao={370 / 512} rotulo="Adicionar imagem"
                           aoEnviar={async img => {
                               await api("POST", `/api/projetos/${projeto.id}/imagens`, { imagem_id: img.id, alt_pt: "", alt_en: "" });
                               await recarregar();
@@ -128,11 +158,14 @@ export default function PaginaProjetos() {
 
             <section className="cartao">
                 <EditorColecao tabela="projetos" itens={dados.projetos} campos={CAMPOS} rotuloNovo="Novo projeto"
-                               resumo={(item: Linha) => (
+                               resumo={(item: Linha) => String(item.titulo_pt || item.titulo_en || "Sem título")}
+                               selos={item => (
                                    <>
-                                       {String(item.titulo_pt || item.titulo_en || "Sem título")}
-                                       {!item.publicado && <span className="selo"> oculto</span>}
-                                       {Boolean(item.exemplo) && <span className="selo selo-pendente"> exemplo</span>}
+                                       {item.publicado
+                                           ? <span className="selo selo-aprovado"><Icone nome="fal:eye" /> no site</span>
+                                           : <span className="selo"><Icone nome="fal:eye-slash" /> oculto</span>}
+                                       <span className="selo"><Icone nome="fal:image" /> {(item as Projeto).imagens.length}</span>
+                                       {Boolean(item.exemplo) && <span className="selo selo-pendente">exemplo</span>}
                                    </>
                                )}
                                extras={item => (

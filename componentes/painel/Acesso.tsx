@@ -1,10 +1,40 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, type InputHTMLAttributes } from "react";
 import { api, destinoDepoisDoLogin, type Usuario } from "@/lib/api";
+import type { NomeIcone } from "@/componentes/icones/dados";
+import { Icone } from "@/componentes/icones/Icone";
 import { Aviso, Campo, Entrada, useAcao } from "./Campos";
 
 const proximo = () => new URLSearchParams(location.search).get("next");
+
+/** Entrada com o ícone à esquerda; nas de senha, o botão de mostrar e ocultar à direita. */
+function EntradaIcone({ icone, type, ...props }: InputHTMLAttributes<HTMLInputElement> & { icone: NomeIcone }) {
+    const [visivel, setVisivel] = useState(false);
+    const senha = type === "password";
+
+    return (
+        <span className="entrada-icone">
+            <Icone nome={icone} />
+            <Entrada type={senha && visivel ? "text" : type} {...props} />
+            {senha && (
+                <button type="button" className="entrada-olho" aria-label={visivel ? "Ocultar senha" : "Mostrar senha"}
+                        aria-pressed={visivel} onClick={() => setVisivel(v => !v)}>
+                    <Icone nome={visivel ? "fal:eye-slash" : "fal:eye"} />
+                </button>
+            )}
+        </span>
+    );
+}
+
+/** Fundo das telas de acesso: luzes que flutuam devagar atrás do cartão. */
+function CenarioAcesso() {
+    return (
+        <div className="acesso-cenario" aria-hidden="true">
+            <span /><span /><span />
+        </div>
+    );
+}
 
 /** Formulário de login (/login). Quem já está logado segue direto para a sua área. */
 export function FormLogin() {
@@ -28,6 +58,7 @@ export function FormLogin() {
 
     return (
         <main className="acesso">
+            <CenarioAcesso />
             <form className="acesso-cartao" onSubmit={entrar}>
                 <span className="monograma acesso-marca" aria-hidden="true">LA</span>
                 <h1>Entrar</h1>
@@ -35,15 +66,16 @@ export function FormLogin() {
 
                 <div className="campos">
                     <Campo rotulo="E-mail">
-                        <Entrada type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} />
+                        <EntradaIcone icone="fal:at" type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} />
                     </Campo>
                     <Campo rotulo="Senha">
-                        <Entrada type="password" autoComplete="current-password" required value={senha} onChange={e => setSenha(e.target.value)} />
+                        <EntradaIcone icone="fal:lock-alt" type="password" autoComplete="current-password" required value={senha} onChange={e => setSenha(e.target.value)} />
                     </Campo>
                 </div>
 
                 <div className="botoes">
                     <button type="submit" className="botao botao-primario" disabled={executando}>
+                        <Icone nome={executando ? "fal:circle-notch" : "fal:sign-in"} className={executando ? "girando" : undefined} />
                         {executando ? "Entrando…" : "Entrar"}
                     </button>
                 </div>
@@ -51,7 +83,7 @@ export function FormLogin() {
 
                 <p className="acesso-rodape">
                     Esqueceu a senha? Peça um novo link de acesso ao Lucas.<br />
-                    <a href="/">Voltar ao portfólio</a>
+                    <a href="/"><Icone nome="fal:arrow-left" /> Voltar ao portfólio</a>
                 </p>
             </form>
         </main>
@@ -91,6 +123,7 @@ export function FormConvite() {
 
     return (
         <main className="acesso">
+            <CenarioAcesso />
             <form className="acesso-cartao" onSubmit={definir}>
                 <span className="monograma acesso-marca" aria-hidden="true">LA</span>
                 <h1>Criar senha</h1>
@@ -106,12 +139,12 @@ export function FormConvite() {
 
                         <div className="campos">
                             <Campo rotulo="Senha" dica="Pelo menos 10 caracteres.">
-                                <Entrada type="password" autoComplete="new-password" minLength={10} maxLength={200} required
-                                         value={senha} onChange={e => setSenha(e.target.value)} />
+                                <EntradaIcone icone="fal:lock-alt" type="password" autoComplete="new-password" minLength={10} maxLength={200} required
+                                              value={senha} onChange={e => setSenha(e.target.value)} />
                             </Campo>
                             <Campo rotulo="Repita a senha">
-                                <Entrada type="password" autoComplete="new-password" minLength={10} maxLength={200} required
-                                         value={confirmacao} onChange={e => setConfirmacao(e.target.value)} />
+                                <EntradaIcone icone="fal:lock-alt" type="password" autoComplete="new-password" minLength={10} maxLength={200} required
+                                              value={confirmacao} onChange={e => setConfirmacao(e.target.value)} />
                             </Campo>
                         </div>
 
@@ -124,7 +157,7 @@ export function FormConvite() {
                     </>
                 )}
 
-                <p className="acesso-rodape"><a href="/">Voltar ao portfólio</a></p>
+                <p className="acesso-rodape"><a href="/"><Icone nome="fal:arrow-left" /> Voltar ao portfólio</a></p>
             </form>
         </main>
     );
@@ -147,18 +180,18 @@ export function TrocarSenha() {
 
     return (
         <form className="cartao" onSubmit={trocar}>
-            <h2>Trocar senha</h2>
+            <h2><Icone nome="fal:key" /> Trocar senha</h2>
             <div className="campos-duas">
                 <Campo rotulo="Senha atual">
-                    <Entrada type="password" autoComplete="current-password" required value={atual} onChange={e => setAtual(e.target.value)} />
+                    <EntradaIcone icone="fal:lock-alt" type="password" autoComplete="current-password" required value={atual} onChange={e => setAtual(e.target.value)} />
                 </Campo>
                 <Campo rotulo="Senha nova" dica="Pelo menos 10 caracteres.">
-                    <Entrada type="password" autoComplete="new-password" minLength={10} maxLength={200} required
-                             value={nova} onChange={e => setNova(e.target.value)} />
+                    <EntradaIcone icone="fal:lock-alt" type="password" autoComplete="new-password" minLength={10} maxLength={200} required
+                                  value={nova} onChange={e => setNova(e.target.value)} />
                 </Campo>
             </div>
             <div className="botoes">
-                <button type="submit" className="botao botao-primario" disabled={executando}>Trocar senha</button>
+                <button type="submit" className="botao botao-primario" disabled={executando}><Icone nome="fal:check" /> Trocar senha</button>
             </div>
             <Aviso aviso={aviso} />
         </form>
