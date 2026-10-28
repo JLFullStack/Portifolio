@@ -93,15 +93,17 @@ export async function infoImagens(env) {
 /**
  * Apaga imagens que nada mais usa (perfil, projetos, depoimentos e a versão publicada
  * dos depoimentos), com mais de um dia: uploads recentes podem estar num formulário aberto.
+ * Um NOT IN por fonte: o D1 recusa SELECT composto com mais de 5 termos (UNION).
  */
 export async function limparImagensSemUso(env) {
     await env.DB.prepare(
         `DELETE FROM imagens
           WHERE criada_em < datetime('now', '-1 day')
-            AND id NOT IN (SELECT foto_hero FROM perfil UNION SELECT foto_biografia FROM perfil
-                           UNION SELECT imagem_id FROM projeto_imagens
-                           UNION SELECT fundo FROM projetos WHERE fundo IS NOT NULL
-                           UNION SELECT foto FROM depoimentos WHERE foto IS NOT NULL
-                           UNION SELECT json_extract(publicado, '$.foto') FROM depoimentos WHERE publicado IS NOT NULL)`
+            AND id NOT IN (SELECT foto_hero FROM perfil UNION SELECT foto_biografia FROM perfil)
+            AND id NOT IN (SELECT imagem_id FROM projeto_imagens)
+            AND id NOT IN (SELECT fundo FROM projetos WHERE fundo IS NOT NULL)
+            AND id NOT IN (SELECT foto FROM depoimentos WHERE foto IS NOT NULL)
+            AND id NOT IN (SELECT json_extract(publicado, '$.foto') FROM depoimentos
+                            WHERE json_extract(publicado, '$.foto') IS NOT NULL)`
     ).run();
 }
