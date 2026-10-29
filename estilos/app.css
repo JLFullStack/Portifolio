@@ -1483,10 +1483,27 @@ img {
     text-align: justify;
 }
 
+/* Nome e profissão, com o botão do LinkedIn (se houver) do lado */
+.depoimento-rodape {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espaco-2);
+    margin-top: var(--espaco-2);
+}
+
 .depoimento-autor {
     display: flex;
     flex-direction: column;
-    margin: var(--espaco-2) 0 0;
+    margin: 0;
+}
+
+/* Fica acima da luz do cartão (.cartao-luz::after) */
+.depoimento-linkedin {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    text-decoration: none;
 }
 
 .depoimento-cargo {

@@ -73,6 +73,26 @@ export function campoUrl(dados, nome, opcoes) {
     return url;
 }
 
+/** E-mail obrigatório, já em minúsculas (como fica no banco). */
+export function campoEmail(dados, nome) {
+    const email = campoTexto(dados, nome, { maximo: 254, obrigatorio: true }).toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new ErroHttp(400, "E-mail inválido.");
+    return email;
+}
+
+/** Perfil do LinkedIn: vazio ou um endereço do linkedin.com (o https:// é completado). */
+export function campoLinkedin(dados, nome) {
+    const texto = campoTexto(dados, nome, { maximo: 300 });
+    if (!texto) return "";
+
+    const url = /^https?:\/\//i.test(texto) ? texto.replace(/^http:/i, "https:") : `https://${texto}`;
+    if (!/^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/\S+$/i.test(url)) {
+        throw new ErroHttp(400, "Informe o endereço do perfil no LinkedIn (linkedin.com/in/...).");
+    }
+
+    return url;
+}
+
 export function campoInteiro(dados, nome) {
     const valor = Number(dados[nome]);
     if (!Number.isSafeInteger(valor)) throw new ErroHttp(400, `Campo "${nome}" inválido.`);

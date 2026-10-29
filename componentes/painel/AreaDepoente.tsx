@@ -3,7 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { api } from "@/lib/api";
 import type { InfoImagem } from "@/lib/painel";
-import { sair, TrocarSenha } from "./Acesso";
+import { sair, TrocarEmail, TrocarSenha } from "./Acesso";
 import { AreaTexto, Aviso, Campo, Entrada, useAcao } from "./Campos";
 import { Icone } from "@/componentes/icones/Icone";
 import { CampoImagem } from "./Imagens";
@@ -15,6 +15,7 @@ type MeuDepoimento = {
         idioma_original: "pt" | "en";
         texto: string;
         profissao: string;
+        linkedin: string;
         foto: string | null;
         situacao: "pendente" | "aprovado" | "recusado";
         publicado: boolean;
@@ -32,7 +33,8 @@ const SITUACAO = {
 
 /**
  * Página do depoente (/depoimento): a pessoa escreve o próprio depoimento no idioma
- * dela, com foto e profissão. Cada envio fica pendente até o Lucas aprovar.
+ * dela, com foto, profissão e LinkedIn. Cada envio fica pendente até o Lucas aprovar.
+ * Embaixo, a troca do e-mail de login e da senha.
  */
 export function AreaDepoente() {
     const [dados, setDados] = useState<MeuDepoimento | null>(null);
@@ -40,6 +42,7 @@ export function AreaDepoente() {
     const [idioma, setIdioma] = useState<"pt" | "en">("pt");
     const [profissao, setProfissao] = useState("");
     const [texto, setTexto] = useState("");
+    const [linkedin, setLinkedin] = useState("");
     const [foto, setFoto] = useState<{ id: string; info: InfoImagem } | null>(null);
     const carregamento = useAcao();
     const envio = useAcao();
@@ -53,6 +56,7 @@ export function AreaDepoente() {
         setIdioma(d?.idioma_original ?? "pt");
         setProfissao(d?.profissao ?? "");
         setTexto(d?.texto ?? "");
+        setLinkedin(d?.linkedin ?? "");
         setFoto(d?.foto && resposta.imagem ? { id: d.foto, info: resposta.imagem } : null);
     };
 
@@ -63,7 +67,7 @@ export function AreaDepoente() {
     const enviar = (evento: FormEvent) => {
         evento.preventDefault();
         envio.executar(async () => {
-            await api("PUT", "/api/meu-depoimento", { nome, idioma_original: idioma, profissao, texto, foto: foto?.id ?? null });
+            await api("PUT", "/api/meu-depoimento", { nome, idioma_original: idioma, profissao, texto, linkedin, foto: foto?.id ?? null });
             await carregar();
         }, idioma === "pt"
             ? "Depoimento enviado! Ele aparece no portfólio depois que o Lucas aprovar."
@@ -79,7 +83,7 @@ export function AreaDepoente() {
                 <div className="conteudo">
                     <a className="painel-marca" href="/">
                         <span className="monograma" aria-hidden="true">LA</span>
-                        Portfólio <span>Lucas Araújo</span>
+                        <span className="painel-marca-texto"><span className="rotulo-opcional">Portfólio </span><span>Lucas Araújo</span></span>
                     </a>
                     <div className="painel-acoes-topo">
                         <a className="botao" href="/" title={portugues ? "Ver portfólio" : "View portfolio"}>
@@ -138,6 +142,12 @@ export function AreaDepoente() {
                                                value={texto} onChange={e => setTexto(e.target.value)} />
                                 </Campo>
 
+                                <Campo rotulo={portugues ? "Seu LinkedIn (opcional)" : "Your LinkedIn (optional)"}
+                                       dica={portugues ? "Aparece como um botão no seu depoimento." : "Shown as a button on your testimonial."}>
+                                    <Entrada inputMode="url" maxLength={300} placeholder="https://www.linkedin.com/in/..." value={linkedin}
+                                             onChange={e => setLinkedin(e.target.value)} />
+                                </Campo>
+
                                 <CampoImagem rotulo={portugues ? "Sua foto (opcional)" : "Your photo (optional)"}
                                              dica={portugues ? "Ajuste a posição e o zoom depois de escolher." : "Adjust position and zoom after choosing."}
                                              id={foto?.id ?? null} info={foto?.info} formato="redonda" idioma={idioma}
@@ -157,6 +167,8 @@ export function AreaDepoente() {
                         </form>
                     )}
 
+                    {dados && <TrocarEmail atual={dados.usuario.email}
+                                           aoTrocar={email => setDados(atual => atual && { ...atual, usuario: { ...atual.usuario, email } })} />}
                     {dados && <TrocarSenha />}
                 </div>
             </main>

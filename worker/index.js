@@ -2,7 +2,7 @@
 // arquivos estáticos, sem passar por aqui (run_worker_first no wrangler.jsonc lista só
 // as rotas abaixo). Este Worker cuida da área restrita:
 //
-//   /auth/*         login, sessão, convites e troca de senha (auth.js)
+//   /auth/*         login, sessão, convites e troca de senha e e-mail (auth.js)
 //   /contato        formulário de contato da landing, sem login (contato.js)
 //   /api/*          dados do painel e do depoente, imagens e publicação (api.js)
 //   /admin/*        páginas do painel: só o administrador

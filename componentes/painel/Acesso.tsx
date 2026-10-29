@@ -198,6 +198,42 @@ export function TrocarSenha() {
     );
 }
 
+/** Troca do e-mail de login de quem está logado, confirmada com a senha atual. */
+export function TrocarEmail({ atual, aoTrocar }: { atual: string; aoTrocar: (email: string) => void }) {
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+    const { executando, aviso, executar } = useAcao();
+
+    const trocar = (evento: FormEvent) => {
+        evento.preventDefault();
+        executar(async () => {
+            const { usuario } = await api<{ usuario: Usuario }>("POST", "/auth/email", { email, senha });
+            setEmail("");
+            setSenha("");
+            aoTrocar(usuario.email);
+        }, "E-mail trocado. Use o novo para entrar.");
+    };
+
+    return (
+        <form className="cartao" onSubmit={trocar}>
+            <h2><Icone nome="fal:at" /> Trocar e-mail</h2>
+            <p className="cartao-nota">E-mail atual: <strong>{atual}</strong></p>
+            <div className="campos-duas">
+                <Campo rotulo="E-mail novo">
+                    <EntradaIcone icone="fal:envelope" type="email" autoComplete="email" maxLength={254} required value={email} onChange={e => setEmail(e.target.value)} />
+                </Campo>
+                <Campo rotulo="Senha atual" dica="Para confirmar que é você.">
+                    <EntradaIcone icone="fal:lock-alt" type="password" autoComplete="current-password" required value={senha} onChange={e => setSenha(e.target.value)} />
+                </Campo>
+            </div>
+            <div className="botoes">
+                <button type="submit" className="botao botao-primario" disabled={executando}><Icone nome="fal:check" /> Trocar e-mail</button>
+            </div>
+            <Aviso aviso={aviso} />
+        </form>
+    );
+}
+
 export async function sair() {
     await api("POST", "/auth/sair").catch(() => undefined);
     location.replace("/login");

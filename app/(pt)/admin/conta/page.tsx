@@ -1,18 +1,18 @@
 "use client";
 
 import { Icone } from "@/componentes/icones/Icone";
-import { TrocarSenha } from "@/componentes/painel/Acesso";
+import { TrocarEmail, TrocarSenha } from "@/componentes/painel/Acesso";
 import { Avatar } from "@/componentes/painel/Avatar";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
 
 export default function PaginaConta() {
-    const { dados } = usePainel();
+    const { dados, recarregar } = usePainel();
     const admin = dados.usuarios.find(u => u.papel === "admin");
 
     return (
         <>
             <h1 className="painel-titulo">Conta</h1>
-            <p className="painel-subtitulo">Seu acesso ao painel e a troca de senha.</p>
+            <p className="painel-subtitulo">Seu acesso ao painel: e-mail de login e senha.</p>
 
             {admin && (
                 <section className="cartao conta-perfil">
@@ -25,6 +25,7 @@ export default function PaginaConta() {
                 </section>
             )}
 
+            {admin && <TrocarEmail atual={admin.email} aoTrocar={() => recarregar()} />}
             <TrocarSenha />
 
             <p className="cartao-nota conta-dica">

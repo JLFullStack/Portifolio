@@ -90,6 +90,7 @@
 
 .painel-marca {
     display: inline-flex;
+    min-width: 0;
     align-items: center;
     gap: 0.65rem;
     margin: 0;
@@ -102,11 +103,23 @@
         color: var(--cor-texto);
     }
 
+    .painel-marca > .monograma {
+        flex: 0 0 auto;
+    }
+
         .painel-marca:hover > .monograma {
             transform: rotate(-8deg) scale(1.06);
         }
 
-    .painel-marca-texto > span {
+    /* Marca numa linha só: sem espaço, corta com reticências em vez de quebrar */
+    .painel-marca-texto {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .painel-marca-texto > span:not(.rotulo-opcional) {
         color: var(--cor-acento);
     }
 
@@ -192,6 +205,7 @@
 
 .painel-acoes-topo {
     display: flex;
+    flex: 0 0 auto;
     align-items: center;
     gap: var(--espaco-1);
 }

@@ -30,13 +30,14 @@ function CartaoDepoimento({ depoimento, ordem }: {
     const [idioma, setIdioma] = useState(depoimento.idioma_original);
     const [texto, setTexto] = useState({ pt: depoimento.texto_pt, en: depoimento.texto_en });
     const [profissao, setProfissao] = useState({ pt: depoimento.profissao_pt, en: depoimento.profissao_en });
+    const [linkedin, setLinkedin] = useState(depoimento.linkedin);
     const [foto, setFoto] = useState(depoimento.foto);
     const [imagens, setImagens] = useState(dados.imagens);
     const { executando, aviso, executar } = useAcao();
     const situacao = SITUACAO[depoimento.situacao];
 
     const corpo = () => ({
-        nome, idioma_original: idioma, foto,
+        nome, idioma_original: idioma, foto, linkedin,
         texto_pt: texto.pt, texto_en: texto.en, profissao_pt: profissao.pt, profissao_en: profissao.en
     });
 
@@ -100,6 +101,10 @@ function CartaoDepoimento({ depoimento, ordem }: {
                                 </div>
                             </fieldset>
                         </div>
+                        <Campo rotulo="LinkedIn" dica="Opcional: vira um botão no card.">
+                            <Entrada inputMode="url" value={linkedin} maxLength={300} placeholder="https://www.linkedin.com/in/..."
+                                     onChange={e => setLinkedin(e.target.value)} />
+                        </Campo>
                         <CampoBilingue rotulo="Profissão" valor={profissao} aoMudar={setProfissao} original={idioma} maximo={120} />
                         <CampoBilingue rotulo="Depoimento" valor={texto} aoMudar={setTexto} original={idioma} area linhas={6} maximo={1500}
                                        dica={semTraducao ? "Sem tradução, a outra versão do site mostra o texto original." : undefined} />

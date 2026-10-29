@@ -218,6 +218,10 @@
         text-align: left;
     }
 
+    .depoimento-rodape {
+        flex-direction: column;
+    }
+
     .depoimento-autor {
         align-items: center;
     }

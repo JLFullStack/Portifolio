@@ -152,6 +152,7 @@ const conteudo = {
         idiomaOriginal: depoimento.idiomaOriginal,
         texto: depoimento.texto,
         profissao: depoimento.profissao,
+        linkedin: depoimento.linkedin || null,
         foto: foto(depoimento.foto)
     })),
     habilidades: grupos.map(grupo => ({

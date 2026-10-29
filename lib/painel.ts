@@ -20,6 +20,7 @@ export type Depoimento = Linha & {
     texto_en: string;
     profissao_pt: string;
     profissao_en: string;
+    linkedin: string;
     foto: string | null;
     situacao: "pendente" | "aprovado" | "recusado";
     enviado_em: string;

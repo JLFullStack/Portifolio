@@ -69,6 +69,8 @@ export type Depoimento = {
     idiomaOriginal: Idioma;
     texto: Texto;
     profissao: Texto;
+    /** Perfil do LinkedIn da pessoa: vira um botão no card. */
+    linkedin: string | null;
     foto: Foto | null;
 };
 
@@ -141,6 +143,7 @@ export function lerConteudo(): Conteudo {
             situacao: projeto.situacao ?? vazio,
             fundo: projeto.fundo ?? null
         })),
+        depoimentos: lido.depoimentos.map(depoimento => ({ ...depoimento, linkedin: depoimento.linkedin ?? null })),
         experiencias: lido.experiencias.map(experiencia => ({ ...experiencia, stack: experiencia.stack ?? [] })),
         github: existsSync(github) ? JSON.parse(readFileSync(github, "utf8")) as Github : null
     };

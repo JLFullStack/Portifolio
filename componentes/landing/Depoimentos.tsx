@@ -7,7 +7,8 @@ import type { PropsSecao } from "./Landing";
 
 /**
  * Seção 5 do mockup: Depoimentos. Dois cards por vez no desktop (um no celular),
- * numa faixa com scroll-snap: avatar à esquerda, depoimento à direita, nome e profissão.
+ * numa faixa com scroll-snap: avatar à esquerda, depoimento à direita, nome e profissão
+ * (com o botão do LinkedIn, quando a pessoa informou o perfil).
  * Cards com borda em gradiente e aspas grandes ao fundo.
  *
  * O depoimento aparece no idioma da página quando há tradução; sem ela, no
@@ -44,10 +45,18 @@ export function Depoimentos({ conteudo, idioma, d }: PropsSecao) {
                                                 lang={idiomaTexto !== idioma ? LOCALE[idiomaTexto] : undefined}>
                                         {texto(depoimento.texto, idioma)}
                                     </blockquote>
-                                    <p className="depoimento-autor">
-                                        <strong>{depoimento.nome}</strong>
-                                        <span className="depoimento-cargo">{texto(depoimento.profissao, idioma)}</span>
-                                    </p>
+                                    <div className="depoimento-rodape">
+                                        <p className="depoimento-autor">
+                                            <strong>{depoimento.nome}</strong>
+                                            <span className="depoimento-cargo">{texto(depoimento.profissao, idioma)}</span>
+                                        </p>
+                                        {depoimento.linkedin && (
+                                            <a className="botao-icone depoimento-linkedin" href={depoimento.linkedin} target="_blank" rel="noopener noreferrer"
+                                               aria-label={d.linkedinDepoente(depoimento.nome)} title={d.linkedinDepoente(depoimento.nome)}>
+                                                <Icone nome="fab:linkedin-in" />
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
                             </li>
                         );

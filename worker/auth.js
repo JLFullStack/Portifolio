@@ -3,7 +3,7 @@
 //
 // Senhas: PBKDF2-SHA256 com sal aleatório (100 mil iterações, o máximo do Workers).
 // Sessões e convites: o navegador recebe um token aleatório; o banco guarda só o SHA-256.
-import { ErroHttp, campoTexto, dataSql, json, lerCookie, lerJson } from "./http.js";
+import { ErroHttp, campoEmail, campoTexto, dataSql, json, lerCookie, lerJson } from "./http.js";
 
 const ITERACOES = 100_000;
 const COOKIE = "__Host-sessao";
@@ -184,6 +184,27 @@ export async function tratarAuth(request, url, env, usuario) {
         ]);
 
         return json(200, { ok: true });
+    }
+
+    // Troca do e-mail de login: pede a senha atual, como a troca de senha.
+    if (rota === "POST /auth/email") {
+        if (!usuario) throw new ErroHttp(401, "Entre novamente.");
+
+        const dados = await lerJson(request);
+        const completo = await env.DB.prepare("SELECT * FROM usuarios WHERE id = ?").bind(usuario.id).first();
+
+        if (!(await senhaConfere(typeof dados.senha === "string" ? dados.senha : "", completo))) {
+            throw new ErroHttp(400, "A senha atual não confere.");
+        }
+
+        const email = campoEmail(dados, "email");
+        if (email === completo.email) throw new ErroHttp(400, "Este já é o seu e-mail.");
+        if (await env.DB.prepare("SELECT 1 FROM usuarios WHERE email = ?").bind(email).first()) {
+            throw new ErroHttp(409, "Este e-mail já está em uso.");
+        }
+
+        await env.DB.prepare("UPDATE usuarios SET email = ? WHERE id = ?").bind(email, usuario.id).run();
+        return json(200, { usuario: publico({ ...usuario, email }) });
     }
 
     return json(404, { mensagem: "Não encontrado." });

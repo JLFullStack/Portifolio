@@ -85,6 +85,7 @@ const pt = {
     depoimentoAnterior: "Depoimento anterior",
     proximoDepoimento: "Próximo depoimento",
     fotoDepoenteAlt: (nome: string) => `Foto de ${nome}`,
+    linkedinDepoente: (nome: string) => `LinkedIn de ${nome}`,
 
     universidade: "Universidade:",
     empresa: "Empresa:",
@@ -200,6 +201,7 @@ const en: Dicionario = {
     depoimentoAnterior: "Previous testimonial",
     proximoDepoimento: "Next testimonial",
     fotoDepoenteAlt: (nome: string) => `Photo of ${nome}`,
+    linkedinDepoente: (nome: string) => `${nome} on LinkedIn`,
 
     universidade: "University:",
     empresa: "Company:",

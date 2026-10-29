@@ -1,8 +1,8 @@
 // API do painel (/api/*). Administrador: todo o conteúdo, depoimentos, pessoas e publicação.
-// Depoente: só o próprio depoimento e o upload da própria foto.
+// Depoente: só o próprio depoimento (com nome, foto e LinkedIn) e o upload da própria foto.
 import { ICONES } from "../componentes/icones/dados.ts";
 import { criarConvite } from "./auth.js";
-import { ErroHttp, campoInteiro, campoTexto, campoUrl, json, lerJson } from "./http.js";
+import { ErroHttp, campoEmail, campoInteiro, campoLinkedin, campoTexto, campoUrl, json, lerJson } from "./http.js";
 import { infoImagens, receberImagem, servirImagem } from "./imagens.js";
 import { pedirPublicacao } from "./publicar.js";
 
@@ -307,6 +307,7 @@ async function camposDepoimento(env, dados) {
         texto_en: campoTexto(dados, "texto_en", { maximo: 1500 }),
         profissao_pt: campoTexto(dados, "profissao_pt", { maximo: 120 }),
         profissao_en: campoTexto(dados, "profissao_en", { maximo: 120 }),
+        linkedin: campoLinkedin(dados, "linkedin"),
         foto: dados.foto ? await exigirImagem(env, dados.foto) : null
     };
 }
@@ -337,6 +338,7 @@ async function depoimentosAdmin(request, env, partes) {
             idiomaOriginal: depoimento.idioma_original,
             texto: { pt: depoimento.texto_pt, en: depoimento.texto_en },
             profissao: { pt: depoimento.profissao_pt, en: depoimento.profissao_en },
+            linkedin: depoimento.linkedin,
             foto: depoimento.foto
         });
         await env.DB.prepare("UPDATE depoimentos SET situacao = 'aprovado', publicado = ?, aprovado_em = datetime('now') WHERE id = ?")
@@ -370,9 +372,8 @@ async function usuariosAdmin(request, env, partes, origem) {
     if (request.method === "POST" && !id) {
         const dados = await lerJson(request);
         const nome = campoTexto(dados, "nome", { maximo: 120, obrigatorio: true });
-        const email = campoTexto(dados, "email", { maximo: 254, obrigatorio: true }).toLowerCase();
+        const email = campoEmail(dados, "email");
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new ErroHttp(400, "E-mail inválido.");
         if (await env.DB.prepare("SELECT 1 FROM usuarios WHERE email = ?").bind(email).first()) {
             throw new ErroHttp(409, "Já existe uma pessoa com este e-mail.");
         }
@@ -425,6 +426,7 @@ async function meuDepoimento(request, env, usuario) {
                 idioma_original: atual.idioma_original,
                 texto: atual[`texto_${atual.idioma_original}`],
                 profissao: atual[`profissao_${atual.idioma_original}`],
+                linkedin: atual.linkedin,
                 foto: atual.foto,
                 situacao: atual.situacao,
                 publicado: Boolean(atual.publicado)
@@ -447,19 +449,21 @@ async function meuDepoimento(request, env, usuario) {
             // A tradução anterior não vale para o texto novo: o administrador traduz de novo ao aprovar.
             [`texto_${outro}`]: "",
             [`profissao_${outro}`]: "",
+            linkedin: campoLinkedin(dados, "linkedin"),
             foto: dados.foto ? await exigirImagem(env, dados.foto) : null,
             situacao: "pendente",
             enviado_em: new Date().toISOString().slice(0, 19).replace("T", " ")
         };
 
-        if (atual) {
-            await env.DB.prepare(`UPDATE depoimentos SET ${Object.keys(valores).map(c => `${c} = ?`).join(", ")} WHERE id = ?`)
-                .bind(...Object.values(valores), atual.id).run();
-        } else {
-            const colunas = ["usuario_id", "ordem", ...Object.keys(valores)];
-            await env.DB.prepare(`INSERT INTO depoimentos (${colunas.join(", ")}) VALUES (${colunas.map(() => "?").join(", ")})`)
-                .bind(usuario.id, await proximaOrdem(env, "depoimentos"), ...Object.values(valores)).run();
-        }
+        const colunas = ["usuario_id", "ordem", ...Object.keys(valores)];
+        const gravar = atual
+            ? env.DB.prepare(`UPDATE depoimentos SET ${Object.keys(valores).map(c => `${c} = ?`).join(", ")} WHERE id = ?`)
+                .bind(...Object.values(valores), atual.id)
+            : env.DB.prepare(`INSERT INTO depoimentos (${colunas.join(", ")}) VALUES (${colunas.map(() => "?").join(", ")})`)
+                .bind(usuario.id, await proximaOrdem(env, "depoimentos"), ...Object.values(valores));
+
+        // O nome da conta acompanha o do depoimento (é o nome que a pessoa escolheu para si).
+        await env.DB.batch([gravar, env.DB.prepare("UPDATE usuarios SET nome = ? WHERE id = ?").bind(valores.nome, usuario.id)]);
 
         return json(200, { ok: true });
     }
