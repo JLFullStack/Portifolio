@@ -25,7 +25,7 @@ if (existente.n > 0 && !substituir) {
 const comandos = [
     // Ordem que respeita as chaves estrangeiras.
     ...["projeto_imagens", "depoimentos", "habilidades", "grupos_habilidades", "projetos", "perfil",
-        "redes_sociais", "servicos", "certificacoes", "formacoes", "experiencias", "imagem_arquivos", "imagens"]
+        "redes_sociais", "servicos", "certificacoes", "formacoes", "experiencias", "github_repositorios", "imagem_arquivos", "imagens"]
         .map(tabela => `DELETE FROM ${tabela};`)
 ];
 
@@ -81,7 +81,8 @@ inserir("perfil", {
     chamada_autor: perfil.chamadaAutor,
     foto_hero: gravarFoto(perfil.fotoHero),
     foto_biografia: gravarFoto(perfil.fotoBiografia),
-    disponivel: perfil.disponivel ? 1 : 0
+    disponivel: perfil.disponivel ? 1 : 0,
+    inicio_carreira: perfil.inicioCarreira ?? null
 });
 
 semente.servicos.forEach((servico, ordem) => inserir("servicos", {

@@ -8,7 +8,7 @@ import { pedirPublicacao } from "./publicar.js";
 
 const ID_IMAGEM = /^[0-9a-f]{16}$/;
 
-/** Campos editáveis de cada coleção: tipo "texto", "lista", "url", "icone", "bool", "grupo" ou "imagem-opcional". */
+/** Campos editáveis de cada coleção: tipo "texto", "lista", "url", "icone", "bool", "grupo", "repositorio" ou "imagem-opcional". */
 const COLECOES = {
     redes_sociais: { nome: "texto", url: "url", icone: "icone" },
     projetos: {
@@ -23,11 +23,12 @@ const COLECOES = {
     experiencias: {
         periodo_pt: "texto", periodo_en: "texto", cargo_pt: "texto", cargo_en: "texto", empresa_pt: "texto", empresa_en: "texto",
         endereco_pt: "texto", endereco_en: "texto", descricao_pt: "texto", descricao_en: "texto", stack: "lista"
-    }
+    },
+    github_repositorios: { nome: "repositorio", descricao_pt: "texto", descricao_en: "texto" }
 };
 
 /** Campos obrigatórios por coleção (o resto aceita vazio). */
-const OBRIGATORIOS = { redes_sociais: ["nome", "url", "icone"], servicos: ["icone"], habilidades: ["nome_pt"], certificacoes: ["sigla"] };
+const OBRIGATORIOS = { redes_sociais: ["nome", "url", "icone"], servicos: ["icone"], habilidades: ["nome_pt"], certificacoes: ["sigla"], github_repositorios: ["nome"] };
 
 /** Currículo: PDF de até 1,9 MB (o D1 aceita 2 MB por registro). */
 const MAXIMO_CURRICULO = 1.9 * 1024 * 1024;
@@ -39,7 +40,7 @@ const PERFIL = {
     descricao_hero_pt: "texto", descricao_hero_en: "texto", biografia_pt: "texto", biografia_en: "texto",
     endereco_pt: "texto", endereco_en: "texto", chamada_convite_pt: "texto", chamada_convite_en: "texto",
     chamada_citacao_pt: "texto", chamada_citacao_en: "texto", chamada_autor: "texto",
-    foto_hero: "imagem", foto_biografia: "imagem", disponivel: "bool"
+    foto_hero: "imagem", foto_biografia: "imagem", disponivel: "bool", inicio_carreira: "ano", github_exibir: "bool"
 };
 
 function exigir(usuario, papel) {
@@ -81,6 +82,17 @@ async function validarCampos(env, dados, campos, obrigatorios = []) {
             const data = campoTexto(dados, campo, { obrigatorio: true });
             if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) throw new ErroHttp(400, "Data no formato AAAA-MM-DD.");
             valores[campo] = data;
+        } else if (tipo === "ano") {
+            // Vazio grava NULL.
+            const texto = String(dados[campo] ?? "").trim();
+            const ano = Number(texto);
+            if (texto && (!Number.isInteger(ano) || ano < 1950 || ano > new Date().getUTCFullYear())) throw new ErroHttp(400, "Ano inválido.");
+            valores[campo] = texto ? ano : null;
+        } else if (tipo === "repositorio") {
+            // Nome de repositório do GitHub: letras, números, ponto, hífen e sublinhado.
+            const nome = campoTexto(dados, campo, { maximo: 100, obrigatorio });
+            if (!/^[A-Za-z0-9._-]*$/.test(nome)) throw new ErroHttp(400, "Nome de repositório inválido. Use o nome como aparece no GitHub, ex.: Portifolio.");
+            valores[campo] = nome;
         }
     }
 
@@ -92,7 +104,7 @@ const lerTodos = async (env, sql, ...parametros) => (await env.DB.prepare(sql).b
 /** Tudo o que o painel do administrador mostra. */
 async function painel(env) {
     const [perfil, redes, projetos, projetoImagens, servicos, depoimentos, grupos, habilidades, certificacoes, formacoes, experiencias,
-        usuarios, publicacoes, mensagens, curriculos, imagens] =
+        github, usuarios, publicacoes, mensagens, curriculos, imagens] =
         await Promise.all([
             env.DB.prepare("SELECT * FROM perfil WHERE id = 1").first(),
             lerTodos(env, "SELECT * FROM redes_sociais ORDER BY ordem, id"),
@@ -106,6 +118,7 @@ async function painel(env) {
             lerTodos(env, "SELECT * FROM certificacoes ORDER BY ordem, id"),
             lerTodos(env, "SELECT * FROM formacoes ORDER BY ordem, id"),
             lerTodos(env, "SELECT * FROM experiencias ORDER BY ordem, id"),
+            lerTodos(env, "SELECT * FROM github_repositorios ORDER BY ordem, id"),
             lerTodos(env, `SELECT u.id, u.nome, u.email, u.papel, u.ativo, u.criado_em, u.ultimo_acesso,
                                   (u.senha_hash IS NOT NULL) AS tem_senha,
                                   (SELECT max(expira_em) FROM convites c WHERE c.usuario_id = u.id AND c.usado_em IS NULL) AS convite_expira_em
@@ -127,6 +140,7 @@ async function painel(env) {
         certificacoes,
         formacoes,
         experiencias,
+        github,
         usuarios,
         publicacoes,
         mensagens,

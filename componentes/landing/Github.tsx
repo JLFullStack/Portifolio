@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { LOCALE } from "@/dicionarios";
+import { texto } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
 import { SeparadorSecao, TituloSecao } from "./Comuns";
 import type { PropsSecao } from "./Landing";
@@ -58,7 +59,7 @@ export function Github({ conteudo, idioma, d }: PropsSecao) {
                                     <span className="repositorio-nome">{repositorio.nome}</span>
                                     <Icone nome="fal:external-link" className="repositorio-sair" />
                                 </span>
-                                <span className="repositorio-descricao">{repositorio.descricao || d.githubSemDescricao}</span>
+                                <span className="repositorio-descricao">{texto(repositorio.descricao, idioma) || d.githubSemDescricao}</span>
                                 <span className="repositorio-rodape">
                                     {repositorio.linguagem && (
                                         <span className="repositorio-linguagem"

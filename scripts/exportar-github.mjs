@@ -2,9 +2,11 @@
 // conteudo/github.json (lido por lib/conteudo.ts). npm run github; o deploy roda depois
 // do export do D1.
 //
-// O usuário sai da rede social com ícone fab:github (painel → Seções → Redes sociais),
-// então não há nada a mais para configurar. Sem essa rede, ou se a API falhar, o arquivo
-// é apagado e a seção some: o build nunca quebra por causa do GitHub.
+// O usuário sai da rede social com ícone fab:github (painel → Seções → Redes sociais).
+// Em painel → Seções → Código aberto dá para esconder a seção e escolher os repositórios
+// (com a ordem e a descrição de cada um); sem escolha, entram os mais estrelados.
+// Sem a rede, com a seção desligada ou se a API falhar, o arquivo é apagado e a seção
+// some: o build nunca quebra por causa do GitHub.
 //
 // Sem token a API aceita 60 pedidos por hora por IP; no GitHub Actions o workflow passa
 // o GITHUB_TOKEN automático, para não disputar esse limite com outros repositórios.
@@ -21,6 +23,8 @@ const exportado = join(PASTA, "conteudo.json");
 const conteudo = JSON.parse(readFileSync(existsSync(exportado) ? exportado : join(PASTA, "semente.json"), "utf8"));
 const rede = conteudo.redes.find(r => r.icone === "fab:github");
 const usuario = rede?.url.match(/github\.com\/([A-Za-z0-9-]+)/i)?.[1];
+// Exportado antes da configuração no painel: seção ligada e escolha automática.
+const codigoAberto = conteudo.codigoAberto ?? { exibir: true, repositorios: [] };
 
 function desistir(motivo) {
     if (existsSync(DESTINO)) rmSync(DESTINO);
@@ -28,6 +32,7 @@ function desistir(motivo) {
     process.exit(0);
 }
 
+if (!codigoAberto.exibir) desistir("seção desligada no painel.");
 if (!usuario) desistir("nenhuma rede social com ícone fab:github.");
 
 const cabecalhos = {
@@ -48,11 +53,22 @@ try {
         buscar(`/users/${usuario}/repos?per_page=100&sort=pushed&type=owner`)
     ]);
 
-    // Os próprios (sem forks nem arquivados), os mais estrelados primeiro e, no empate, os mais recentes.
-    const proprios = repositorios.filter(r => !r.fork && !r.archived && !r.private);
-    const escolhidos = [...proprios]
-        .sort((a, b) => b.stargazers_count - a.stargazers_count || b.pushed_at.localeCompare(a.pushed_at))
-        .slice(0, QUANTIDADE);
+    const publicos = repositorios.filter(r => !r.private);
+    const proprios = publicos.filter(r => !r.fork && !r.archived);
+
+    // Escolhidos no painel, na ordem de lá (descrição vazia usa a do GitHub; a em inglês
+    // vazia usa a em português, em texto()). Sem escolha: os próprios (sem forks nem
+    // arquivados), os mais estrelados primeiro e, no empate, os mais recentes.
+    const escolhidos = codigoAberto.repositorios.length
+        ? codigoAberto.repositorios.flatMap(({ nome, descricao }) => {
+            const repositorio = publicos.find(r => r.name.toLowerCase() === nome.toLowerCase());
+            if (!repositorio) console.log(`GitHub: ${usuario}/${nome} não existe ou não é público; fica de fora.`);
+            return repositorio ? [{ repositorio, descricao }] : [];
+        })
+        : [...proprios]
+            .sort((a, b) => b.stargazers_count - a.stargazers_count || b.pushed_at.localeCompare(a.pushed_at))
+            .slice(0, QUANTIDADE)
+            .map(repositorio => ({ repositorio, descricao: { pt: "", en: "" } }));
 
     const github = {
         usuario: perfil.login,
@@ -60,9 +76,9 @@ try {
         repositoriosPublicos: perfil.public_repos,
         seguidores: perfil.followers,
         estrelas: proprios.reduce((total, r) => total + r.stargazers_count, 0),
-        repositorios: escolhidos.map(r => ({
+        repositorios: escolhidos.map(({ repositorio: r, descricao }) => ({
             nome: r.name,
-            descricao: r.description ?? "",
+            descricao: { pt: descricao.pt || (r.description ?? ""), en: descricao.en },
             url: r.html_url,
             linguagem: r.language,
             estrelas: r.stargazers_count,
@@ -71,7 +87,7 @@ try {
         }))
     };
 
-    if (!github.repositorios.length) desistir(`${usuario} não tem repositórios públicos próprios.`);
+    if (!github.repositorios.length) desistir(`nenhum repositório público de ${usuario} para mostrar.`);
 
     writeFileSync(DESTINO, JSON.stringify(github, null, 2));
     console.log(`GitHub: ${github.repositorios.length} repositórios de ${usuario} exportados.`);

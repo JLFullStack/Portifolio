@@ -1,7 +1,9 @@
 "use client";
 
+import { api } from "@/lib/api";
 import type { Grupo, Linha } from "@/lib/painel";
 import { Icone } from "@/componentes/icones/Icone";
+import { Aviso, useAcao } from "@/componentes/painel/Campos";
 import { EditorColecao, type DefCampo } from "@/componentes/painel/EditorColecao";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
 
@@ -46,6 +48,33 @@ const EXPERIENCIA: DefCampo[] = [
     { nome: "stack", rotulo: "Tecnologias", dica: "Separadas por vírgula. Aparecem em etiquetas no card." }
 ];
 
+const REPOSITORIO: DefCampo[] = [
+    { nome: "nome", rotulo: "Repositório", dica: "O nome exato no GitHub, ex.: Portifolio. Precisa ser público." },
+    { nome: "descricao", rotulo: "Descrição", tipo: "area", bilingue: true, dica: "Vazio: usa a descrição do GitHub." }
+];
+
+/** Liga e desliga a seção "Código aberto" (grava na hora, como as setas de ordem). */
+function ExibirGithub() {
+    const { dados, recarregar } = usePainel();
+    const { executando, aviso, executar } = useAcao();
+
+    const mudar = (exibir: boolean) => executar(async () => {
+        await api("PUT", "/api/perfil", { github_exibir: exibir ? 1 : 0 });
+        await recarregar();
+    }, "Salvo. Publique para atualizar o site.");
+
+    return (
+        <>
+            <label className="interruptor interruptor-destaque">
+                <input type="checkbox" role="switch" checked={Number(dados.perfil.github_exibir ?? 1) !== 0} disabled={executando}
+                       onChange={e => mudar(e.target.checked)} />
+                <span>Mostrar a seção <strong>Código aberto</strong> na landing</span>
+            </label>
+            <Aviso aviso={aviso} />
+        </>
+    );
+}
+
 /** As seções em lista da landing. Seção sem nenhum item some da landing e do menu. */
 export default function PaginaSecoes() {
     const { dados } = usePainel();
@@ -68,6 +97,18 @@ export default function PaginaSecoes() {
                 <EditorColecao tabela="servicos" itens={dados.servicos} campos={SERVICO} rotuloNovo="Novo serviço"
                                resumo={item => titulo(item, "titulo_pt", "titulo_en")}
                                selos={item => Boolean(item.exemplo) && <span className="selo selo-pendente">exemplo</span>} />
+            </section>
+
+            <section className="cartao">
+                <h2><Icone nome="fab:github" /> Código aberto (GitHub)</h2>
+                <p className="cartao-nota">
+                    Repositórios públicos do perfil da rede social com ícone github, buscados a cada Publicar. Sem nenhum escolhido abaixo,
+                    entram os seis mais estrelados; com escolhidos, só eles, nesta ordem.
+                </p>
+                <ExibirGithub />
+                <EditorColecao tabela="github_repositorios" itens={dados.github} campos={REPOSITORIO} rotuloNovo="Escolher repositório"
+                               resumo={item => titulo(item, "nome")}
+                               selos={item => !item.descricao_pt && !item.descricao_en && <span className="selo">descrição do GitHub</span>} />
             </section>
 
             <section className="cartao">

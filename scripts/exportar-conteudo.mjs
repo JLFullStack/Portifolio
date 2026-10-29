@@ -16,7 +16,7 @@ const LOTE_BYTES = 2 * 1024 * 1024; // imagens buscadas por consulta (o hexadeci
 
 const CURRICULO = idioma => join(RAIZ, "public", `curriculo-${idioma}.pdf`);
 
-const [perfis, redes, servicos, projetos, projetoImagens, depoimentos, grupos, habilidades, certificacoes, formacoes, experiencias, curriculos] = consultar(`
+const [perfis, redes, servicos, projetos, projetoImagens, depoimentos, grupos, habilidades, certificacoes, formacoes, experiencias, github, curriculos] = consultar(`
     SELECT * FROM perfil WHERE id = 1;
     SELECT * FROM redes_sociais ORDER BY ordem, id;
     SELECT * FROM servicos ORDER BY ordem, id;
@@ -28,6 +28,7 @@ const [perfis, redes, servicos, projetos, projetoImagens, depoimentos, grupos, h
     SELECT * FROM certificacoes ORDER BY ordem, id;
     SELECT * FROM formacoes ORDER BY ordem, id;
     SELECT * FROM experiencias ORDER BY ordem, id;
+    SELECT * FROM github_repositorios ORDER BY ordem, id;
     SELECT nome, hex(dados) AS hex FROM arquivos WHERE nome LIKE 'curriculo_%';
 `);
 
@@ -131,7 +132,8 @@ const conteudo = {
         chamadaAutor: perfil.chamada_autor,
         fotoHero: foto(perfil.foto_hero),
         fotoBiografia: foto(perfil.foto_biografia),
-        disponivel: Boolean(perfil.disponivel)
+        disponivel: Boolean(perfil.disponivel),
+        inicioCarreira: perfil.inicio_carreira ?? null
     },
     redes: redes.map(rede => ({ nome: rede.nome, url: rede.url, icone: rede.icone })),
     servicos: servicos.map(servico => ({ icone: servico.icone, titulo: t(servico, "titulo"), descricao: t(servico, "descricao") })),
@@ -164,7 +166,12 @@ const conteudo = {
     experiencias: experiencias.map(e => ({
         periodo: t(e, "periodo"), cargo: t(e, "cargo"), empresa: t(e, "empresa"), endereco: t(e, "endereco"), descricao: t(e, "descricao"),
         stack: lista(e.stack)
-    }))
+    })),
+    // Lido por scripts/exportar-github.mjs, que monta conteudo/github.json.
+    codigoAberto: {
+        exibir: perfil.github_exibir !== 0,
+        repositorios: github.map(r => ({ nome: r.nome, descricao: t(r, "descricao") }))
+    }
 };
 
 writeFileSync(join(RAIZ, "conteudo", "conteudo.json"), JSON.stringify(conteudo, null, 2));

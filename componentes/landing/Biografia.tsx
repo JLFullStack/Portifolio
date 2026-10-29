@@ -20,11 +20,11 @@ export function Biografia({ conteudo, idioma, d }: PropsSecao) {
     const nascimento = new Intl.DateTimeFormat(LOCALE[idioma], { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
         .format(new Date(`${perfil.nascimento}T00:00:00Z`));
 
-    // O ano mais antigo citado nos períodos das experiências marca o início da carreira.
+    // Início da carreira: o ano do painel (Perfil) ou, sem ele, o mais antigo citado nos períodos das experiências.
     const anosCarreira = conteudo.experiencias
         .flatMap(experiencia => texto(experiencia.periodo, idioma).match(/\d{4}/g) ?? [])
         .map(Number);
-    const inicioCarreira = anosCarreira.length ? Math.min(...anosCarreira) : undefined;
+    const inicioCarreira = perfil.inicioCarreira ?? (anosCarreira.length ? Math.min(...anosCarreira) : undefined);
     const tecnologias = conteudo.habilidades.reduce((total, grupo) => total + grupo.itens.length, 0);
 
     const numeros = [

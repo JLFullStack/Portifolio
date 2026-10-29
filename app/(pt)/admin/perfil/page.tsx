@@ -8,7 +8,7 @@ import { Icone } from "@/componentes/icones/Icone";
 import { CampoImagem } from "@/componentes/painel/Imagens";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
 
-const SIMPLES = ["nome_curto", "nome_completo", "nascimento", "email", "telefone", "whatsapp", "linkedin", "curriculo_pt", "curriculo_en", "chamada_autor", "foto_hero", "foto_biografia"];
+const SIMPLES = ["nome_curto", "nome_completo", "nascimento", "email", "telefone", "whatsapp", "linkedin", "curriculo_pt", "curriculo_en", "chamada_autor", "foto_hero", "foto_biografia", "inicio_carreira"];
 const BILINGUES = ["saudacao", "profissao", "descricao_hero", "biografia", "endereco", "chamada_convite", "chamada_citacao"];
 
 const IDIOMAS = { pt: "português", en: "inglês" } as const;
@@ -71,7 +71,7 @@ function Curriculo({ idioma }: { idioma: "pt" | "en" }) {
     );
 }
 
-/** Perfil: identidade, contatos, selo de disponível, currículo, textos do hero, biografia, chamada final e as duas fotos. */
+/** Perfil: identidade, contatos, selo de disponível, currículo, textos do hero, biografia, início da carreira, chamada final e as duas fotos. */
 export default function PaginaPerfil() {
     const { dados, recarregar } = usePainel();
     const [perfil, setPerfil] = useState<Record<string, string>>(() => ({ ...dados.perfil }));
@@ -169,6 +169,13 @@ export default function PaginaPerfil() {
                 <h2><Icone nome="fal:user" /> Biografia</h2>
                 <CampoBilingue rotulo="Texto" area linhas={10} dica="Separe os parágrafos com uma linha em branco."
                                valor={bilingue("biografia")} aoMudar={mudarBilingue("biografia")} />
+                <div className="campos-duas">
+                    <Campo rotulo="Início da carreira (ano)"
+                           dica={`Base do número "Anos de experiência". Vazio: o ano mais antigo dos períodos das experiências.`}>
+                        <Entrada type="number" min={1950} max={new Date().getFullYear()} step={1} inputMode="numeric"
+                                 value={perfil.inicio_carreira ?? ""} onChange={e => mudar("inicio_carreira", e.target.value)} />
+                    </Campo>
+                </div>
             </section>
 
             <section className="cartao">

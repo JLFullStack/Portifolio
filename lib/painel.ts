@@ -74,6 +74,8 @@ export type DadosPainel = {
     certificacoes: Linha[];
     formacoes: Linha[];
     experiencias: Linha[];
+    /** Repositórios escolhidos para a seção "Código aberto" (vazio: escolha automática). */
+    github: Linha[];
     usuarios: UsuarioPainel[];
     publicacoes: Publicacao[];
     mensagens: Mensagem[];

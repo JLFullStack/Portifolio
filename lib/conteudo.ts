@@ -43,7 +43,8 @@ export type Servico = { icone: NomeIcone; titulo: Texto; descricao: Texto };
 
 export type RepositorioGithub = {
     nome: string;
-    descricao: string;
+    /** A escrita no painel ou, sem ela, a do GitHub (em português). */
+    descricao: Texto;
     url: string;
     linguagem: string | null;
     estrelas: number;
@@ -101,6 +102,8 @@ export type Conteudo = {
         fotoBiografia: Foto;
         /** Mostra o selo "Disponível para novos projetos" no topo. */
         disponivel: boolean;
+        /** Ano em que a carreira começou (Anos de experiência). null: o mais antigo dos períodos das experiências. */
+        inicioCarreira: number | null;
     };
     redes: RedeSocial[];
     servicos: Servico[];
@@ -111,6 +114,8 @@ export type Conteudo = {
     formacoes: { periodo: Texto; titulo: Texto; instituicao: Texto }[];
     experiencias: { periodo: Texto; cargo: Texto; empresa: Texto; endereco: Texto; descricao: Texto; stack: string[] }[];
     github: Github | null;
+    /** Configuração da seção "Código aberto", usada por scripts/exportar-github.mjs. */
+    codigoAberto: { exibir: boolean; repositorios: { nome: string; descricao: Texto }[] };
 };
 
 let cache: Conteudo | undefined;
@@ -133,7 +138,8 @@ export function lerConteudo(): Conteudo {
             ...lido.perfil,
             // Exportado antes do currículo por idioma: o link único vale para o português.
             curriculo: typeof lido.perfil.curriculo === "string" ? { pt: lido.perfil.curriculo, en: "" } : lido.perfil.curriculo,
-            disponivel: Boolean(lido.perfil.disponivel)
+            disponivel: Boolean(lido.perfil.disponivel),
+            inicioCarreira: lido.perfil.inicioCarreira ?? null
         },
         servicos: lido.servicos ?? [],
         projetos: lido.projetos.map(projeto => ({
@@ -145,9 +151,20 @@ export function lerConteudo(): Conteudo {
         })),
         depoimentos: lido.depoimentos.map(depoimento => ({ ...depoimento, linkedin: depoimento.linkedin ?? null })),
         experiencias: lido.experiencias.map(experiencia => ({ ...experiencia, stack: experiencia.stack ?? [] })),
-        github: existsSync(github) ? JSON.parse(readFileSync(github, "utf8")) as Github : null
+        github: existsSync(github) ? lerGithub(github) : null,
+        codigoAberto: lido.codigoAberto ?? { exibir: true, repositorios: [] }
     };
     return cache;
+}
+
+/** conteudo/github.json; um gerado antes das descrições por idioma traz a descrição como texto simples. */
+function lerGithub(arquivo: string): Github {
+    const lido = JSON.parse(readFileSync(arquivo, "utf8")) as Github;
+
+    return {
+        ...lido,
+        repositorios: lido.repositorios.map(r => ({ ...r, descricao: typeof r.descricao === "string" ? { pt: r.descricao, en: "" } : r.descricao }))
+    };
 }
 
 /** O texto no idioma pedido; se estiver vazio, o do outro idioma. */
