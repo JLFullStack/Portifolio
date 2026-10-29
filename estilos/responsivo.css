@@ -43,28 +43,82 @@
     }
 
     /* Projetos em uma coluna: a vitrine vem primeiro e o texto do projeto ativo logo
-       abaixo das setas. Trocar de projeto e ler a descrição ficam na mesma tela (com o
+       abaixo dela. Trocar de projeto e ler a descrição ficam na mesma tela (com o
        texto em cima, era preciso rolar para cima e para baixo a cada troca). */
-    .projetos-grade {
-        grid-template-columns: minmax(0, 1fr);
-        gap: var(--espaco-3);
-    }
-
-    .projetos-vitrine {
-        order: -1;
-    }
-
-    /* menos vazio acima da vitrine, para o texto do projeto subir para a tela */
+    /* A seção inteira (card, setas, texto e botões) cabe numa tela: ela tem a altura
+       da janela menos o cabeçalho, o texto ocupa o que precisa e a vitrine fica com o
+       resto. A vitrine é um container de tamanho: o card sai da altura dela (100cqh),
+       descontados o rótulo e as folgas (3.5rem), na proporção 370 × 512.
+       svh: a altura com a barra do navegador visível, para nada ficar escondido atrás dela. */
     .secao.projetos {
-        padding-top: var(--espaco-4);
+        padding-block: var(--espaco-2);
+        scroll-margin-top: var(--altura-cabecalho);
     }
 
+    .projetos-grade {
+        display: flex;
+        flex-direction: column;
+        /* o center do desktop encolheria a vitrine a largura zero (container de tamanho) */
+        align-items: stretch;
+        gap: var(--espaco-2);
+        min-height: calc(100vh - var(--altura-cabecalho) - 2 * var(--espaco-2));
+        min-height: calc(100svh - var(--altura-cabecalho) - 2 * var(--espaco-2));
+    }
+
+    .projetos-info {
+        flex: none;
+    }
+
+    /* Com texto muito longo a seção cresce, mas o card nunca fica menor que 9rem.
+       Faixa e setas dividem a mesma célula: as setas não ocupam uma linha própria.
+       Quando o card bate na largura máxima, sobra altura e a faixa fica centrada nela. */
+    .projetos-vitrine {
+        --largura-card: clamp(9rem, (100cqh - 3.5rem) * 370 / 512, min(23rem, 66vw));
+        order: -1;
+        flex: 1 1 0;
+        min-height: calc(9rem * 512 / 370 + 3.5rem);
+        container-type: size;
+        display: grid;
+        align-content: center;
+    }
+
+        .projetos-vitrine > * {
+            grid-area: 1 / 1;
+        }
+
+    /* A folga embaixo da faixa (onde cabe o brilho do card) fica fora do fluxo: só
+       0.5rem dela ocupa espaço */
     .projetos-faixa {
         padding-top: var(--espaco-2);
+        padding-bottom: 3rem;
+        margin-bottom: -2.5rem;
     }
 
+    /* Os cards de trás encolhem a partir do canto de cima: o rótulo deles fica na altura
+       do rótulo do ativo, e embaixo deles sobra o lugar das setas */
+    .projeto-card {
+        transform-origin: left top;
+        transform: perspective(1100px) rotateY(-16deg) scale(0.8);
+    }
+
+    .projeto-card:hover {
+        transform: perspective(1100px) rotateY(-6deg) scale(0.82);
+    }
+
+    .projeto-card.ativo {
+        transform: none;
+    }
+
+    /* Setas no canto de baixo à direita, sob os cards de trás, alinhadas com o pé do
+       card ativo (a folga de 0.5rem da faixa) */
     .projetos-vitrine > .controles-carrossel {
-        margin-top: 0;
+        position: relative;
+        z-index: 1;
+        align-self: end;
+        justify-self: end;
+        width: auto;
+        gap: var(--espaco-1);
+        margin: 0 0 0.5rem;
     }
 
     /* O texto agora fica embaixo: o véu da imagem de fundo escurece de cima para baixo */
@@ -97,6 +151,16 @@
     .hero-fundo {
         bottom: auto;
         top: 38%;
+    }
+}
+
+/* Em uma coluna o texto do projeto fica embaixo do card: revelado só quando o topo
+   dele chegasse a 60% da tela (.revelar-tarde), ele continuava invisível com o card já
+   à vista e era preciso rolar para encontrá-lo. Aqui ele entra junto com a vitrine. */
+@media only screen and (max-width: 991px) and (prefers-reduced-motion: no-preference) {
+    .revelar-ativo .projetos-grade:has(.projetos-vitrine.visivel) > .projetos-info:not(.visivel) {
+        opacity: 1;
+        animation: revelar 0.9s var(--curva-saida) 0.2s both;
     }
 }
 
@@ -183,30 +247,89 @@
         width: 100%;
     }
 
+    /* Texto do projeto compacto: o destaque no celular é a imagem. A descrição mostra
+       três linhas e o "Ler mais" (ProjetosVitrine) abre o resto. Em coluna flex, o botão
+       vem logo depois da descrição, antes das etiquetas e dos links. */
+    .projeto-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .projeto-info > .etiquetas,
+        .projeto-info > .projeto-acoes {
+            order: 1;
+        }
+
     .projeto-descricao {
-        margin: var(--espaco-2) 0;
-        font-size: 0.95rem;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        overflow: hidden;
+        margin: var(--espaco-1) 0 var(--espaco-2);
+        font-size: 0.9rem;
+        line-height: 1.55;
         text-align: left;
         text-indent: 0;
     }
 
-    /* Texto do projeto mais compacto, para caber junto com o card */
+        .projeto-info.expandido > .projeto-descricao {
+            display: block;
+            overflow: visible;
+        }
+
+    .projeto-ler-mais {
+        margin: calc(-1 * var(--espaco-2)) 0 var(--espaco-1);
+        padding: 0.35rem 0;
+        border: 0;
+        background: none;
+        color: var(--cor-acento);
+        font: inherit;
+        font-size: var(--texto-xs);
+        font-weight: var(--peso-forte);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
     .projeto-titulo {
-        font-size: clamp(1.6rem, 1rem + 4vw, 2.25rem);
+        font-size: clamp(1.5rem, 1rem + 3vw, 2rem);
     }
 
     .projeto-numero {
-        font-size: 4.5rem;
+        font-size: 3.5rem;
     }
 
     .projeto-situacao {
         margin-bottom: var(--espaco-1);
+        padding: 0.15rem 0.6rem;
     }
 
+    .projeto-info > .etiquetas {
+        margin-bottom: var(--espaco-2);
+    }
+
+    /* Os dois links dividem a linha, mais baixos. À direita fica o lugar do botão
+       flutuante de voltar ao topo (3.5rem, na margem do conteúdo), para não cobri-los. */
+    .projeto-acoes {
+        align-self: stretch;
+        padding-right: calc(3.5rem + var(--espaco-1));
+    }
+
+        .projeto-acoes > .btn-acento,
+        .projeto-acoes > .btn-contorno {
+            flex: 1 1 auto;
+            justify-content: center;
+            padding: 0.6rem 0.85rem;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
     .projetos-vitrine .controle-faixa {
-        width: 2.75rem;
-        height: 2.75rem;
-        font-size: 1.1rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1rem;
     }
 
     .depoimento-card {
@@ -298,6 +421,46 @@
        a linha de copyright quando a página está rolada até o fim. */
     .rodape {
         padding-bottom: 5.5rem;
+    }
+}
+
+/* #endregion */
+
+/* #region celular de tela baixa — o texto do projeto encolhe para o card não ficar minúsculo */
+
+@media only screen and (max-width: 767px) and (max-height: 720px) {
+    .projeto-descricao {
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
+    .projeto-titulo {
+        font-size: 1.4rem;
+    }
+
+    .projeto-numero {
+        font-size: 3rem;
+    }
+
+    .projeto-info > .etiquetas {
+        margin-bottom: var(--espaco-1);
+    }
+
+    .projeto-acoes > .btn-acento,
+    .projeto-acoes > .btn-contorno {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Celular estreito (360px): os dois links só cabem lado a lado, ao lado do botão de
+   voltar ao topo, com letra e folgas menores */
+@media only screen and (max-width: 380px) {
+    .projeto-acoes > .btn-acento,
+    .projeto-acoes > .btn-contorno {
+        gap: 0.4rem;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
     }
 }
 

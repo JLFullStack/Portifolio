@@ -250,7 +250,11 @@
         transition: opacity 1.4s ease 0.3s;
     }
 
-    .revelar-ativo .projetos-vitrine.visivel .projeto-card {
+    /* Quem desliza é o conteúdo do card, não o <li>: o Chrome guardava o ponto de snap
+       da faixa com o card ainda deslocado (o fill backwards já o desloca na espera) e,
+       terminada a entrada, a faixa ficava parada fora do lugar. */
+    .revelar-ativo .projetos-vitrine.visivel .projeto-card > *,
+    .revelar-ativo .projetos-vitrine.visivel .projeto-card::before {
         animation: entrar-card 0.9s var(--curva-saida) backwards;
         animation-delay: calc(200ms + var(--indice, 0) * 120ms);
     }

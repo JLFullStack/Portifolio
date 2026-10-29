@@ -72,6 +72,8 @@ const pt = {
 
     verTrabalho: "Ver Trabalho",
     verCodigo: "Ver código",
+    lerMais: "Ler mais",
+    lerMenos: "Ler menos",
     tecnologias: "Tecnologias",
     imagemPendente: "Imagem",
     imagemProjetoAlt: (titulo: string) => `Imagem do projeto ${titulo}`,
@@ -188,6 +190,8 @@ const en: Dicionario = {
 
     verTrabalho: "View Work",
     verCodigo: "View code",
+    lerMais: "Read more",
+    lerMenos: "Read less",
     tecnologias: "Tech stack",
     imagemPendente: "Image",
     imagemProjetoAlt: (titulo: string) => `Screenshot of ${titulo}`,

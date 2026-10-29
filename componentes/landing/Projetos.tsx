@@ -103,6 +103,8 @@ export function Projetos({ conteudo, idioma, d }: PropsSecao) {
                     projetos={projetos}
                     rotuloVitrine={d.vitrineProjetos}
                     rotuloFechar={d.fecharImagem}
+                    rotuloLerMais={d.lerMais}
+                    rotuloLerMenos={d.lerMenos}
                     iconeAmpliar={<Icone nome="fal:search-plus" />}
                     iconeFechar={<Icone nome="fal:times" />}
                     controles={

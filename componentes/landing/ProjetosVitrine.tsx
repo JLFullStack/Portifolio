@@ -44,16 +44,27 @@ function inverter(origem: DOMRect, destino: DOMRect): string {
  * maior da imagem só é pedida depois que a abertura termina; a página não é travada
  * (rolar fecha a imagem); e o card volta a mostrar a imagem no mesmo quadro em que
  * o diálogo fecha.
+ *
+ * No celular a descrição mostra três linhas (CSS); quando ela foi cortada, aparece o
+ * "Ler mais". Ao abrir, a vitrine fica com a altura que tinha: sem isso o texto maior
+ * tomaria o espaço dela e o card encolheria.
  */
-export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, iconeAmpliar, iconeFechar, controles }: {
+export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, rotuloLerMais, rotuloLerMenos, iconeAmpliar, iconeFechar, controles }: {
     projetos: ItemVitrine[];
     rotuloVitrine: string;
     rotuloFechar: string;
+    rotuloLerMais: string;
+    rotuloLerMenos: string;
     iconeAmpliar: ReactNode;
     iconeFechar: ReactNode;
     controles: ReactNode;
 }) {
     const faixa = useRef<HTMLUListElement>(null);
+    const vitrine = useRef<HTMLDivElement>(null);
+    const textos = useRef<HTMLDivElement>(null);
+    // Projetos cuja descrição ficou cortada; o aberto, com a altura da vitrine ao abrir.
+    const [cortados, setCortados] = useState<number[]>([]);
+    const [aberto, setAberto] = useState<{ id: number; alturaVitrine: number } | null>(null);
     const dialogo = useRef<HTMLDialogElement>(null);
     const imagemAmpliada = useRef<HTMLImageElement>(null);
     const fechando = useRef(false);
@@ -92,6 +103,37 @@ export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, iconeAm
 
         return () => elemento.removeEventListener("scroll", atualizar);
     }, []);
+
+    // Mede quais descrições o corte de três linhas esconde (no desktop, nenhuma). A
+    // aberta não é medida: sem corte ela pareceria inteira e perderia o "Ler menos".
+    useEffect(() => {
+        const elemento = textos.current;
+
+        if (!elemento) return;
+
+        const medir = () => {
+            const ids = (Array.from(elemento.children) as HTMLElement[]).flatMap(artigo => {
+                const id = Number(artigo.dataset.projeto);
+                const descricao = artigo.querySelector<HTMLElement>(".projeto-descricao");
+
+                if (artigo.classList.contains("expandido")) return [id];
+                return descricao && descricao.scrollHeight > descricao.clientHeight + 1 ? [id] : [];
+            });
+
+            setCortados(atuais => atuais.join() === ids.join() ? atuais : ids);
+        };
+
+        const observador = new ResizeObserver(medir);
+        observador.observe(elemento);
+
+        return () => observador.disconnect();
+    }, []);
+
+    const alternarDescricao = (id: number) =>
+        setAberto(atual => atual?.id === id ? null : { id, alturaVitrine: vitrine.current?.offsetHeight ?? 0 });
+
+    // Trocar de projeto fecha a descrição.
+    const descricaoAberta = aberto && aberto.id === ativo ? aberto : null;
 
     /** A imagem do card de um projeto, na faixa. */
     const imagemDoCard = (id: number) => faixa.current?.querySelector<HTMLImageElement>(`[data-projeto="${id}"] img.projeto-imagem`);
@@ -213,15 +255,28 @@ export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, iconeAm
 
             {/* Texto e vitrine se revelam cada um quando entra na tela (RevelarAoRolar);
                 os cards da vitrine entram deslizando, um depois do outro (--indice). */}
-            <div className="projetos-info revelar revelar-tarde">
-                {projetos.map(projeto => (
-                    <article key={projeto.id} className={projeto.id === ativo ? "projeto-info ativo" : "projeto-info"}>
-                        {projeto.info}
-                    </article>
-                ))}
+            <div className="projetos-info revelar revelar-tarde" ref={textos}>
+                {projetos.map(projeto => {
+                    const expandido = descricaoAberta?.id === projeto.id;
+                    const classes = ["projeto-info", projeto.id === ativo && "ativo", expandido && "expandido"];
+
+                    return (
+                        <article key={projeto.id} data-projeto={projeto.id} className={classes.filter(Boolean).join(" ")}>
+                            {projeto.info}
+
+                            {cortados.includes(projeto.id) && (
+                                <button type="button" className="projeto-ler-mais" aria-expanded={expandido}
+                                        onClick={() => alternarDescricao(projeto.id)}>
+                                    {expandido ? rotuloLerMenos : rotuloLerMais}
+                                </button>
+                            )}
+                        </article>
+                    );
+                })}
             </div>
 
-            <div className="projetos-vitrine revelar revelar-tarde" style={{ "--indice": 1 } as CSSProperties}>
+            <div className="projetos-vitrine revelar revelar-tarde" ref={vitrine}
+                 style={{ "--indice": 1, ...(descricaoAberta && { flex: "none", height: descricaoAberta.alturaVitrine }) } as CSSProperties}>
                 {/* tabIndex torna a faixa rolável pelo teclado (setas). */}
                 <ul className="projetos-faixa" id="projetos-faixa" ref={faixa} tabIndex={0} aria-label={rotuloVitrine}>
                     {projetos.map((projeto, indice) => {
