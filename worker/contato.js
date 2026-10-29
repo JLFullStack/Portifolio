@@ -5,6 +5,8 @@
 //   - campo-isca "site", escondido de quem usa o formulário: robô que o preenche é descartado;
 //   - "inicio": quando o formulário apareceu; envio em menos de 3 s não é de uma pessoa;
 //   - limite por IP (só o SHA-256 dele é guardado) e um teto diário geral.
+// O hash do IP só serve ao limite de uma hora e é apagado depois dela: como há poucos
+// IPs possíveis, um hash guardado para sempre deixaria descobrir o IP de quem escreveu.
 import { sha256 } from "./auth.js";
 import { ErroHttp, campoTexto, dataSql, json, lerJson } from "./http.js";
 
@@ -62,8 +64,11 @@ export async function tratarContato(request, env) {
     if (recentes >= POR_IP_POR_HORA) throw new ErroHttp(429, m.limite);
     if (hoje >= POR_DIA) throw new ErroHttp(429, m.ocupado);
 
-    await env.DB.prepare("INSERT INTO mensagens (nome, email, interesse, texto, idioma, ip_hash) VALUES (?, ?, ?, ?, ?, ?)")
-        .bind(nome, email.toLowerCase(), interesse, texto, idioma, ipHash).run();
+    await env.DB.batch([
+        env.DB.prepare("INSERT INTO mensagens (nome, email, interesse, texto, idioma, ip_hash) VALUES (?, ?, ?, ?, ?, ?)")
+            .bind(nome, email.toLowerCase(), interesse, texto, idioma, ipHash),
+        env.DB.prepare("UPDATE mensagens SET ip_hash = '' WHERE ip_hash <> '' AND enviada_em <= ?").bind(dataSql(-3600))
+    ]);
 
     return json(201, { ok: true });
 }

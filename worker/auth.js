@@ -10,6 +10,7 @@ const COOKIE = "__Host-sessao";
 const DURACAO_SESSAO = 30 * 24 * 3600;      // 30 dias
 const DURACAO_CONVITE = 7 * 24 * 3600;      // 7 dias
 const LIMITE_TENTATIVAS = 10;               // falhas por IP...
+const LIMITE_POR_CONTA = 30;                // ...ou por e-mail (ataque de vários IPs)...
 const JANELA_TENTATIVAS = 15 * 60;          // ...em 15 minutos
 const SENHA_MINIMA = 10;
 
@@ -66,7 +67,8 @@ async function abrirSessao(env, usuario) {
         env.DB.prepare("INSERT INTO sessoes (token_hash, usuario_id, expira_em) VALUES (?, ?, ?)")
             .bind(await sha256(token), usuario.id, dataSql(DURACAO_SESSAO)),
         env.DB.prepare("UPDATE usuarios SET ultimo_acesso = datetime('now') WHERE id = ?").bind(usuario.id),
-        env.DB.prepare("DELETE FROM sessoes WHERE expira_em < datetime('now')")
+        env.DB.prepare("DELETE FROM sessoes WHERE expira_em < datetime('now')"),
+        env.DB.prepare("DELETE FROM convites WHERE expira_em < datetime('now')")
     ]);
 
     return json(200, { usuario: publico(usuario) }, { "set-cookie": cookieSessao(token, DURACAO_SESSAO) });
@@ -119,19 +121,26 @@ export async function tratarAuth(request, url, env, usuario) {
 
     if (rota === "POST /auth/entrar") {
         const dados = await lerJson(request);
-        const ip = request.headers.get("cf-connecting-ip") || "local";
-        const { n } = await env.DB.prepare("SELECT count(*) AS n FROM tentativas_login WHERE ip = ? AND quando > ?")
-            .bind(ip, dataSql(-JANELA_TENTATIVAS)).first();
-
-        if (n >= LIMITE_TENTATIVAS) throw new ErroHttp(429, "Muitas tentativas. Aguarde 15 minutos e tente de novo.");
-
         const email = campoTexto(dados, "email", { maximo: 254 }).toLowerCase();
+
+        // A coluna "ip" guarda só hashes: um do IP e um do e-mail tentado (nem o IP nem o e-mail ficam no banco).
+        const chaveIp = await sha256(`login-ip:${request.headers.get("cf-connecting-ip") || "local"}`);
+        const chaveConta = await sha256(`login-conta:${email}`);
+        const { porIp, porConta } = await env.DB.prepare(
+            `SELECT count(CASE WHEN ip = ?1 THEN 1 END) AS porIp, count(CASE WHEN ip = ?2 THEN 1 END) AS porConta
+               FROM tentativas_login WHERE ip IN (?1, ?2) AND quando > ?3`
+        ).bind(chaveIp, chaveConta, dataSql(-JANELA_TENTATIVAS)).first();
+
+        if (porIp >= LIMITE_TENTATIVAS || porConta >= LIMITE_POR_CONTA) {
+            throw new ErroHttp(429, "Muitas tentativas. Aguarde 15 minutos e tente de novo.");
+        }
+
         const senha = typeof dados.senha === "string" ? dados.senha : "";
         const encontrado = await env.DB.prepare("SELECT * FROM usuarios WHERE email = ? AND ativo = 1").bind(email).first();
 
         if (!(await senhaConfere(senha, encontrado))) {
             await env.DB.batch([
-                env.DB.prepare("INSERT INTO tentativas_login (ip) VALUES (?)").bind(ip),
+                env.DB.prepare("INSERT INTO tentativas_login (ip) VALUES (?), (?)").bind(chaveIp, chaveConta),
                 env.DB.prepare("DELETE FROM tentativas_login WHERE quando < ?").bind(dataSql(-JANELA_TENTATIVAS))
             ]);
             throw new ErroHttp(401, "E-mail ou senha incorretos.");
@@ -203,7 +212,11 @@ export async function tratarAuth(request, url, env, usuario) {
             throw new ErroHttp(409, "Este e-mail já está em uso.");
         }
 
-        await env.DB.prepare("UPDATE usuarios SET email = ? WHERE id = ?").bind(email, usuario.id).run();
+        // Como na troca de senha, encerra as outras sessões: quem tivesse uma não segue com o e-mail novo.
+        await env.DB.batch([
+            env.DB.prepare("UPDATE usuarios SET email = ? WHERE id = ?").bind(email, usuario.id),
+            env.DB.prepare("DELETE FROM sessoes WHERE usuario_id = ? AND token_hash <> ?").bind(usuario.id, usuario.token_hash)
+        ]);
         return json(200, { usuario: publico({ ...usuario, email }) });
     }
 

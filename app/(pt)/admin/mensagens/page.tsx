@@ -30,7 +30,7 @@ function CartaoMensagem({ mensagem }: { mensagem: Mensagem }) {
                     <Avatar nome={mensagem.nome} />
                     <div className="pessoa-dados">
                         <strong>{mensagem.nome}</strong>
-                        <a href={`mailto:${mensagem.email}`}>{mensagem.email}</a>
+                        <a href={`mailto:${encodeURIComponent(mensagem.email)}`}>{mensagem.email}</a>
                     </div>
                 </header>
                 <div className="mensagem-meta">
@@ -50,7 +50,7 @@ function CartaoMensagem({ mensagem }: { mensagem: Mensagem }) {
                         <Icone nome={mensagem.lida ? "fal:envelope" : "fal:envelope-open"} /> {mensagem.lida ? "Marcar como nova" : "Marcar como lida"}
                     </button>
                     <a className="botao botao-primario"
-                       href={`mailto:${mensagem.email}?subject=${encodeURIComponent(`Re: ${assunto}`)}`}
+                       href={`mailto:${encodeURIComponent(mensagem.email)}?subject=${encodeURIComponent(`Re: ${assunto}`)}`}
                        onClick={() => { if (!mensagem.lida) marcar(true); }}><Icone nome="fal:reply" /> Responder por e-mail</a>
                 </div>
                 <Aviso aviso={aviso} />

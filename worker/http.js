@@ -21,6 +21,9 @@ export async function lerJson(request, limite = 256 * 1024) {
         throw new ErroHttp(415, "Envie os dados em JSON.");
     }
 
+    // Recusa antes de ler, quando o tamanho é declarado; depois confere o que de fato chegou.
+    if (Number(request.headers.get("content-length") || 0) > limite) throw new ErroHttp(413, "Dados grandes demais.");
+
     const texto = await request.text();
     if (texto.length > limite) throw new ErroHttp(413, "Dados grandes demais.");
 

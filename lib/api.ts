@@ -52,8 +52,11 @@ export type Usuario = { id: number; nome: string; email: string; papel: "admin" 
 
 /** Para onde mandar a pessoa depois do login: o `next` pedido (se for deste site) ou a área do papel. */
 export function destinoDepoisDoLogin(usuario: Usuario, proximo: string | null): string {
-    if (proximo && proximo.startsWith("/") && !proximo.startsWith("//")) {
-        if (usuario.papel === "admin" || !proximo.startsWith("/admin")) return proximo;
+    // Resolve o endereço como o navegador faria: "/\outro.site" e variações viram outra origem e são recusados.
+    const destino = proximo ? new URL(proximo, location.origin) : null;
+    if (destino && destino.origin === location.origin && proximo!.startsWith("/")) {
+        const caminho = destino.pathname + destino.search + destino.hash;
+        if (usuario.papel === "admin" || !destino.pathname.startsWith("/admin")) return caminho;
     }
     return usuario.papel === "admin" ? "/admin" : "/depoimento";
 }
