@@ -268,15 +268,17 @@
         border-color: var(--cor-borda-forte);
     }
 
-    /* Filete em gradiente no alto de cada cartão */
+    /* Filete em gradiente no alto de cada cartão. O pseudo-elemento cobre o cartão todo com
+       o mesmo raio e pinta só os 2px de cima, para o arredondamento recortar o filete nos
+       cantos (uma faixa de 2px com raio próprio sairia reta para fora da curva). */
     .cartao::before {
         content: "";
         position: absolute;
-        inset: -1px -1px auto;
-        height: 2px;
-        border-radius: var(--raio-cartao) var(--raio-cartao) 0 0;
-        background: linear-gradient(90deg, var(--cor-acento-solido), var(--cor-violeta) 45%, transparent 75%);
+        inset: -1px;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--cor-acento-solido), var(--cor-violeta) 45%, transparent 75%) top / 100% 2px no-repeat;
         opacity: 0.75;
+        pointer-events: none;
     }
 
     .cartao > h2,
