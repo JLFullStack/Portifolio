@@ -1176,6 +1176,8 @@ img {
     transform-origin: left center;
     transition: opacity 0.5s ease, transform 0.6s var(--curva-saida);
     opacity: 0.6;
+    /* camada fixa: criar e desfazer a camada a cada troca de projeto dava soluços */
+    will-change: transform;
 }
 
     .projeto-card:hover {
@@ -1213,12 +1215,7 @@ img {
     border-radius: var(--raio);
     object-fit: cover;
     box-shadow: var(--sombra-card);
-    transition: box-shadow 0.45s ease;
 }
-
-    .projeto-card.ativo .projeto-imagem {
-        box-shadow: 0 16px 40px -20px var(--cor-acento-solido), 0 0 0 1px var(--cor-acento-suave);
-    }
 
 /* Botão invisível sobre o card: no ativo, amplia a imagem (lupa no hover); nos
    outros, traz o card para o destaque. */
@@ -1226,8 +1223,30 @@ img {
     position: relative;
 }
 
+    /* O brilho do card ativo fica numa caixa do tamanho da imagem (ela é o último
+       filho, encostada no fundo do card) e acende só por opacity: animar o
+       box-shadow da imagem a repintava a cada quadro, no meio da rolagem. */
+    .projeto-card::before {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        aspect-ratio: 370 / 512;
+        border-radius: var(--raio);
+        box-shadow: 0 16px 40px -20px var(--cor-acento-solido), 0 0 0 1px var(--cor-acento-suave);
+        opacity: 0;
+        transition: opacity 0.45s ease;
+        pointer-events: none;
+    }
+
+    .projeto-card.ativo::before {
+        opacity: 1;
+    }
+
     /* Enquanto a imagem está ampliada, a do card some: parece que ela saiu dali */
-    .projeto-card.ampliando .projeto-imagem {
+    .projeto-card.ampliando .projeto-imagem,
+    .projeto-card.ampliando::before {
         opacity: 0;
     }
 

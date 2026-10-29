@@ -43,10 +43,12 @@ export function ControlesFaixa({ idFaixa, passo, rotuloAnterior, rotuloProximo, 
         let distancia = faixa.clientWidth;
 
         if (passo === "item") {
-            const card = faixa.firstElementChild;
+            const card = faixa.firstElementChild as HTMLElement | null;
             const espaco = parseFloat(getComputedStyle(faixa).columnGap) || 0;
 
-            if (card) distancia = card.getBoundingClientRect().width + espaco;
+            // offsetWidth, não getBoundingClientRect: o card inativo está encolhido e
+            // girado (transform), e a rolagem parava antes; o scroll-snap dava um tranco.
+            if (card) distancia = card.offsetWidth + espaco;
         }
 
         faixa.scrollBy({ left: distancia * direcao, behavior: "smooth" });
