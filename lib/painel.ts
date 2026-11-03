@@ -26,7 +26,15 @@ export type Depoimento = Linha & {
     enviado_em: string;
     aprovado_em: string | null;
     exemplo: number;
-    publicado: { nome: string; texto: { pt: string; en: string } } | null;
+    /** A versão aprovada, que vai para a landing (aprovações antigas podem não ter o LinkedIn). */
+    publicado: {
+        nome: string;
+        idiomaOriginal: "pt" | "en";
+        texto: { pt: string; en: string };
+        profissao: { pt: string; en: string };
+        linkedin?: string | null;
+        foto: string | null;
+    } | null;
 };
 
 export type Grupo = Linha & { itens: Linha[] };

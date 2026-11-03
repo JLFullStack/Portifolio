@@ -16,6 +16,19 @@ const SITUACAO = {
     recusado: { selo: "selo-recusado", texto: "Recusado", icone: "fal:ban" }
 } as const;
 
+/** A versão salva difere da aprovada (a que está no site)? Ex.: foto removida e salva sem aprovar. */
+function alteradoDesdeAprovacao(depoimento: Depoimento) {
+    const publicado = depoimento.publicado;
+    if (!publicado) return false;
+
+    return publicado.nome !== depoimento.nome
+        || publicado.idiomaOriginal !== depoimento.idioma_original
+        || publicado.texto.pt !== depoimento.texto_pt || publicado.texto.en !== depoimento.texto_en
+        || publicado.profissao.pt !== depoimento.profissao_pt || publicado.profissao.en !== depoimento.profissao_en
+        || (publicado.linkedin || "") !== (depoimento.linkedin || "")
+        || (publicado.foto || null) !== (depoimento.foto || null);
+}
+
 /**
  * Um depoimento: o texto original da pessoa e a tradução que você completa, com
  * Salvar, Aprovar (salva e publica esta versão no próximo Publicar), Recusar,
@@ -35,6 +48,7 @@ function CartaoDepoimento({ depoimento, ordem }: {
     const [imagens, setImagens] = useState(dados.imagens);
     const { executando, aviso, executar } = useAcao();
     const situacao = SITUACAO[depoimento.situacao];
+    const alterado = alteradoDesdeAprovacao(depoimento);
 
     const corpo = () => ({
         nome, idioma_original: idioma, foto, linkedin,
@@ -66,6 +80,9 @@ function CartaoDepoimento({ depoimento, ordem }: {
                     <span className="item-selos">
                         <span className={`selo ${situacao.selo}`}><Icone nome={situacao.icone} /> {situacao.texto}</span>
                         {depoimento.publicado && <span className="selo selo-aprovado"><Icone nome="fal:eye" /> no site</span>}
+                        {alterado && depoimento.situacao === "aprovado" && (
+                            <span className="selo selo-pendente"><Icone nome="fal:exclamation-circle" /> alterado, falta aprovar</span>
+                        )}
                         {Boolean(depoimento.exemplo) && <span className="selo selo-pendente">exemplo</span>}
                     </span>
                 </span>
@@ -78,7 +95,7 @@ function CartaoDepoimento({ depoimento, ordem }: {
                     {depoimento.aprovado_em && <li><Icone nome="fal:check" /> Última aprovação em {dataHora(depoimento.aprovado_em)}</li>}
                     {depoimento.email_usuario && <li><Icone nome="fal:envelope" /> {depoimento.email_usuario}</li>}
                 </ul>
-                {depoimento.publicado && depoimento.situacao !== "aprovado" && (
+                {depoimento.publicado && (depoimento.situacao !== "aprovado" || alterado) && (
                     <p className="aviso aviso-info"><Icone nome="fal:info-circle" /><span>A versão aprovada antes continua no site até você aprovar esta.</span></p>
                 )}
 
