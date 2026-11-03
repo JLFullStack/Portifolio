@@ -17,8 +17,9 @@ import type { PropsSecao } from "./Landing";
  */
 export function Biografia({ conteudo, idioma, d }: PropsSecao) {
     const { perfil, redes } = conteudo;
-    const nascimento = new Intl.DateTimeFormat(LOCALE[idioma], { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+    const nascimento = perfil.nascimento && new Intl.DateTimeFormat(LOCALE[idioma], { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
         .format(new Date(`${perfil.nascimento}T00:00:00Z`));
+    const endereco = texto(perfil.endereco, idioma);
 
     // Início da carreira: o ano do painel (Perfil) ou, sem ele, o mais antigo citado nos períodos das experiências.
     const anosCarreira = conteudo.experiencias
@@ -35,12 +36,26 @@ export function Biografia({ conteudo, idioma, d }: PropsSecao) {
     ];
 
     const dado = (icone: NomeIcone, rotulo: string, valor: ReactNode) => (
-        <div className="bio-dado">
+        <div key={rotulo} className="bio-dado">
             {/* Num <dl>, o <div> só pode ter <dt> e <dd>: o ícone vai dentro do termo. */}
             <dt><span className="bio-dado-icone" aria-hidden="true"><Icone nome={icone} /></span>{rotulo}</dt>
             <dd>{valor}</dd>
         </div>
     );
+
+    // Dado pessoal vazio no painel não aparece (sem nascimento, some também a idade).
+    const dados = [
+        perfil.nomeCompleto && dado("fal:id-card", d.bioNome, perfil.nomeCompleto),
+        nascimento && dado("fal:calendar-alt", d.bioNascimento, nascimento),
+        nascimento && dado("fal:birthday-cake", d.bioIdade,
+            <Idade nascimento={perfil.nascimento}
+                   noBuild={idade(perfil.nascimento, new Date())}
+                   formato={d.anos} />),
+        endereco && dado("fal:map-marker-alt", d.bioEndereco, endereco),
+        perfil.telefone && dado("fal:mobile-alt", d.bioTelefone,
+            <a href={`tel:${perfil.telefone.replace(/[^\d+]/g, "")}`}>{perfil.telefone}</a>),
+        perfil.email && dado("fal:envelope", d.bioEmail, <a href={`mailto:${perfil.email}`}>{perfil.email}</a>)
+    ].filter(Boolean);
 
     return (
         <section id="biografia" className="secao bio">
@@ -72,18 +87,7 @@ export function Biografia({ conteudo, idioma, d }: PropsSecao) {
                         <p key={i} className="bio-paragrafo">{texto(paragrafo, idioma)}</p>
                     ))}
 
-                    <dl className="bio-dados">
-                        {dado("fal:id-card", d.bioNome, perfil.nomeCompleto)}
-                        {dado("fal:calendar-alt", d.bioNascimento, nascimento)}
-                        {dado("fal:birthday-cake", d.bioIdade,
-                            <Idade nascimento={perfil.nascimento}
-                                   noBuild={idade(perfil.nascimento, new Date())}
-                                   formato={d.anos} />)}
-                        {dado("fal:map-marker-alt", d.bioEndereco, texto(perfil.endereco, idioma))}
-                        {dado("fal:mobile-alt", d.bioTelefone,
-                            <a href={`tel:${perfil.telefone.replace(/[^\d+]/g, "")}`}>{perfil.telefone}</a>)}
-                        {dado("fal:envelope", d.bioEmail, <a href={`mailto:${perfil.email}`}>{perfil.email}</a>)}
-                    </dl>
+                    {dados.length > 0 && <dl className="bio-dados">{dados}</dl>}
                 </div>
             </div>
 

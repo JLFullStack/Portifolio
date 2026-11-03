@@ -128,13 +128,13 @@ export default function PaginaPerfil() {
                 <h2><Icone nome="fal:id-card" /> Identificação e contato</h2>
                 <div className="campos-duas">
                     {texto("nome_curto", "Nome em destaque")}
-                    {texto("nome_completo", "Nome completo")}
-                    {texto("nascimento", "Nascimento", "date", "A idade é calculada a partir desta data.")}
-                    {texto("email", "E-mail", "email")}
-                    {texto("telefone", "Celular")}
-                    {texto("whatsapp", "Link do WhatsApp", "url", "Destino do botão CONTATO. Ex.: https://wa.me/5513999999999")}
-                    {texto("linkedin", "LinkedIn", "url", "Link da assinatura no rodapé.")}
-                    {texto("curriculo_pt", "Currículo (PT)", "url", "Download CV da página em português, enquanto não houver PDF enviado abaixo.")}
+                    {texto("nome_completo", "Nome completo", "text", "Vazio: não aparece na biografia.")}
+                    {texto("nascimento", "Nascimento", "date", "A idade é calculada a partir desta data. Vazio: nascimento e idade não aparecem.")}
+                    {texto("email", "E-mail", "email", "Vazio: não aparece na biografia nem no contato.")}
+                    {texto("telefone", "Celular", "text", "Vazio: não aparece na biografia nem no contato.")}
+                    {texto("whatsapp", "Link do WhatsApp", "url", "Botão do contato; vazio, o botão some. Ex.: https://wa.me/5513999999999")}
+                    {texto("linkedin", "LinkedIn", "url", "Link da assinatura no rodapé. Vazio: a assinatura fica sem link.")}
+                    {texto("curriculo_pt", "Currículo (PT)", "url", "Download CV da página em português, enquanto não houver PDF enviado abaixo. Sem link nem PDF, o botão some.")}
                     {texto("curriculo_en", "Currículo (EN)", "url", "Download CV da página em inglês. Vazio: usa o do português.")}
                 </div>
                 <label className="interruptor interruptor-destaque">

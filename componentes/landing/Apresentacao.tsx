@@ -18,6 +18,8 @@ export function Apresentacao({ conteudo, idioma, d }: PropsSecao) {
     const tecnologias = habilidades.flatMap(grupo => grupo.itens.map(item => texto(item, idioma)));
     // Uma tecnologia de cada grupo, para as etiquetas que flutuam em volta da foto.
     const destaques = habilidades.slice(0, 4).map(grupo => grupo.itens[0]).filter(Boolean).map(item => texto(item, idioma));
+    // Sem currículo (link nem PDF) no painel, o Download CV não aparece.
+    const curriculo = texto(perfil.curriculo, idioma);
 
     return (
         <section id="apresentacao" className="secao secao--abertura hero" aria-label={d.secaoApresentacao}>
@@ -58,10 +60,12 @@ export function Apresentacao({ conteudo, idioma, d }: PropsSecao) {
                         {texto(perfil.descricaoHero, idioma)}
                     </p>
                     <div className="hero-acoes entrada" style={{ "--atraso": 4 } as CSSProperties}>
-                        <a className="btn-acento" href={texto(perfil.curriculo, idioma)} target="_blank" rel="noopener noreferrer">
-                            <Icone nome="fal:download" />
-                            {d.baixarCv}
-                        </a>
+                        {curriculo && (
+                            <a className="btn-acento" href={curriculo} target="_blank" rel="noopener noreferrer">
+                                <Icone nome="fal:download" />
+                                {d.baixarCv}
+                            </a>
+                        )}
                         <a className="btn-contorno" href="#contato">
                             {d.heroContato}
                             <Icone nome="fal:arrow-right" />

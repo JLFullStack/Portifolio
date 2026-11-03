@@ -1929,7 +1929,7 @@ img {
     list-style: none;
 }
 
-    .chamada-contatos > li:first-child {
+    .chamada-contatos > .chamada-contatos-botao {
         margin-bottom: 0.25rem;
     }
 

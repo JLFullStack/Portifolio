@@ -130,14 +130,25 @@ export function lerConteudo(): Conteudo {
     const lido = JSON.parse(readFileSync(arquivo, "utf8")) as Conteudo;
     const github = join(pasta, "github.json");
     const vazio: Texto = { pt: "", en: "" };
+    // Dados pessoais são opcionais no painel: vazio (ou só espaços) some da landing.
+    const opcional = (valor: string | null | undefined) => (valor ?? "").trim();
+    const opcionalTexto = (valor: Texto | null | undefined): Texto => ({ pt: opcional(valor?.pt), en: opcional(valor?.en) });
+    const curriculo = lido.perfil.curriculo as Texto | string | null | undefined;
 
     // Campos novos ganham valor padrão: um conteudo.json exportado antes deles continua valendo.
     cache = {
         ...lido,
         perfil: {
             ...lido.perfil,
+            nomeCompleto: opcional(lido.perfil.nomeCompleto),
+            nascimento: opcional(lido.perfil.nascimento),
+            email: opcional(lido.perfil.email),
+            telefone: opcional(lido.perfil.telefone),
+            whatsapp: opcional(lido.perfil.whatsapp),
+            linkedin: opcional(lido.perfil.linkedin),
+            endereco: opcionalTexto(lido.perfil.endereco),
             // Exportado antes do currículo por idioma: o link único vale para o português.
-            curriculo: typeof lido.perfil.curriculo === "string" ? { pt: lido.perfil.curriculo, en: "" } : lido.perfil.curriculo,
+            curriculo: typeof curriculo === "string" || !curriculo ? { pt: opcional(curriculo as string), en: "" } : opcionalTexto(curriculo),
             disponivel: Boolean(lido.perfil.disponivel),
             inicioCarreira: lido.perfil.inicioCarreira ?? null
         },

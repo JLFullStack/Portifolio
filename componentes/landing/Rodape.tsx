@@ -23,8 +23,10 @@ export function Rodape({ conteudo, d }: PropsSecao) {
 
                 <p className="rodape-copyright">
                     <AnoAtual formato={d.copyright} noBuild={new Date().getFullYear()} />
-                    <a className="rodape-assinatura" href={perfil.linkedin} target="_blank" rel="noopener noreferrer"
-                       title={d.assinaturaTitulo}>{perfil.nomeCurto}</a>
+                    {perfil.linkedin
+                        ? <a className="rodape-assinatura" href={perfil.linkedin} target="_blank" rel="noopener noreferrer"
+                             title={d.assinaturaTitulo}>{perfil.nomeCurto}</a>
+                        : <span className="rodape-assinatura">{perfil.nomeCurto}</span>}
                 </p>
 
                 {/* Entrada da área restrita (painel e depoentes): discreta, a landing continua sendo a index. */}

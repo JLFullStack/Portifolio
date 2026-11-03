@@ -35,6 +35,8 @@ export function Cabecalho({ conteudo, idioma, d, secoes }: { conteudo: Conteudo;
         { idioma: "en", sigla: "EN", nome: d.idiomaIngles }
     ];
 
+    const curriculo = texto(perfil.curriculo, idioma);
+
     const rodapeMenu = (
         <>
             {perfil.disponivel && <p className="selo-disponivel">{d.heroDisponivel}</p>}
@@ -43,10 +45,12 @@ export function Cabecalho({ conteudo, idioma, d, secoes }: { conteudo: Conteudo;
                     {d.heroContato}
                     <Icone nome="fal:arrow-right" />
                 </a>
-                <a className="btn-contorno" href={texto(perfil.curriculo, idioma)} target="_blank" rel="noopener noreferrer">
-                    <Icone nome="fal:download" />
-                    {d.baixarCv}
-                </a>
+                {curriculo && (
+                    <a className="btn-contorno" href={curriculo} target="_blank" rel="noopener noreferrer">
+                        <Icone nome="fal:download" />
+                        {d.baixarCv}
+                    </a>
+                )}
             </div>
             <p className="menu-rotulo-redes">{d.menuRedes}</p>
             <ul className="menu-redes">

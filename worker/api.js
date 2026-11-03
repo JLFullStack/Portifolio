@@ -79,8 +79,9 @@ async function validarCampos(env, dados, campos, obrigatorios = []) {
             if (!Object.hasOwn(ICONES, dados[campo])) throw new ErroHttp(400, "Ícone desconhecido.");
             valores[campo] = dados[campo];
         } else if (tipo === "data") {
-            const data = campoTexto(dados, campo, { obrigatorio: true });
-            if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) throw new ErroHttp(400, "Data no formato AAAA-MM-DD.");
+            // Vazio é aceito (o nascimento e a idade somem da landing).
+            const data = campoTexto(dados, campo, { obrigatorio });
+            if (data && !/^\d{4}-\d{2}-\d{2}$/.test(data)) throw new ErroHttp(400, "Data no formato AAAA-MM-DD.");
             valores[campo] = data;
         } else if (tipo === "ano") {
             // Vazio grava NULL.
