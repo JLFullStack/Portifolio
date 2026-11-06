@@ -40,7 +40,16 @@ const PERFIL = {
     descricao_hero_pt: "texto", descricao_hero_en: "texto", biografia_pt: "texto", biografia_en: "texto",
     endereco_pt: "texto", endereco_en: "texto", chamada_convite_pt: "texto", chamada_convite_en: "texto",
     chamada_citacao_pt: "texto", chamada_citacao_en: "texto", chamada_autor: "texto",
-    foto_hero: "imagem", foto_biografia: "imagem", disponivel: "bool", inicio_carreira: "ano", github_exibir: "bool"
+    foto_hero: "imagem", foto_biografia: "imagem", disponivel: "bool", inicio_carreira: "ano", github_exibir: "bool",
+    hero_tamanho: "tamanho-foto", hero_opacidade_escuro: "opacidade", hero_opacidade_claro: "opacidade", hero_esmaecer: "esmaecer-foto", hero_esmaecer_direita: "esmaecer-foto", hero_luz_direita: "luz-foto"
+};
+
+/** Ajustes da foto do topo, em %: menor e maior valor aceitos, e o que dizer fora deles. */
+const FAIXAS = {
+    "tamanho-foto": [50, 100, "O tamanho da foto vai de 50% a 100%."],
+    opacidade: [10, 100, "A opacidade vai de 10% a 100%."],
+    "esmaecer-foto": [0, 100, "O esmaecimento vai de 0% a 100%."],
+    "luz-foto": [-100, 100, "A luz vai de -100% a 100%."]
 };
 
 function exigir(usuario, papel) {
@@ -89,6 +98,11 @@ async function validarCampos(env, dados, campos, obrigatorios = []) {
             const ano = Number(texto);
             if (texto && (!Number.isInteger(ano) || ano < 1950 || ano > new Date().getUTCFullYear())) throw new ErroHttp(400, "Ano inválido.");
             valores[campo] = texto ? ano : null;
+        } else if (Object.hasOwn(FAIXAS, tipo)) {
+            const [minimo, maximo, mensagem] = FAIXAS[tipo];
+            const valor = campoInteiro(dados, campo);
+            if (valor < minimo || valor > maximo) throw new ErroHttp(400, mensagem);
+            valores[campo] = valor;
         } else if (tipo === "repositorio") {
             // Nome de repositório do GitHub: letras, números, ponto, hífen e sublinhado.
             const nome = campoTexto(dados, campo, { maximo: 100, obrigatorio });

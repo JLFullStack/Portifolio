@@ -467,11 +467,17 @@ img {
 
 /* #region Seção 2 — Hero */
 
-.hero {
-    /* as curvas, a aurora e a palavra de fundo sangram para fora da faixa de
-       conteúdo e não podem gerar rolagem */
+/* A hero tem a altura da janela: o palco (texto e retrato) fica com o que sobra da
+   faixa de tecnologias. O teto evita um retrato maior que a própria foto em telas muito altas. */
+.secao.hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    min-height: min(100vh, 72rem);
+    min-height: min(100svh, 72rem);
+    padding-block: 0;
+    /* a aurora sangra para fora da faixa de conteúdo e não pode gerar rolagem */
     overflow: hidden;
-    padding-bottom: var(--espaco-4);
 }
 
 /* Aurora: dois halos de cor e a grade de pontos, que some nas bordas */
@@ -501,41 +507,16 @@ img {
         mask-image: radial-gradient(ellipse 70% 60% at 60% 40%, black 10%, transparent 75%);
     }
 
-/* A palavra gigante, só contornada, atrás da composição */
-.hero-fundo {
-    position: absolute;
-    z-index: -1;
-    left: 50%;
-    bottom: 5.5rem;
-    transform: translateX(-50%);
-    color: transparent;
-    -webkit-text-stroke: 1px var(--cor-contorno);
-    font-size: clamp(5rem, 1rem + 15vw, 17rem);
-    font-weight: var(--peso-fantasma);
-    letter-spacing: -0.03em;
-    line-height: 1;
-    white-space: nowrap;
-    pointer-events: none;
-    user-select: none;
-}
-
-/* Traçado decorativo ao fundo: fica atrás do conteúdo e fora do fluxo de foco */
-.hero-curvas {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.hero-grade {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+.hero-palco {
+    display: flex;
     align-items: center;
-    gap: var(--espaco-5);
+    padding-block: calc(var(--altura-cabecalho) + var(--espaco-3)) var(--espaco-4);
+}
+
+/* O texto fica por cima do retrato: um nome longo pode entrar na parte que se dissolve */
+.hero-texto {
+    position: relative;
+    z-index: 1;
 }
 
 .hero-saudacao {
@@ -599,112 +580,67 @@ img {
     gap: var(--espaco-2);
 }
 
-/* A largura fica no contêiner, não só na imagem: com largura apenas em % na
-   imagem, a coluna encolhia até a foto carregar e o texto pulava (CLS). */
+/* O retrato: a moldura sai só do CSS (altura da seção e proporção fixa), então a foto
+   não desloca nada ao carregar (CLS). Ela se mede pela seção inteira e desce por trás do
+   letreiro. A foto cresce e diminui dentro da moldura, sempre centrada nela: acompanha o
+   texto, que também fica no meio da altura, e não foge do lugar. */
 .hero-foto {
-    position: relative;
-    isolation: isolate;
-    justify-self: end;
-    width: 100%;
-    max-width: 26rem;
+    position: absolute;
+    top: 1.5rem;
+    bottom: 0;
+    right: max(0px, calc(50% - var(--largura-conteudo) / 2 - 8rem));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 5;
+    max-width: 68%;
 }
 
-    .hero-foto > img {
+    /* A base e as pontas dos ombros se dissolvem no fundo. Do perfil vêm o tamanho, as
+       opacidades, que deixam o fundo da página aparecer através da foto, e o quanto cada
+       lado também se dissolve (em zero sobra só a ponta do ombro). Opacidade e máscara ficam
+       neste grupo: valem para a foto e para a cópia da luz como se fossem uma imagem só. */
+    .hero-foto-imagens {
         position: relative;
-        display: block;
-        width: 100%;
-        height: auto;
-        /* as bordas da foto (braços e base cortados pelo quadro) se dissolvem
-           no disco e no fundo; a cabeça, no alto, fica inteira */
-        -webkit-mask-image: linear-gradient(to bottom, black 68%, transparent 98%), linear-gradient(to right, transparent, black 16%, black 84%, transparent);
+        width: calc(var(--tamanho-foto, 1) * 100%);
+        height: calc(var(--tamanho-foto, 1) * 100%);
+        opacity: var(--opacidade-foto-escuro, 0.7);
+        -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 96%), linear-gradient(to right, transparent calc(5% * var(--esmaecer-foto, 0.6)), black calc(10% + 48% * var(--esmaecer-foto, 0.6)), black calc(90% - 48% * var(--esmaecer-direita-foto, 0)), transparent calc(100% - 5% * var(--esmaecer-direita-foto, 0)));
         -webkit-mask-composite: source-in;
-        mask-image: linear-gradient(to bottom, black 68%, transparent 98%), linear-gradient(to right, transparent, black 16%, black 84%, transparent);
+        mask-image: linear-gradient(to bottom, black 55%, transparent 96%), linear-gradient(to right, transparent calc(5% * var(--esmaecer-foto, 0.6)), black calc(10% + 48% * var(--esmaecer-foto, 0.6)), black calc(90% - 48% * var(--esmaecer-direita-foto, 0)), transparent calc(100% - 5% * var(--esmaecer-direita-foto, 0)));
         mask-composite: intersect;
     }
 
-/* Disco em gradiente atrás da foto, com halo */
-.hero-disco {
-    position: absolute;
-    z-index: -1;
-    left: 50%;
-    bottom: 6%;
-    width: 92%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--gradiente-vivo);
-    box-shadow: 0 0 90px 10px var(--cor-brilho-acento), 0 0 50px var(--cor-brilho-violeta);
-    transform: translateX(-50%);
+        /* cover e alto da foto: outra proporção perde a base, nunca a cabeça. */
+        .hero-foto-imagens > img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+        }
+
+        /* A luz: a cópia da foto, de 30% a 170% do brilho, aparecendo aos poucos da metade
+           para a direita. Por ser a própria foto, nunca pinta o fundo em volta dela. */
+        .hero-foto-imagens > .hero-foto-luz {
+            position: absolute;
+            inset: 0;
+            filter: brightness(calc(1 + 0.7 * var(--luz-direita-foto, 0)));
+            -webkit-mask-image: linear-gradient(to right, transparent 40%, black 80%);
+            mask-image: linear-gradient(to right, transparent 40%, black 80%);
+        }
+
+            .hero-foto-imagens > .hero-foto-luz[hidden] {
+                display: none;
+            }
+
+:root[data-tema="claro"] .hero-foto-imagens {
+    opacity: var(--opacidade-foto-claro, 0.93);
 }
-
-/* Órbita tracejada com um ponto de luz, girando em volta do disco */
-.hero-orbita {
-    position: absolute;
-    z-index: -1;
-    left: -6%;
-    /* concêntrica com o disco: a foto tem 3:4, então 10% da largura = 7,5% da altura */
-    bottom: -1.5%;
-    width: 112%;
-    aspect-ratio: 1;
-    border: 1px dashed var(--cor-borda-forte);
-    border-radius: 50%;
-}
-
-    .hero-orbita::after {
-        content: "";
-        position: absolute;
-        top: 14.6%;
-        left: 14.6%;
-        width: 0.75rem;
-        height: 0.75rem;
-        margin: -0.375rem;
-        border-radius: 50%;
-        background-color: var(--cor-acento-solido);
-        box-shadow: 0 0 14px 3px var(--cor-acento-solido);
-    }
-
-/* Etiquetas de vidro com as tecnologias, flutuando em volta da foto */
-.hero-etiquetas {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.hero-etiqueta {
-    position: absolute;
-    z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    padding: 0.4rem 0.85rem;
-    border: 1px solid var(--cor-borda-forte);
-    border-radius: var(--raio-pilula);
-    background-color: var(--cor-vidro);
-    box-shadow: var(--sombra-card);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    color: var(--cor-texto);
-    font-size: var(--texto-sm);
-    font-weight: var(--peso-forte);
-    white-space: nowrap;
-}
-
-    .hero-etiqueta::before {
-        content: "";
-        width: 0.5rem;
-        height: 0.5rem;
-        border-radius: 50%;
-        background: var(--gradiente-vivo);
-    }
-
-    .hero-etiqueta:nth-child(1) { top: 16%; left: -10%; }
-    .hero-etiqueta:nth-child(2) { top: 34%; right: -8%; }
-    .hero-etiqueta:nth-child(3) { bottom: 30%; left: -14%; }
-    .hero-etiqueta:nth-child(4) { bottom: 12%; right: -4%; }
 
 /* Letreiro contínuo com todas as tecnologias, de ponta a ponta da janela */
 .letreiro {
     position: relative;
-    margin-top: var(--espaco-5);
     padding-block: var(--espaco-2);
     border-block: 1px solid var(--cor-borda);
     background-color: var(--cor-vidro);

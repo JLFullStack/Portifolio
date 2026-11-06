@@ -5,10 +5,11 @@ import { api } from "@/lib/api";
 import { dataHora } from "@/lib/painel";
 import { Aviso, Campo, CampoBilingue, Entrada, useAcao, type Bilingue } from "@/componentes/painel/Campos";
 import { Icone } from "@/componentes/icones/Icone";
+import { CamposAparenciaHero, PADRAO_FOTO } from "@/componentes/painel/AparenciaHero";
 import { CampoImagem } from "@/componentes/painel/Imagens";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
 
-const SIMPLES = ["nome_curto", "nome_completo", "nascimento", "email", "telefone", "whatsapp", "linkedin", "curriculo_pt", "curriculo_en", "chamada_autor", "foto_hero", "foto_biografia", "inicio_carreira"];
+const SIMPLES = ["nome_curto", "nome_completo", "nascimento", "email", "telefone", "whatsapp", "linkedin", "curriculo_pt", "curriculo_en", "chamada_autor", "foto_hero", "foto_biografia", "inicio_carreira", "hero_tamanho", "hero_esmaecer", "hero_esmaecer_direita", "hero_luz_direita", "hero_opacidade_escuro", "hero_opacidade_claro"];
 const BILINGUES = ["saudacao", "profissao", "descricao_hero", "biografia", "endereco", "chamada_convite", "chamada_citacao"];
 
 const IDIOMAS = { pt: "português", en: "inglês" } as const;
@@ -110,14 +111,32 @@ export default function PaginaPerfil() {
             <p className="painel-subtitulo">Seus dados e os textos fixos da landing. Campo vazio num idioma usa o texto do outro.</p>
 
             <section className="cartao">
-                <h2><Icone nome="fal:camera" /> Fotos</h2>
+                <h2><Icone nome="fal:camera" /> Foto do topo</h2>
                 <p className="cartao-nota">Depois de escolher, ajuste a posição e o zoom. A foto nova só vale depois de salvar o perfil.</p>
-                <div className="fotos-perfil">
-                    <CampoImagem rotulo="Foto do topo" dica="Recortada, com fundo transparente. Mantém a proporção da própria foto."
+                <div className="foto-topo-grade">
+                    <CampoImagem dica="Retrato com fundo transparente, na proporção 4:5, com a cabeça encostada no alto. A base se dissolve no fundo da página."
                                  id={perfil.foto_hero || null} info={imagens[perfil.foto_hero]} formato="livre"
-                                 larguras={[320, 480, 640, 832]} rotuloEnviar="Trocar foto"
+                                 larguras={[480, 640, 832, 1120]} proporcao={4 / 5} rotuloEnviar="Trocar foto"
                                  aoEnviar={img => { setImagens(i => ({ ...i, [img.id]: img })); mudar("foto_hero", img.id); }} />
-                    <CampoImagem rotulo="Foto da biografia" dica="Aparece recortada em círculo."
+                    <CamposAparenciaHero aoMudar={mudar}
+                                         aparencia={{
+                                             tamanho: Number(perfil.hero_tamanho ?? PADRAO_FOTO.tamanho),
+                                             esmaecer: Number(perfil.hero_esmaecer ?? PADRAO_FOTO.esmaecer),
+                                             esmaecerDireita: Number(perfil.hero_esmaecer_direita ?? PADRAO_FOTO.esmaecerDireita),
+                                             luzDireita: Number(perfil.hero_luz_direita ?? PADRAO_FOTO.luzDireita),
+                                             opacidadeEscuro: Number(perfil.hero_opacidade_escuro ?? PADRAO_FOTO.opacidadeEscuro),
+                                             opacidadeClaro: Number(perfil.hero_opacidade_claro ?? PADRAO_FOTO.opacidadeClaro),
+                                             foto: perfil.foto_hero || null,
+                                             info: imagens[perfil.foto_hero]
+                                         }} />
+                </div>
+            </section>
+
+            <section className="cartao">
+                <h2><Icone nome="fal:camera" /> Foto da biografia</h2>
+                <p className="cartao-nota">Depois de escolher, ajuste a posição e o zoom. A foto nova só vale depois de salvar o perfil.</p>
+                <div className="foto-biografia-campo">
+                    <CampoImagem dica="Aparece recortada em círculo."
                                  id={perfil.foto_biografia || null} info={imagens[perfil.foto_biografia]} formato="redonda"
                                  larguras={[360, 700]} proporcao={1} rotuloEnviar="Trocar foto"
                                  aoEnviar={img => { setImagens(i => ({ ...i, [img.id]: img })); mudar("foto_biografia", img.id); }} />

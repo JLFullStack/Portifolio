@@ -4,11 +4,15 @@ import { Icone } from "@/componentes/icones/Icone";
 import type { PropsSecao } from "./Landing";
 
 /**
- * Seção 2 do mockup: Hero. À esquerda o selo de disponível (quando ligado no painel),
- * a saudação, o nome, o cargo, a apresentação e os botões; à direita a foto sobre um disco em gradiente, com uma órbita
- * tracejada e as tecnologias principais flutuando em volta. Ao fundo, a aurora,
- * a grade de pontos, a palavra gigante contornada e três curvas finas em SVG inline
- * que se desenham na abertura. Embaixo, a faixa contínua com todas as tecnologias.
+ * Seção 2: Hero. À esquerda o selo de disponível (quando ligado no painel), a saudação,
+ * o nome, o cargo, a apresentação e os botões; à direita o retrato grande, ocupando a
+ * altura da primeira dobra e se dissolvendo no fundo. Atrás dele, a aurora e a grade de
+ * pontos. Embaixo, a faixa contínua com todas as tecnologias.
+ *
+ * O painel define o tamanho da foto, o esmaecimento de cada lado, a luz do lado direito e
+ * a opacidade em cada tema (variáveis de CSS). A luz é uma segunda cópia da mesma imagem,
+ * clareada ou escurecida e visível só à direita: mesmo arquivo, sem novo download, e
+ * escondida (sem custo de pintura) enquanto o ajuste estiver em zero.
  *
  * Tudo o que se mexe aqui é CSS (transform e opacity): nada de JavaScript nem
  * de reflow, e a foto (o LCP) nunca começa invisível.
@@ -16,33 +20,43 @@ import type { PropsSecao } from "./Landing";
 export function Apresentacao({ conteudo, idioma, d }: PropsSecao) {
     const { perfil, habilidades } = conteudo;
     const tecnologias = habilidades.flatMap(grupo => grupo.itens.map(item => texto(item, idioma)));
-    // Uma tecnologia de cada grupo, para as etiquetas que flutuam em volta da foto.
-    const destaques = habilidades.slice(0, 4).map(grupo => grupo.itens[0]).filter(Boolean).map(item => texto(item, idioma));
     // Sem currículo (link nem PDF) no painel, o Download CV não aparece.
     const curriculo = texto(perfil.curriculo, idioma);
+    const aparenciaFoto = {
+        "--tamanho-foto": perfil.heroTamanho / 100,
+        "--esmaecer-foto": perfil.heroEsmaecer / 100,
+        "--esmaecer-direita-foto": perfil.heroEsmaecerDireita / 100,
+        "--luz-direita-foto": perfil.heroLuzDireita / 100,
+        "--opacidade-foto-escuro": perfil.heroOpacidade.escuro / 100,
+        "--opacidade-foto-claro": perfil.heroOpacidade.claro / 100
+    } as CSSProperties;
 
     return (
-        <section id="apresentacao" className="secao secao--abertura hero" aria-label={d.secaoApresentacao}>
+        <section id="apresentacao" className="secao secao--abertura hero" style={aparenciaFoto} aria-label={d.secaoApresentacao}>
             <div className="hero-aurora" aria-hidden="true" />
-            <span className="hero-fundo" aria-hidden="true">{d.heroFundo}</span>
 
-            <svg className="hero-curvas" viewBox="0 0 1898 1000" preserveAspectRatio="xMaxYMid slice"
-                 aria-hidden="true" focusable="false">
-                <defs>
-                    <linearGradient id="hero-curvas-gradiente" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0" stopColor="var(--cor-acento-solido)" />
-                        <stop offset="1" stopColor="var(--cor-violeta)" />
-                    </linearGradient>
-                </defs>
-                <g fill="none" stroke="url(#hero-curvas-gradiente)" strokeWidth="2" pathLength="1">
-                    <path pathLength="1" d="M814 0 C 828 70, 872 106, 952 162 C 1062 238, 1152 302, 1192 402 C 1226 492, 1200 562, 1232 642 C 1282 762, 1452 852, 1898 942" />
-                    <path pathLength="1" d="M870 0 C 884 70, 928 106, 1008 162 C 1118 238, 1202 306, 1230 406 C 1258 496, 1236 572, 1270 652 C 1322 772, 1502 862, 1898 892" />
-                    <path pathLength="1" d="M926 0 C 940 70, 984 106, 1064 162 C 1174 238, 1248 312, 1266 412 C 1288 502, 1270 580, 1302 662 C 1358 782, 1562 872, 1898 988" />
-                </g>
-            </svg>
+            <div className="hero-palco">
+                {/* Primeira dobra e maior elemento do carregamento (LCP): sem lazy e com
+                    prioridade alta. sizes segue o CSS, no maior tamanho: a largura da janela até
+                    991px, depois 4/5 da altura da dobra. A moldura sai só do CSS: qualquer foto
+                    do painel ocupa o mesmo espaço, sem CLS. */}
+                <div className="hero-foto">
+                    <div className="hero-foto-imagens">
+                        <img src={src(perfil.fotoHero)}
+                             srcSet={srcset(perfil.fotoHero)}
+                             sizes="(max-width: 991px) 100vw, 78vh"
+                             width={perfil.fotoHero.largura} height={perfil.fotoHero.altura}
+                             alt={d.fotoHeroAlt}
+                             fetchPriority="high" decoding="async" />
+                        <img className="hero-foto-luz" src={src(perfil.fotoHero)}
+                             srcSet={srcset(perfil.fotoHero)}
+                             sizes="(max-width: 991px) 100vw, 78vh"
+                             width={perfil.fotoHero.largura} height={perfil.fotoHero.altura}
+                             alt="" hidden={perfil.heroLuzDireita === 0} decoding="async" />
+                    </div>
+                </div>
 
-            <div className="conteudo hero-grade">
-                <div className="hero-texto">
+                <div className="conteudo hero-texto">
                     {perfil.disponivel && (
                         <p className="selo-disponivel entrada" style={{ "--atraso": 0 } as CSSProperties}>{d.heroDisponivel}</p>
                     )}
@@ -71,26 +85,6 @@ export function Apresentacao({ conteudo, idioma, d }: PropsSecao) {
                             <Icone nome="fal:arrow-right" />
                         </a>
                     </div>
-                </div>
-
-                {/* Primeira dobra e maior elemento do carregamento (LCP): sem lazy e com
-                    prioridade alta. sizes segue o CSS: até 26rem no desktop, 16rem no celular. */}
-                <div className="hero-foto">
-                    <span className="hero-disco" aria-hidden="true" />
-                    <span className="hero-orbita" aria-hidden="true" />
-                    <img src={src(perfil.fotoHero)}
-                         srcSet={srcset(perfil.fotoHero)}
-                         sizes="(max-width: 767px) 16rem, 26rem"
-                         width={perfil.fotoHero.largura} height={perfil.fotoHero.altura}
-                         alt={d.fotoHeroAlt}
-                         fetchPriority="high" decoding="async" />
-                    <ul className="hero-etiquetas" aria-hidden="true">
-                        {destaques.map((tecnologia, i) => (
-                            <li key={tecnologia} className="hero-etiqueta" style={{ "--indice": i } as CSSProperties}>
-                                {tecnologia}
-                            </li>
-                        ))}
-                    </ul>
                 </div>
             </div>
 

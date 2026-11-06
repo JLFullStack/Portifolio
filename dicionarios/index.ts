@@ -52,8 +52,6 @@ const pt = {
     baixarCv: "Download CV",
     heroContato: "Vamos conversar",
     heroDisponivel: "Disponível para novos projetos",
-    /** Palavra gigante e contornada ao fundo da hero (decorativa). */
-    heroFundo: "PORTFÓLIO",
     fotoHeroAlt: "Lucas Araújo, desenvolvedor full-stack",
 
     bioNome: "Nome:",
@@ -172,7 +170,6 @@ const en: Dicionario = {
     baixarCv: "Download CV",
     heroContato: "Let's talk",
     heroDisponivel: "Available for new projects",
-    heroFundo: "PORTFOLIO",
     fotoHeroAlt: "Lucas Araújo, full-stack developer",
 
     bioNome: "Name:",

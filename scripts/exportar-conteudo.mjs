@@ -133,7 +133,12 @@ const conteudo = {
         fotoHero: foto(perfil.foto_hero),
         fotoBiografia: foto(perfil.foto_biografia),
         disponivel: Boolean(perfil.disponivel),
-        inicioCarreira: perfil.inicio_carreira ?? null
+        inicioCarreira: perfil.inicio_carreira ?? null,
+        heroTamanho: perfil.hero_tamanho,
+        heroEsmaecer: perfil.hero_esmaecer,
+        heroEsmaecerDireita: perfil.hero_esmaecer_direita,
+        heroLuzDireita: perfil.hero_luz_direita,
+        heroOpacidade: { escuro: perfil.hero_opacidade_escuro, claro: perfil.hero_opacidade_claro }
     },
     redes: redes.map(rede => ({ nome: rede.nome, url: rede.url, icone: rede.icone })),
     servicos: servicos.map(servico => ({ icone: servico.icone, titulo: t(servico, "titulo"), descricao: t(servico, "descricao") })),

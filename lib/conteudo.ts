@@ -104,6 +104,16 @@ export type Conteudo = {
         disponivel: boolean;
         /** Ano em que a carreira começou (Anos de experiência). null: o mais antigo dos períodos das experiências. */
         inicioCarreira: number | null;
+        /** Tamanho da foto do topo, em % do maior tamanho que ela alcança na hero. */
+        heroTamanho: number;
+        /** Quanto o lado esquerdo da foto do topo se dissolve no fundo, em %. */
+        heroEsmaecer: number;
+        /** O mesmo do lado direito. */
+        heroEsmaecerDireita: number;
+        /** Luz do lado direito da foto do topo, em %: negativo escurece, positivo clareia. */
+        heroLuzDireita: number;
+        /** Opacidade da foto do topo, em % e por tema. */
+        heroOpacidade: { escuro: number; claro: number };
     };
     redes: RedeSocial[];
     servicos: Servico[];
@@ -150,7 +160,12 @@ export function lerConteudo(): Conteudo {
             // Exportado antes do currículo por idioma: o link único vale para o português.
             curriculo: typeof curriculo === "string" || !curriculo ? { pt: opcional(curriculo as string), en: "" } : opcionalTexto(curriculo),
             disponivel: Boolean(lido.perfil.disponivel),
-            inicioCarreira: lido.perfil.inicioCarreira ?? null
+            inicioCarreira: lido.perfil.inicioCarreira ?? null,
+            heroTamanho: lido.perfil.heroTamanho ?? 100,
+            heroEsmaecer: lido.perfil.heroEsmaecer ?? 60,
+            heroEsmaecerDireita: lido.perfil.heroEsmaecerDireita ?? 0,
+            heroLuzDireita: lido.perfil.heroLuzDireita ?? 0,
+            heroOpacidade: lido.perfil.heroOpacidade ?? { escuro: 70, claro: 93 }
         },
         servicos: lido.servicos ?? [],
         projetos: lido.projetos.map(projeto => ({

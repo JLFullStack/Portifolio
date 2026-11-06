@@ -6,10 +6,11 @@ import "@/estilos/responsivo.css";
 
 // Tema: aplica o data-tema ANTES da primeira pintura, senão quem escolheu o tema
 // claro vê o escuro piscar a cada carregamento. Inline e antes do conteúdo. Padrão: escuro.
+// A área restrita é sempre escura: a escolha vale só para o site, onde fica o botão.
 const SCRIPT_TEMA = `(function () {
     var tema = "escuro";
     try {
-        if (localStorage.getItem("portifolio-tema") === "claro") tema = "claro";
+        if (localStorage.getItem("portifolio-tema") === "claro" && !/^\\/(admin|login|convite|depoimento)(\\/|$)/.test(location.pathname)) tema = "claro";
     } catch (e) { /* localStorage bloqueado: segue no tema padrão */ }
     document.documentElement.setAttribute("data-tema", tema);
 })();`;

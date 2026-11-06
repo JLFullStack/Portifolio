@@ -19,7 +19,7 @@ import { ErroHttp, json } from "./http.js";
 const PAGINAS_ADMIN = /^\/admin(\/|$)/;
 const PAGINAS_DEPOENTE = /^\/depoimento(\/|$)/;
 
-// Mesma política do public/_headers: tudo da própria origem, sem ser embutido em outro site.
+// Mesma política do public/_headers, mas sem poder ser embutido nem na própria origem.
 // connect-src 'self' impede que um script injetado envie dados a outro endereço.
 const CABECALHOS_SEGURANCA = {
     "content-security-policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; " +

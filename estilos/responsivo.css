@@ -13,23 +13,57 @@
 /* #region tablet — o grid de duas colunas fica apertado antes do celular */
 
 @media only screen and (max-width: 991px) {
-    .hero-grade,
     .bio-grade {
         grid-template-columns: minmax(0, 1fr);
         gap: var(--espaco-4);
     }
 
-    /* A foto sobe para cima do texto e fica centrada; o texto continua
-       alinhado à esquerda, que é mais legível do que um bloco centralizado. */
-    .hero-foto,
+    /* O retrato vem primeiro, encostado no topo da tela e por trás do cabeçalho, e o texto
+       entra sobre a parte que se dissolve. A altura tem teto para os botões não ficarem longe demais. Na tela
+       estreita o ajuste de tamanho age pela metade (50% no painel vira 75% aqui), e a
+       moldura acompanha a foto para não sobrar um vão acima dela. */
+    .secao.hero {
+        --escala-foto: calc(0.5 + 0.5 * var(--tamanho-foto, 1));
+        --entrada-foto-x: 0px;
+        display: block;
+        min-height: 0;
+    }
+
+    .hero-palco {
+        display: block;
+        padding-block: 0 var(--espaco-4);
+    }
+
+    .hero-foto {
+        position: relative;
+        top: auto;
+        bottom: auto;
+        right: auto;
+        width: calc(min(100%, 48vh) * var(--escala-foto));
+        width: calc(min(100%, 48svh) * var(--escala-foto));
+        max-width: none;
+        margin: 0 auto;
+    }
+
+        .hero-foto-imagens {
+            width: 100%;
+            height: 100%;
+            -webkit-mask-image: linear-gradient(to bottom, black 45%, transparent 92%);
+            -webkit-mask-composite: source-over;
+            mask-image: linear-gradient(to bottom, black 45%, transparent 92%);
+            mask-composite: add;
+        }
+
+    .hero-texto {
+        margin-top: calc(-7rem * var(--escala-foto));
+    }
+
+    /* A foto sobe para cima do texto e fica centrada; o texto continua alinhado à
+       esquerda, que é mais legível do que um bloco centralizado. */
     .bio-retrato {
         order: -1;
         justify-self: center;
     }
-
-        .hero-foto > img {
-            margin-inline: auto;
-        }
 
     /* Justificar em coluna estreita abre "rios" de espaço entre as palavras */
     .hero-descricao,
@@ -146,12 +180,6 @@
         grid-template-columns: minmax(0, 1fr);
         gap: var(--espaco-4);
     }
-
-    /* A palavra de fundo desce para trás do texto, que agora vem depois da foto */
-    .hero-fundo {
-        bottom: auto;
-        top: 38%;
-    }
 }
 
 /* Em uma coluna o texto do projeto fica embaixo do card: revelado só quando o topo
@@ -190,34 +218,9 @@
         right: var(--espaco-2);
     }
 
-    /* As curvas são desenhadas para uma composição larga: recortadas em tela
-       estreita viram ruído atrás do texto. */
-    .hero-curvas {
-        display: none;
-    }
-
-    .hero-foto {
-        max-width: 16rem;
-    }
-
-    /* Em volta da foto estreita só cabem etiquetas menores e mais próximas */
-    .hero-etiqueta {
-        padding: 0.3rem 0.65rem;
-        font-size: var(--texto-xs);
-    }
-
-        .hero-etiqueta:nth-child(1) { left: -18%; }
-        .hero-etiqueta:nth-child(2) { right: -16%; }
-        .hero-etiqueta:nth-child(3) { left: -20%; }
-        .hero-etiqueta:nth-child(4) { right: -12%; }
-
     .hero-acoes > a {
         flex: 1 1 auto;
         justify-content: center;
-    }
-
-    .letreiro {
-        margin-top: var(--espaco-4);
     }
 
     .letreiro-lista > li {
