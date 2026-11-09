@@ -1,0 +1,129 @@
+/* #region Habilidades Profissionais */
+
+/* Cinco cards de mesma altura lado a lado; o responsivo reduz as colunas. */
+
+.habilidades-grade {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--espaco-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Cada card tem o seu tom: no ícone, no número, na barra do topo e no hover */
+
+.habilidades-card {
+    --tom: var(--tom-1);
+    overflow: hidden;
+    padding: var(--espaco-3) var(--espaco-3) var(--espaco-4);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+    /* o hover usa translate, não transform: o transform é da animação .revelar */
+    transition: translate 0.35s var(--curva-saida), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+    .habilidades-card:nth-child(5n + 2) { --tom: var(--tom-2); }
+
+    .habilidades-card:nth-child(5n + 3) { --tom: var(--tom-3); }
+
+    .habilidades-card:nth-child(5n + 4) { --tom: var(--tom-4); }
+
+    .habilidades-card:nth-child(5n + 5) { --tom: var(--tom-5); }
+
+    .habilidades-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 3px;
+        background: linear-gradient(90deg, var(--tom), transparent);
+    }
+
+    .habilidades-card:hover {
+        border-color: color-mix(in srgb, var(--tom) 55%, transparent);
+        box-shadow: 0 22px 44px -22px var(--tom);
+        translate: 0 -6px;
+    }
+
+.habilidades-numero {
+    position: absolute;
+    top: var(--espaco-2);
+    right: var(--espaco-2);
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--tom) 55%, transparent);
+    font-size: 2.5rem;
+    font-weight: var(--peso-fantasma);
+    line-height: 1;
+}
+
+.habilidades-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: var(--espaco-2);
+    border-radius: 0.75rem;
+    background-color: color-mix(in srgb, var(--tom) 15%, transparent);
+    color: var(--tom);
+    font-size: 1.35rem;
+    transition: transform 0.35s var(--curva-saida);
+}
+
+    .habilidades-card:hover .habilidades-icone {
+        transform: rotate(-8deg) scale(1.08);
+    }
+
+.habilidades-titulo {
+    margin: 0 0 var(--espaco-2);
+    font-size: var(--texto-lg);
+    font-weight: var(--peso-forte);
+}
+
+/* Itens em etiquetas */
+
+.habilidades-itens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .habilidades-itens > li {
+        padding: 0.2rem 0.65rem;
+        border: 1px solid var(--cor-borda);
+        border-radius: var(--raio-pilula);
+        background-color: var(--cor-superficie-alta);
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-sm);
+        transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+        .habilidades-itens > li:hover {
+            border-color: var(--tom);
+            color: var(--cor-texto);
+        }
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 991px) {
+    /* Cinco cards de habilidade não cabem em tablet: passam a três */
+    .habilidades-grade {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    /* Coluna única de habilidades, serviços e repositórios */
+    .habilidades-grade {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* #endregion */

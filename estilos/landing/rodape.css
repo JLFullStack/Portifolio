@@ -1,0 +1,120 @@
+/* #region Rodapé */
+
+/* Faixa de ponta a ponta da janela; só o miolo respeita a largura de leitura.
+   Um filete em gradiente marca o topo. */
+
+.rodape {
+    position: relative;
+    padding-block: var(--espaco-4);
+    background-color: var(--cor-superficie);
+    text-align: center;
+}
+
+    .rodape::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--cor-acento-solido) 40%, var(--cor-acento-solido) 70%, var(--cor-violeta), transparent);
+    }
+
+.rodape-redes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--espaco-2);
+    margin: 0 0 var(--espaco-3);
+    padding: 0;
+    list-style: none;
+}
+
+    /* Círculos apenas contornados, como no mockup — diferente dos ícones da
+       biografia, que têm preenchimento. */
+
+    .rodape-redes a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border: 1px solid var(--cor-borda-forte);
+        border-radius: 50%;
+        color: var(--cor-texto);
+        font-size: var(--texto-lg);
+        transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s var(--curva-saida);
+    }
+
+        .rodape-redes a:hover,
+        .rodape-redes a:focus-visible {
+            border-color: transparent;
+            background: var(--gradiente-acento);
+            color: var(--cor-acento-contraste);
+            box-shadow: var(--sombra-botao);
+            transform: translateY(-4px);
+        }
+
+.rodape-copyright {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0 var(--espaco-1);
+    margin: 0;
+    color: var(--cor-texto-suave);
+}
+
+/* A assinatura usa a Ernestone: é o propósito dela no projeto. Como a fonte
+   é manuscrita e tem altura de x pequena, vai num corpo bem maior. */
+
+.rodape-assinatura {
+    font-family: var(--fonte-assinatura);
+    font-size: 2rem;
+    line-height: 1;
+    background: var(--gradiente-texto);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+    .rodape-assinatura:hover,
+    .rodape-assinatura:focus-visible {
+        color: var(--cor-acento);
+    }
+
+/* Acesso à área restrita: só um ícone discreto sob o copyright. */
+
+.rodape-entrar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-top: var(--espaco-1);
+    border-radius: 50%;
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-md);
+}
+
+    .rodape-entrar:hover,
+    .rodape-entrar:focus-visible {
+        color: var(--cor-acento);
+    }
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 767px) {
+    /* Seis ícones de 3rem só cabem em uma fila com folga menor */
+    .rodape-redes {
+        gap: var(--espaco-1);
+    }
+
+    /* Reserva espaço para o botão flutuante de voltar ao topo não cobrir
+       a linha de copyright quando a página está rolada até o fim. */
+    .rodape {
+        padding-bottom: 5.5rem;
+    }
+}
+
+/* #endregion */

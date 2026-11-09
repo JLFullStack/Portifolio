@@ -1,0 +1,226 @@
+/* #region Linha do tempo */
+
+.linha-tempo {
+    --meia-calha: var(--espaco-4);
+    --raio-marcador: 1.25rem;
+    position: relative;
+    display: grid;
+    gap: var(--espaco-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    /* A linha vertical central: o trilho apagado (::before) e o
+       preenchimento em gradiente (::after), que cresce com a rolagem. */
+
+    .linha-tempo::before,
+    .linha-tempo::after {
+        content: "";
+        position: absolute;
+        /* no mockup a linha ultrapassa o primeiro e o último card */
+        top: calc(-1 * var(--espaco-3));
+        bottom: calc(-1 * var(--espaco-3));
+        left: 50%;
+        width: 2px;
+        margin-left: -1px;
+        border-radius: 2px;
+    }
+
+    .linha-tempo::before {
+        background-color: var(--cor-borda-forte);
+    }
+
+    .linha-tempo::after {
+        background: linear-gradient(to bottom, var(--cor-acento-solido) 70%, var(--cor-violeta));
+        box-shadow: 0 0 12px var(--cor-acento-suave);
+        transform-origin: top;
+    }
+
+.linha-tempo-item {
+    position: relative;
+    width: calc(50% - var(--meia-calha));
+    /* o card da esquerda entra pela esquerda, o da direita pela direita */
+    --desloc-x: -2.5rem;
+}
+
+    /* Cards alternam os lados; a ordem no markup é a cronológica */
+
+    .linha-tempo-item:nth-child(even) {
+        margin-left: calc(50% + var(--meia-calha));
+        --desloc-x: 2.5rem;
+    }
+
+/* O marcador, com o ícone da seção, fica sobre a linha no centro vertical do card */
+
+.linha-tempo-marcador {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(var(--raio-marcador) * 2);
+    height: calc(var(--raio-marcador) * 2);
+    border: 2px solid var(--cor-acento-solido);
+    border-radius: 50%;
+    background-color: var(--cor-fundo);
+    box-shadow: 0 0 0 6px var(--cor-fundo), 0 0 24px var(--cor-acento-suave);
+    color: var(--cor-acento);
+    font-size: 0.95rem;
+    transform: translateY(-50%);
+}
+
+    /* Onda que pulsa a partir do marcador */
+
+    .linha-tempo-marcador::after {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border: 2px solid var(--cor-acento-solido);
+        border-radius: 50%;
+        opacity: 0;
+    }
+
+    .linha-tempo-item:nth-child(odd) > .linha-tempo-marcador {
+        right: calc(-1 * (var(--meia-calha) + var(--raio-marcador)));
+    }
+
+    .linha-tempo-item:nth-child(even) > .linha-tempo-marcador {
+        left: calc(-1 * (var(--meia-calha) + var(--raio-marcador)));
+    }
+
+.linha-tempo-card {
+    padding: var(--espaco-3);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s var(--curva-saida);
+}
+
+    .linha-tempo-card:hover {
+        border-color: var(--cor-acento-suave);
+        box-shadow: var(--sombra-brilho);
+        transform: translateY(-4px);
+    }
+
+/* O período vira uma pílula no acento */
+
+.linha-tempo-periodo {
+    display: inline-block;
+    margin: 0 0 var(--espaco-1);
+    padding: 0.15rem 0.75rem;
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-acento-fundo);
+    color: var(--cor-acento);
+    font-size: var(--texto-sm);
+    font-weight: var(--peso-forte);
+}
+
+.linha-tempo-titulo {
+    margin: 0;
+    font-size: var(--texto-lg);
+    font-weight: var(--peso-forte);
+}
+
+/* No mockup há um respiro claro entre o cargo e o bloco de detalhes */
+
+.linha-tempo-corpo {
+    margin-top: var(--espaco-2);
+    color: var(--cor-texto-suave);
+}
+
+    .linha-tempo-corpo strong {
+        color: var(--cor-texto);
+    }
+
+    .linha-tempo-corpo > p {
+        margin: 0 0 var(--espaco-2);
+    }
+
+        .linha-tempo-corpo > p:last-child {
+            margin-bottom: 0;
+        }
+
+.linha-tempo-descricao {
+    text-align: justify;
+}
+
+    .linha-tempo-corpo > .etiquetas {
+        margin: var(--espaco-2) 0 0;
+    }
+
+/* #endregion */
+
+/* #region Movimento */
+
+@media (prefers-reduced-motion: no-preference) {
+    .linha-tempo-marcador::after {
+        animation: pulsar 2.6s ease-out infinite;
+    }
+
+    @supports (animation-timeline: view()) {
+        /* A linha das timelines se preenche conforme a seção passa pela tela;
+           navegador sem suporte mostra a linha cheia */
+        .linha-tempo::after {
+            animation: preencher linear both;
+            animation-timeline: view();
+            animation-range: cover 20% cover 65%;
+        }
+    }
+}
+
+@keyframes pulsar {
+    0% {
+        opacity: 0.7;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.9);
+    }
+}
+
+@keyframes preencher {
+    from { transform: scaleY(0); }
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 767px) {
+    /* As timelines colapsam: a linha vai para a esquerda e todos os cards
+       ficam do mesmo lado. A alternância só existe no desktop. */
+    .linha-tempo {
+        --recuo-linha: 3.5rem;
+        gap: var(--espaco-4);
+    }
+
+        .linha-tempo::before,
+        .linha-tempo::after {
+            left: var(--raio-marcador);
+        }
+
+    /* todos os cards entram pela direita, do lado em que estão */
+    .linha-tempo-item,
+    .linha-tempo-item:nth-child(even) {
+        --desloc-x: 1.5rem;
+        width: auto;
+        margin-left: var(--recuo-linha);
+    }
+
+        .linha-tempo-item:nth-child(odd) > .linha-tempo-marcador,
+        .linha-tempo-item:nth-child(even) > .linha-tempo-marcador {
+            left: calc(-1 * var(--recuo-linha));
+            right: auto;
+        }
+
+    .linha-tempo-descricao {
+        text-align: left;
+    }
+}
+
+/* #endregion */

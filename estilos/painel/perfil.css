@@ -1,0 +1,437 @@
+/* #region Currículo e barra de salvar */
+
+/* Um currículo em PDF por idioma */
+
+.arquivo-curriculo {
+    align-content: start;
+    gap: var(--espaco-1);
+    padding: var(--espaco-2);
+    border: 1px dashed var(--cor-borda-forte);
+    border-radius: 0.875rem;
+    background-color: var(--cor-fundo);
+    transition: border-color 0.25s ease;
+}
+
+    .arquivo-curriculo:hover {
+        border-color: var(--cor-acento-suave);
+    }
+
+    .arquivo-curriculo .cartao-nota {
+        margin: 0;
+    }
+
+.campo > .arquivo-curriculo-titulo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--cor-texto);
+    font-size: var(--texto-md);
+}
+
+.arquivo-curriculo-icone {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.65rem;
+    background-color: var(--cor-erro-fundo);
+    color: var(--cor-erro);
+}
+
+/* Salvar perfil: fixo no canto de baixo, sempre ao alcance enquanto o formulário rola,
+   na mesma linha do botão de voltar ao topo, com a mesma altura e logo à esquerda
+   dele. As medidas do botão de topo (--topo-*) repetem as de .painel .botao-topo
+   (painel/compartilhado.css): mudou lá, muda aqui. */
+
+.barra-salvar {
+    --topo-tamanho: 3.5rem;
+    --topo-direita: var(--espaco-3);
+    --topo-base: calc(var(--espaco-4) + var(--altura-barra));
+    --salvar-direita: calc(var(--topo-direita) + var(--topo-tamanho) + var(--espaco-1));
+    position: fixed;
+    right: var(--salvar-direita);
+    bottom: var(--topo-base);
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--espaco-1);
+    max-width: min(34rem, calc(100vw - var(--salvar-direita) - var(--espaco-2)));
+}
+
+    .barra-salvar > .botao {
+        min-height: var(--topo-tamanho);
+        padding-inline: 1.4rem;
+        box-shadow: 0 14px 32px -14px var(--cor-sombra);
+    }
+
+    /* Depois de salvar, o aviso aparece junto do botão, num vidro para ficar legível
+       por cima do formulário */
+    .barra-salvar:has(> .aviso) {
+        padding: 0.5rem;
+        border: 1px solid var(--cor-borda-forte);
+        border-radius: 1.25rem;
+        background-color: var(--cor-cabecalho);
+        box-shadow: 0 18px 40px -18px var(--cor-sombra);
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+    }
+
+    .barra-salvar > .aviso {
+        flex: 1 1 16rem;
+        margin: 0;
+    }
+
+/* O botão fixo não pode cobrir o fim do formulário: sobra espaço embaixo dele */
+.painel-corpo:has(.barra-salvar) {
+    padding-bottom: calc(var(--espaco-4) + var(--altura-barra) + 3.5rem + var(--espaco-3));
+}
+
+/* #endregion */
+
+/* #region Fotos e aparência da foto do topo */
+
+/* Foto do topo e os ajustes dela, lado a lado (um embaixo do outro em tela estreita) */
+
+.foto-topo-grade {
+    display: grid;
+    grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--espaco-3);
+}
+
+.foto-biografia-campo {
+    max-width: 21rem;
+}
+
+/* Ajustes da foto do topo, ao lado dela no cartão */
+
+.aparencia-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.6rem;
+}
+
+    .aparencia-hero small {
+        color: var(--cor-texto-suave);
+    }
+
+    .aparencia-hero .botoes {
+        justify-content: flex-start;
+    }
+
+/* Resumo do que está escolhido, em duas colunas quando há largura */
+
+.aparencia-resumo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: 0.35rem var(--espaco-3);
+    max-width: 36rem;
+    margin: 0.2rem 0;
+    font-size: var(--texto-sm);
+}
+
+    .aparencia-resumo > div {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.6rem;
+    }
+
+    .aparencia-resumo dt {
+        color: var(--cor-texto-suave);
+    }
+
+    .aparencia-resumo dd {
+        margin: 0;
+        font-variant-numeric: tabular-nums;
+    }
+
+/* Grupos de barras da tela de configuração */
+/* minmax(0, 1fr): a largura padrão da barra deslizante não alarga o grupo */
+
+.ajustes-grupo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--cor-borda-forte);
+    border-radius: var(--raio-pequeno);
+    container-type: inline-size;
+}
+
+    .ajustes-ajuda {
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-xs);
+        line-height: 1.45;
+    }
+
+    .ajustes-grupo > strong {
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-xs);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+/* Rótulo, barra e valor sempre na mesma linha: quem cede espaço é a barra */
+
+.controle-opacidade {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--texto-sm);
+}
+
+    /* largura fixa: as barras começam na mesma linha */
+
+    .controle-opacidade > span {
+        flex: none;
+        width: 6.25rem;
+        white-space: nowrap;
+    }
+
+    .painel .controle-opacidade input[type="range"] {
+        flex: 1;
+        min-width: 0;
+        padding: 0;
+        accent-color: var(--cor-acento-solido);
+        cursor: pointer;
+    }
+
+    /* Pontas da barra de luz: sem espaço, o sinal do valor basta */
+
+    .controle-opacidade small {
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-xs);
+        white-space: nowrap;
+    }
+
+    @container (max-width: 26rem) {
+        .controle-opacidade small {
+            display: none;
+        }
+    }
+
+    /* Largura para o valor mais longo, "-100%", sempre em uma linha */
+
+    .controle-opacidade output {
+        flex: none;
+        width: 3.25rem;
+        color: var(--cor-texto-suave);
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+/* Configuração da aparência: a tela inteira, com os controles e a landing em um quadro
+   do tamanho da janela simulada, reduzido para caber. */
+
+.config-foto-landing {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+}
+
+    .config-foto-landing[open] {
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+    }
+
+.config-foto-barra {
+    display: grid;
+    gap: 0.6rem;
+    padding: 0.6rem var(--espaco-2);
+    border-bottom: 1px solid var(--cor-borda-forte);
+    background-color: var(--cor-superficie);
+}
+
+.config-foto-acoes {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+    .config-foto-acoes .segmentado {
+        flex-wrap: nowrap;
+    }
+
+    .config-foto-acoes .segmentado label > span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .config-foto-acoes .segmentado .config-foto-rotulo {
+        display: inline;
+        padding: 0;
+        color: inherit;
+    }
+
+    .config-foto-acoes .botao[aria-pressed="true"] {
+        border-color: var(--cor-acento);
+        color: var(--cor-acento);
+    }
+
+.config-foto-fechar {
+    margin-left: auto;
+}
+
+.config-foto-nota {
+    color: var(--cor-texto-suave);
+    font-size: var(--texto-xs);
+    line-height: 1.45;
+}
+
+/* Telas médias: os botões ficam só com o ícone para tudo caber em uma linha */
+
+@media (max-width: 1199px) {
+    .config-foto-acoes .botao .config-foto-rotulo {
+        display: none;
+    }
+}
+
+.config-foto-ajustes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espaco-2);
+}
+
+/* As abas são só de telas menores */
+
+.config-foto-abas {
+    display: none;
+}
+
+/* Celular e tablet: os controles descem para o fundo da tela, ao alcance do polegar, com as
+   abas por último; ações só com ícones e um grupo de ajustes por vez, para sobrar tela para o site */
+
+@media (max-width: 991px) {
+    .config-foto-landing[open] {
+        grid-template-rows: minmax(0, 1fr) auto;
+    }
+
+    .config-foto-barra {
+        order: 1;
+        padding-bottom: max(0.6rem, env(safe-area-inset-bottom));
+        border-top: 1px solid var(--cor-borda-forte);
+        border-bottom: 0;
+    }
+
+    /* Linha mais alta: a barra fica mais fácil de acertar com o dedo */
+    .config-foto-ajustes .ajustes-grupo {
+        gap: 0;
+    }
+
+    .painel .config-foto-ajustes .controle-opacidade input[type="range"] {
+        height: 2.5rem;
+    }
+
+    .config-foto-acoes .config-foto-rotulo {
+        display: none;
+    }
+
+    .config-foto-acoes .segmentado .config-foto-rotulo {
+        display: none;
+    }
+
+    .config-foto-acoes {
+        gap: 0.4rem;
+    }
+
+    .config-foto-acoes .botao {
+        padding-inline: 0.65rem;
+    }
+
+    .config-foto-acoes .segmentado label > span {
+        padding: 0.45rem 0.55rem;
+    }
+
+    .config-foto-abas {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: 100%;
+        text-align: center;
+    }
+
+    .config-foto-abas span {
+        padding-inline: 0.25rem;
+    }
+
+    .config-foto-ajustes {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .config-foto-ajustes .ajustes-grupo > strong,
+    .ajustes-grupo[data-oculto] {
+        display: none;
+    }
+
+    /* Com as abas, um grupo por vez: a borda só ocuparia a altura do site */
+    .config-foto-ajustes .ajustes-grupo {
+        padding: 0;
+        border: 0;
+    }
+}
+
+/* Telas muito estreitas: os ícones das ações se apertam para caber em uma linha */
+
+@media (max-width: 359px) {
+    .config-foto-acoes {
+        gap: 0.25rem;
+    }
+
+    .config-foto-acoes .segmentado label > span {
+        padding-inline: 0.4rem;
+    }
+
+    .config-foto-acoes .botao {
+        padding-inline: 0.5rem;
+    }
+}
+
+.config-foto-area {
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.config-foto-caixa {
+    overflow: hidden;
+    box-shadow: 0 0 0 1px var(--cor-borda-forte);
+}
+
+.config-foto-quadro {
+    display: block;
+    border: 0;
+    transform-origin: 0 0;
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media (max-width: 767px) {
+    .foto-topo-grade {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* No celular o botão de topo é menor e mais perto da borda e da barra de abas */
+    .barra-salvar {
+        --topo-tamanho: 3rem;
+        --topo-direita: var(--espaco-2);
+        --topo-base: calc(var(--espaco-2) + var(--altura-barra));
+    }
+}
+
+/* #endregion */

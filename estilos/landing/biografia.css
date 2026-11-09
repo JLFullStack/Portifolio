@@ -1,0 +1,240 @@
+/* #region Biografia */
+
+.bio-grade {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: center;
+    gap: var(--espaco-5);
+}
+
+.bio-retrato {
+    display: flex;
+    justify-content: center;
+}
+
+/* O anel é a borda transparente; o gradiente que gira por trás dela é o ::before */
+
+.bio-anel {
+    --diametro-anel: clamp(14rem, 8rem + 18vw, 22rem);
+    --raio-anel: calc(var(--diametro-anel) / 2);
+    --tamanho-icone-social: clamp(2.25rem, 1.85rem + 1.1vw, 2.75rem);
+    position: relative;
+    isolation: isolate;
+    width: var(--diametro-anel);
+    height: var(--diametro-anel);
+    padding: 0.5rem;
+    border: 4px solid transparent;
+    border-radius: 50%;
+    box-shadow: 0 0 80px -10px var(--cor-brilho-acento);
+}
+
+    .bio-anel::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: -4px;
+        padding: 4px;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, var(--cor-acento-solido), var(--cor-acento-hover), var(--cor-violeta), var(--cor-acento-solido) 75%);
+        -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(black 0 0) content-box exclude, linear-gradient(black 0 0);
+    }
+
+.bio-foto {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.bio-redes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Os seis ícones ficam no arco inferior, a 25° um do outro e centrados
+   embaixo — a distribuição medida no mockup. O ângulo sai do --indice que o
+   componente escreve em cada item, então mexer na lista de redes
+   reposiciona o arco sem tocar no CSS. */
+
+.bio-rede {
+    --angulo: calc(152.5deg - var(--indice) * 25deg);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--tamanho-icone-social);
+    height: var(--tamanho-icone-social);
+    margin: calc(var(--tamanho-icone-social) / -2);
+    transform: rotate(var(--angulo)) translate(var(--raio-anel)) rotate(calc(var(--angulo) * -1));
+}
+
+    .bio-rede > a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        border: 2px solid var(--cor-acento-solido);
+        border-radius: 50%;
+        background-color: var(--cor-fundo);
+        color: var(--cor-texto);
+        font-size: 1rem;
+        transition: background-color 0.2s ease, color 0.2s ease, transform 0.25s var(--curva-saida), box-shadow 0.25s ease;
+    }
+
+        .bio-rede > a:hover,
+        .bio-rede > a:focus-visible {
+            border-color: transparent;
+            background: var(--gradiente-acento);
+            color: var(--cor-acento-contraste);
+            box-shadow: var(--sombra-botao);
+            transform: translateY(-4px) scale(1.08);
+        }
+
+.bio-paragrafo {
+    margin: 0 0 var(--espaco-2);
+    color: var(--cor-texto-suave);
+    text-align: justify;
+    text-indent: 1.5rem;
+}
+
+/* Duas colunas: Nome, Nascimento, Idade e Endereço na primeira; Celular e
+   E-mail na segunda — a ordem do mockup. O fluxo por coluna com 4 linhas
+   reproduz isso sem precisar de marcação extra. */
+
+.bio-dados {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(4, auto);
+    justify-content: start;
+    gap: var(--espaco-2) var(--espaco-5);
+    margin: var(--espaco-4) 0 0;
+}
+
+.bio-dado {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 0.4rem;
+}
+
+    .bio-dado > dt {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: var(--peso-forte);
+    }
+
+    .bio-dado > dd {
+        margin: 0;
+        color: var(--cor-texto-suave);
+    }
+
+.bio-dado-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--raio-pequeno);
+    background-color: var(--cor-acento-fundo);
+    color: var(--cor-acento);
+    font-size: 0.9rem;
+}
+
+/* Números da carreira, numa fileira de cards de vidro */
+
+.bio-numeros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--espaco-2);
+    margin: var(--espaco-5) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bio-numero {
+    padding: var(--espaco-3);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+    background-color: var(--cor-vidro);
+    text-align: center;
+}
+
+    .bio-numero > strong {
+        display: block;
+        font-size: clamp(2.25rem, 1.6rem + 2vw, 3.25rem);
+        font-weight: var(--peso-display);
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+    }
+
+    .bio-numero > span {
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-sm);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+/* #endregion */
+
+/* #region Movimento */
+
+@media (prefers-reduced-motion: no-preference) {
+    .bio-anel::before {
+        animation: girar 14s linear infinite;
+    }
+}
+
+@keyframes girar {
+    to { transform: rotate(1turn); }
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 991px) {
+    .bio-grade {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--espaco-4);
+    }
+
+    /* A foto sobe para cima do texto e fica centrada; o texto continua alinhado à
+       esquerda, que é mais legível do que um bloco centralizado. */
+    .bio-retrato {
+        order: -1;
+        justify-self: center;
+    }
+
+    .bio-paragrafo {
+        text-align: left;
+        text-indent: 0;
+    }
+
+    .bio-dados {
+        justify-content: start;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .bio-numeros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .bio-numero {
+        padding: var(--espaco-2);
+    }
+
+    /* Uma coluna só: os seis campos empilham */
+    .bio-dados {
+        grid-auto-flow: row;
+        grid-template-rows: none;
+        gap: var(--espaco-1);
+    }
+}
+
+/* #endregion */

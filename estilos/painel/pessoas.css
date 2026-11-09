@@ -1,0 +1,93 @@
+/* #region Pessoas e convites */
+
+/* Link de convite pronto para copiar */
+
+.convite-gerado {
+    margin-top: var(--espaco-2);
+    padding: var(--espaco-2);
+    border: 1px dashed var(--cor-acento-suave);
+    border-radius: 0.875rem;
+    background-color: var(--cor-acento-fundo);
+    font-size: var(--texto-sm);
+}
+
+    .convite-gerado > p {
+        margin: 0;
+    }
+
+        .convite-gerado > p > .icone {
+            margin-right: 0.35rem;
+            color: var(--cor-acento);
+        }
+
+.link-copiavel {
+    display: flex;
+    gap: var(--espaco-1);
+    margin-top: var(--espaco-1);
+}
+
+    .link-copiavel input {
+        flex: 1;
+        font-family: ui-monospace, monospace;
+        font-size: var(--texto-xs);
+    }
+
+.pessoas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr));
+    gap: var(--espaco-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.pessoa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding: var(--espaco-2);
+    border: 1px solid var(--cor-borda);
+    border-radius: 1rem;
+    background-color: var(--cor-fundo);
+    transition: border-color 0.25s ease, translate 0.3s var(--curva-saida), box-shadow 0.25s ease;
+}
+
+    .pessoa:hover {
+        border-color: var(--cor-acento-suave);
+        box-shadow: var(--sombra-card);
+        translate: 0 -2px;
+    }
+
+    .pessoa > .botoes {
+        margin-top: auto;
+        padding-top: 0.85rem;
+        border-top: 1px solid var(--cor-borda);
+    }
+
+    .pessoa .aviso,
+    .pessoa .convite-gerado {
+        margin-top: 0;
+    }
+
+.pessoa-inativa {
+    opacity: 0.7;
+}
+
+.pessoa-cabeca {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media (max-width: 767px) {
+    .link-copiavel {
+        flex-direction: column;
+    }
+}
+
+/* #endregion */

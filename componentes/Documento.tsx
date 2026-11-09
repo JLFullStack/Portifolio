@@ -1,8 +1,23 @@
 import type { ReactNode } from "react";
 import { ernestone, inter } from "@/app/fontes";
+// Estilos de toda a aplicação, seguidos dos da landing, na ordem das seções.
+// A ordem importa: cada seção traz a própria animação e o próprio responsivo no fim.
 import "@/estilos/app.css";
 import "@/estilos/animacao.css";
 import "@/estilos/responsivo.css";
+import "@/estilos/landing/compartilhado.css";
+import "@/estilos/landing/cabecalho.css";
+import "@/estilos/landing/hero.css";
+import "@/estilos/landing/servicos.css";
+import "@/estilos/landing/biografia.css";
+import "@/estilos/landing/projetos.css";
+import "@/estilos/landing/github.css";
+import "@/estilos/landing/depoimentos.css";
+import "@/estilos/landing/habilidades.css";
+import "@/estilos/landing/certificacoes.css";
+import "@/estilos/landing/educacao-experiencia.css";
+import "@/estilos/landing/chamada-final.css";
+import "@/estilos/landing/rodape.css";
 
 // Tema: aplica o data-tema ANTES da primeira pintura, senão quem escolheu o tema
 // claro vê o escuro piscar a cada carregamento. Inline e antes do conteúdo. Padrão: escuro.

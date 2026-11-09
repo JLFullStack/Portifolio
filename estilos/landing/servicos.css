@@ -1,0 +1,126 @@
+/* #region O que eu faço (serviços) */
+
+.servicos-grade {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--espaco-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* A borda em gradiente é o ::before (máscara que deixa só 1px): ela acende no hover.
+   O hover usa translate, porque o transform é da animação .revelar. */
+
+.servico-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--espaco-4) var(--espaco-3) var(--espaco-3);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+    transition: translate 0.35s var(--curva-saida), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+    .servico-card::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        padding: 1px;
+        border-radius: inherit;
+        background: var(--gradiente-vivo);
+        -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(black 0 0) content-box exclude, linear-gradient(black 0 0);
+        opacity: 0;
+        transition: opacity 0.35s ease;
+        pointer-events: none;
+    }
+
+    .servico-card:hover {
+        border-color: transparent;
+        box-shadow: var(--sombra-brilho);
+        translate: 0 -6px;
+    }
+
+        .servico-card:hover::before {
+            opacity: 1;
+        }
+
+.servico-numero {
+    position: absolute;
+    top: var(--espaco-2);
+    right: var(--espaco-3);
+    color: transparent;
+    -webkit-text-stroke: 1px var(--cor-acento-suave);
+    font-size: 2.75rem;
+    font-weight: var(--peso-fantasma);
+    line-height: 1;
+}
+
+.servico-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: var(--espaco-3);
+    border-radius: 1rem;
+    background: var(--gradiente-acento);
+    box-shadow: var(--sombra-botao);
+    color: var(--cor-acento-contraste);
+    font-size: 1.5rem;
+    transition: transform 0.4s var(--curva-saida);
+}
+
+    .servico-card:hover .servico-icone {
+        transform: rotate(-8deg) scale(1.08);
+    }
+
+.servico-titulo {
+    margin: 0 0 var(--espaco-1);
+    font-size: var(--texto-lg);
+}
+
+.servico-descricao {
+    flex: 1;
+    margin: 0 0 var(--espaco-3);
+    color: var(--cor-texto-suave);
+    font-size: 0.95rem;
+}
+
+.servico-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: fit-content;
+    font-size: var(--texto-sm);
+    font-weight: var(--peso-forte);
+}
+
+    .servico-link > .icone {
+        transition: transform 0.3s var(--curva-saida);
+    }
+
+    .servico-card:hover .servico-link > .icone {
+        transform: translateX(4px);
+    }
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 991px) {
+    .servicos-grade {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .servicos-grade {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* #endregion */

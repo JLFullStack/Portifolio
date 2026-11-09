@@ -1,0 +1,69 @@
+/* #region Certificação */
+
+.certificacoes-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr));
+    gap: var(--espaco-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.certificacao-card {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-3);
+    padding: var(--espaco-3);
+    border: 1px solid transparent;
+    border-radius: var(--raio);
+    background:
+        linear-gradient(var(--cor-superficie), var(--cor-superficie)) padding-box,
+        var(--gradiente-borda) border-box;
+    box-shadow: var(--sombra-card);
+    transition: translate 0.35s var(--curva-saida), box-shadow 0.35s ease;
+}
+
+    .certificacao-card:hover {
+        box-shadow: var(--sombra-brilho);
+        translate: 0 -4px;
+    }
+
+/* Ladrilho em gradiente com o ícone do certificado */
+
+.certificacao-icone {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 1rem;
+    background: var(--gradiente-acento);
+    box-shadow: var(--sombra-botao);
+    color: var(--cor-acento-contraste);
+    font-size: 2.1rem;
+    line-height: 1;
+}
+
+.certificacao-sigla {
+    margin: 0 0 0.25rem;
+    font-size: var(--texto-lg);
+}
+
+.certificacao-descricao {
+    margin: 0;
+    color: var(--cor-texto-suave);
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 767px) {
+    .certificacao-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* #endregion */

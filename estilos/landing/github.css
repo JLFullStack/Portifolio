@@ -1,0 +1,172 @@
+/* #region Código aberto (GitHub) */
+
+.github-topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--espaco-3);
+    margin-bottom: var(--espaco-4);
+}
+
+    .github-topo > .titulo-secao {
+        margin: 0;
+    }
+
+.github-perfil {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--espaco-3);
+}
+
+.github-numeros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-1) var(--espaco-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--cor-texto-suave);
+    font-size: var(--texto-sm);
+}
+
+    .github-numeros strong {
+        font-size: 1.5rem;
+        font-weight: var(--peso-display);
+    }
+
+.github-grade {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espaco-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .github-grade > li {
+        display: flex;
+    }
+
+/* O card inteiro é o link do repositório */
+
+.repositorio-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    padding: var(--espaco-3);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+    color: var(--cor-texto);
+    transition: translate 0.35s var(--curva-saida), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+    .repositorio-card:hover,
+    .repositorio-card:focus-visible {
+        border-color: var(--cor-acento-suave);
+        box-shadow: var(--sombra-brilho);
+        color: var(--cor-texto);
+        translate: 0 -4px;
+    }
+
+.repositorio-cabeca {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+}
+
+.repositorio-icone {
+    color: var(--cor-acento);
+}
+
+.repositorio-nome {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 1.05rem;
+    font-weight: var(--peso-forte);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.repositorio-sair {
+    color: var(--cor-acento);
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition: opacity 0.25s ease, transform 0.3s var(--curva-saida);
+}
+
+    .repositorio-card:hover .repositorio-sair,
+    .repositorio-card:focus-visible .repositorio-sair {
+        opacity: 1;
+        transform: none;
+    }
+
+/* Até três linhas de descrição: os cards ficam com a mesma altura */
+
+.repositorio-descricao {
+    display: -webkit-box;
+    flex: 1;
+    overflow: hidden;
+    color: var(--cor-texto-suave);
+    font-size: var(--texto-sm);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+}
+
+.repositorio-rodape {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1rem;
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-xs);
+}
+
+.repositorio-linguagem {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--cor-texto-suave);
+    font-weight: var(--peso-forte);
+}
+
+    .repositorio-linguagem::before {
+        content: "";
+        width: 0.65rem;
+        height: 0.65rem;
+        border-radius: 50%;
+        background-color: var(--cor-linguagem, var(--cor-acento-solido));
+    }
+
+.repositorio-data {
+    margin-left: auto;
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 991px) {
+    .github-grade {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .github-grade {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .github-topo {
+        align-items: flex-start;
+    }
+}
+
+/* #endregion */

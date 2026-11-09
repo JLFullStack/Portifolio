@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { FormConvite } from "@/componentes/painel/Acesso";
 import { Moldura } from "@/componentes/painel/Moldura";
+import "@/estilos/painel/acesso.css";
 
 export const metadata: Metadata = {
     title: "Criar senha — Lucas Araújo",

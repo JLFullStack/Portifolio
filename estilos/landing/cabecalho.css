@@ -1,0 +1,576 @@
+/* #region Cabeçalho fixo */
+
+.cabecalho {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 1030;
+    height: var(--altura-cabecalho);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+    /* Ganha fundo de vidro depois que a página rola (classe aplicada em CabecalhoFixo.tsx) */
+
+    .cabecalho.rolado {
+        background-color: var(--cor-cabecalho);
+        box-shadow: 0 1px 0 0 var(--cor-borda);
+        -webkit-backdrop-filter: blur(14px) saturate(140%);
+        backdrop-filter: blur(14px) saturate(140%);
+    }
+
+    .cabecalho > .conteudo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--espaco-2);
+        height: 100%;
+    }
+
+.cabecalho-inicio {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-1);
+}
+
+.cabecalho-marca:hover > .monograma,
+.cabecalho-marca:focus-visible > .monograma {
+    transform: rotate(-8deg) scale(1.06);
+}
+
+/* Seções principais no desktop, numa pílula de vidro. O ::before é a pílula em
+   gradiente da seção atual: NavegacaoTopo.tsx escreve --x e --largura. */
+
+.nav-topo {
+    display: none;
+}
+
+    .nav-topo > ul {
+        position: relative;
+        display: flex;
+        gap: 0.15rem;
+        margin: 0;
+        padding: 0.3rem;
+        border: 1px solid var(--cor-borda);
+        border-radius: var(--raio-pilula);
+        background-color: var(--cor-vidro);
+        list-style: none;
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+    }
+
+        .nav-topo > ul::before {
+            content: "";
+            position: absolute;
+            top: 0.3rem;
+            bottom: 0.3rem;
+            left: 0;
+            width: var(--largura, 0);
+            border-radius: var(--raio-pilula);
+            background: var(--gradiente-acento);
+            box-shadow: var(--sombra-botao);
+            opacity: 0;
+            transform: translateX(var(--x, 0));
+            transition: transform 0.45s var(--curva-saida), width 0.45s var(--curva-saida), opacity 0.3s ease;
+        }
+
+        .nav-topo > ul.com-ativo::before {
+            opacity: 1;
+        }
+
+    .nav-topo a {
+        position: relative;
+        display: block;
+        padding: 0.4rem 0.95rem;
+        border-radius: var(--raio-pilula);
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-sm);
+        font-weight: var(--peso-medio);
+        white-space: nowrap;
+        transition: color 0.25s ease;
+    }
+
+        .nav-topo a:hover {
+            color: var(--cor-texto);
+        }
+
+        .nav-topo a[aria-current] {
+            color: var(--cor-acento-contraste);
+        }
+
+@media (min-width: 1100px) {
+    .nav-topo {
+        display: block;
+    }
+
+    /* O menu lateral é só do celular e do tablet: aqui a navegação é a do topo.
+       .cabecalho na frente: a regra vem antes de .botao-icone (display: inline-flex)
+       no arquivo e, com a mesma especificidade, perderia para ela. */
+    .cabecalho .botao-menu {
+        display: none;
+    }
+}
+
+/* Barra de progresso da leitura, na borda de baixo do cabeçalho. Sem suporte
+   a animation-timeline ela simplesmente não aparece (região Movimento, abaixo). */
+
+.cabecalho-progresso {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--gradiente-vivo);
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+.cabecalho-controles {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-2);
+}
+
+/* Botões só de ícone do cabeçalho (menu e tema) */
+
+.botao-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 1px solid var(--cor-borda);
+    border-radius: 50%;
+    background-color: var(--cor-vidro);
+    color: var(--cor-texto);
+    font-size: 1.05rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.3s var(--curva-saida);
+}
+
+    .botao-icone:hover {
+        border-color: var(--cor-acento-suave);
+        color: var(--cor-acento);
+    }
+
+    /* o sol/lua dá meia-volta ao passar o mouse */
+
+    .botao-icone:hover > .icone-tema {
+        transform: rotate(40deg);
+    }
+
+.icone-tema {
+    transition: transform 0.4s var(--curva-saida);
+}
+
+/* Alternador de idioma PT | EN, numa pílula */
+
+.alternador-idioma {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-vidro);
+}
+
+.botao-idioma {
+    display: inline-block;
+    min-width: 2.25rem;
+    text-align: center;
+    text-decoration: none;
+    padding: 0.2rem var(--espaco-1);
+    border: 0;
+    border-radius: var(--raio-pilula);
+    background-color: transparent;
+    color: var(--cor-texto-suave);
+    font-family: inherit;
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+    .botao-idioma:hover {
+        color: var(--cor-acento);
+    }
+
+    .botao-idioma.ativo,
+    .botao-idioma.ativo:hover {
+        background: var(--gradiente-acento);
+        color: var(--cor-acento-contraste);
+    }
+
+/* Ícone do alternador de tema: mostra a AÇÃO, não o estado atual.
+   No escuro aparece o sol (ir para o claro); no claro, a lua.
+   Sem data-tema (JS desligado) vale o padrão do produto: escuro. */
+
+.icone-ir-escuro {
+    display: none;
+}
+
+:root[data-tema="claro"] .icone-ir-claro {
+    display: none;
+}
+
+:root[data-tema="claro"] .icone-ir-escuro {
+    display: inline-block;
+}
+
+/* #endregion */
+
+/* #region Menu de navegação */
+
+/*
+   <dialog> nativo (MenuNavegacao.tsx):
+   showModal() já dá o fundo escurecido, prende o foco dentro do menu e fecha
+   com Esc. O painel desliza da esquerda sobre uma aurora e uma grade de
+   pontos; os itens entram em sequência (região Movimento, abaixo).
+
+*/
+
+/* Só existe abaixo de 1100px (no desktop a navegação é a do topo) e ocupa a tela
+   inteira, deslizando da esquerda. */
+
+.menu-navegacao {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    background:
+        radial-gradient(26rem 18rem at 0% 100%, var(--cor-brilho-acento), transparent 70%),
+        radial-gradient(20rem 16rem at 100% 0%, var(--cor-brilho-violeta), transparent 70%),
+        var(--cor-superficie);
+    color: var(--cor-texto);
+    transform: translateX(-100%);
+    transition: transform 0.45s var(--curva-saida), overlay 0.45s ease allow-discrete, display 0.45s ease allow-discrete;
+}
+
+    .menu-navegacao[open] {
+        display: flex;
+        flex-direction: column;
+        transform: translateX(0);
+    }
+
+    /* Em tela larga (tablet), o conteúdo não estica: fica numa coluna central */
+
+    .menu-navegacao > * {
+        width: 100%;
+        max-width: 36rem;
+        margin-inline: auto;
+    }
+
+    /* grade de pontos ao fundo, sumindo para baixo */
+
+    .menu-navegacao::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background-image: radial-gradient(var(--cor-ponto) 1px, transparent 1.5px);
+        background-size: 22px 22px;
+        -webkit-mask-image: linear-gradient(to bottom, black, transparent 60%);
+        mask-image: linear-gradient(to bottom, black, transparent 60%);
+        pointer-events: none;
+    }
+
+@starting-style {
+    .menu-navegacao[open] {
+        transform: translateX(-100%);
+    }
+}
+
+    /* A página não rola por trás do menu aberto */
+
+    html:has(.menu-navegacao[open]) {
+        overflow: hidden;
+    }
+
+    /* O menu cobre a tela toda: o véu só escurece durante o deslize (sem desfoque, que
+       é caro no celular e nem apareceria) */
+
+    .menu-navegacao::backdrop {
+        background-color: var(--cor-veu);
+        opacity: 0;
+        transition: opacity 0.45s ease, overlay 0.45s ease allow-discrete, display 0.45s ease allow-discrete;
+    }
+
+    .menu-navegacao[open]::backdrop {
+        opacity: 1;
+    }
+
+@starting-style {
+    .menu-navegacao[open]::backdrop {
+        opacity: 0;
+    }
+}
+
+.menu-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--espaco-2) var(--espaco-3);
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.menu-marca {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+    .menu-navegacao .menu-titulo {
+        color: var(--cor-texto-suave);
+        font-size: var(--texto-xs);
+        font-weight: var(--peso-forte);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+    }
+
+/* O X dá um quarto de volta ao passar o mouse */
+
+.menu-fechar > .icone {
+    transition: transform 0.35s var(--curva-saida);
+}
+
+.menu-fechar:hover > .icone {
+    transform: rotate(90deg);
+}
+
+.menu-corpo {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--espaco-2) var(--espaco-2);
+}
+
+.lista-navegacao {
+    display: grid;
+    gap: 0.15rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Cada link: número, ícone num ladrilho, rótulo e a seta que aparece no hover */
+
+.link-navegacao {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.6rem 2.25rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.875rem;
+    color: var(--cor-texto);
+    font-size: 1.05rem;
+    font-weight: var(--peso-forte);
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+    /* barra em gradiente da seção atual, na borda esquerda */
+
+    .link-navegacao::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 22%;
+        bottom: 22%;
+        width: 3px;
+        border-radius: 3px;
+        background: var(--gradiente-vivo);
+        transform: scaleY(0);
+        transition: transform 0.3s var(--curva-saida);
+    }
+
+.link-navegacao-numero {
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-xs);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    transition: color 0.25s ease;
+}
+
+.link-navegacao-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.65rem;
+    background-color: var(--cor-acento-fundo);
+    color: var(--cor-acento);
+    font-size: 0.95rem;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.35s var(--curva-saida), box-shadow 0.25s ease;
+}
+
+.link-navegacao-seta {
+    color: var(--cor-acento);
+    opacity: 0;
+    transform: translateX(-0.5rem);
+    transition: opacity 0.25s ease, transform 0.3s var(--curva-saida);
+}
+
+    .link-navegacao:hover,
+    .link-navegacao:focus-visible {
+        background-color: var(--cor-vidro);
+        color: var(--cor-texto);
+    }
+
+        .link-navegacao:hover .link-navegacao-icone,
+        .link-navegacao:focus-visible .link-navegacao-icone {
+            background: var(--gradiente-acento);
+            box-shadow: var(--sombra-botao);
+            color: var(--cor-acento-contraste);
+            transform: rotate(-8deg) scale(1.06);
+        }
+
+        .link-navegacao:hover .link-navegacao-seta,
+        .link-navegacao:focus-visible .link-navegacao-seta {
+            opacity: 1;
+            transform: none;
+        }
+
+    /* A seção que está na tela */
+
+    .link-navegacao[aria-current] {
+        background-color: var(--cor-acento-fundo);
+        color: var(--cor-acento);
+    }
+
+        .link-navegacao[aria-current]::before {
+            transform: scaleY(1);
+        }
+
+        .link-navegacao[aria-current] .link-navegacao-numero {
+            color: var(--cor-acento);
+        }
+
+        .link-navegacao[aria-current] .link-navegacao-icone {
+            background: var(--gradiente-acento);
+            color: var(--cor-acento-contraste);
+        }
+
+/* Rodapé do menu: selo, ações, redes */
+
+.menu-rodape {
+    display: grid;
+    gap: var(--espaco-2);
+    padding: var(--espaco-2) var(--espaco-3) var(--espaco-3);
+    border-top: 1px solid var(--cor-borda);
+}
+
+    .menu-rodape .selo-disponivel {
+        margin: 0;
+    }
+
+.menu-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-1);
+}
+
+    .menu-acoes > a {
+        flex: 1 1 auto;
+        justify-content: center;
+        padding: 0.7rem 1rem;
+        font-size: var(--texto-sm);
+    }
+
+.menu-rotulo-redes {
+    margin: 0;
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.menu-redes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+    .menu-redes a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 1px solid var(--cor-borda-forte);
+        border-radius: 50%;
+        color: var(--cor-texto);
+        transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s var(--curva-saida);
+    }
+
+        .menu-redes a:hover,
+        .menu-redes a:focus-visible {
+            border-color: transparent;
+            background: var(--gradiente-acento);
+            box-shadow: var(--sombra-botao);
+            color: var(--cor-acento-contraste);
+            transform: translateY(-3px);
+        }
+
+/* #endregion */
+
+/* #region Movimento */
+
+@media (prefers-reduced-motion: no-preference) {
+    /* Menu lateral: os itens e o rodapé entram em sequência ao abrir */
+    .menu-navegacao[open] .lista-navegacao > li,
+    .menu-navegacao[open] .menu-rodape {
+        animation: entrar-menu 0.5s var(--curva-saida) both;
+        animation-delay: calc(120ms + var(--indice, 0) * 40ms);
+    }
+}
+
+/* A barra de progresso também é só decorativa, mas não é "movimento": segue
+   a rolagem do próprio visitante, então vale mesmo com movimento reduzido. */
+
+@supports (animation-timeline: scroll()) {
+    .cabecalho-progresso {
+        animation: progresso linear both;
+        animation-timeline: scroll(root);
+    }
+}
+
+@keyframes progresso {
+    to { transform: scaleX(1); }
+}
+
+@keyframes entrar-menu {
+    from {
+        opacity: 0;
+        transform: translateX(-1.5rem);
+    }
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 767px) {
+    .cabecalho-controles {
+        gap: var(--espaco-1);
+    }
+
+    /* No celular o contato fica no menu e na própria página */
+    .cabecalho-contato {
+        display: none;
+    }
+}
+
+/* #endregion */

@@ -1,0 +1,101 @@
+/* #region Depoimentos */
+
+/* Selos de resumo no alto de uma página */
+
+.resumo-linha {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: calc(-1 * var(--espaco-2)) 0 var(--espaco-3);
+}
+
+    .resumo-linha .selo {
+        padding: 0.35rem 0.8rem;
+        font-size: var(--texto-sm);
+    }
+
+.depoimento-pendente {
+    box-shadow: inset 3px 0 0 var(--cor-alerta);
+}
+
+    .depoimento-pendente[open] {
+        box-shadow: inset 3px 0 0 var(--cor-alerta), 0 0 0 4px var(--cor-acento-fundo);
+    }
+
+.depoimento-recusado {
+    opacity: 0.8;
+}
+
+.depoimento > summary .avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+.depoimento-historico {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-sm);
+}
+
+    .depoimento-historico li {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .depoimento-historico .icone {
+        color: var(--cor-acento);
+    }
+
+.depoimento-grade {
+    display: grid;
+    grid-template-columns: 14rem minmax(0, 1fr);
+    align-items: start;
+    gap: var(--espaco-3);
+    margin-top: var(--espaco-2);
+}
+
+/* Excluir e afins à esquerda; Salvar e Aprovar à direita */
+
+.botoes-depoimento {
+    justify-content: space-between;
+    margin-top: var(--espaco-3);
+    padding-top: var(--espaco-2);
+    border-top: 1px solid var(--cor-borda);
+}
+
+.botoes-grupo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-1);
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media (max-width: 767px) {
+    .depoimento-grade {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .botoes-depoimento {
+        justify-content: center;
+    }
+
+    .botoes-grupo {
+        justify-content: center;
+        width: 100%;
+    }
+
+        .botoes-depoimento > .botoes-grupo:last-child {
+            order: -1;
+        }
+}
+
+/* #endregion */

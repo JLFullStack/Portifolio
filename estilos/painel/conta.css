@@ -1,0 +1,40 @@
+/* #region Conta */
+
+.conta-perfil {
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-3);
+}
+
+    .conta-perfil h2 {
+        margin: 0 0 0.15rem;
+        font-size: var(--texto-lg);
+    }
+
+    .conta-perfil .cartao-nota {
+        margin-bottom: 0.6rem;
+    }
+
+.conta-dica {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+    .conta-dica > .icone {
+        color: var(--cor-acento);
+    }
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media (max-width: 767px) {
+    .conta-perfil {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* #endregion */

@@ -1,0 +1,134 @@
+/* #region Imagens do projeto */
+
+.bloco-imagens > h3 > .icone {
+    box-sizing: content-box;
+    height: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.7rem;
+    background-color: var(--cor-acento-fundo);
+    color: var(--cor-acento);
+    font-size: 1rem;
+}
+
+/* Imagens de um projeto e o fundo, abaixo do formulário dele */
+
+.bloco-imagens {
+    margin-top: var(--espaco-3);
+    padding-top: var(--espaco-3);
+    border-top: 1px dashed var(--cor-borda-forte);
+}
+
+    .bloco-imagens > h3 {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin: 0 0 var(--espaco-1);
+        font-size: var(--texto-md);
+    }
+
+    .bloco-imagens > .campo-imagem {
+        margin-top: var(--espaco-2);
+    }
+
+.galeria {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espaco-2);
+    margin: 0 0 var(--espaco-2);
+    padding: 0;
+    list-style: none;
+}
+
+    .galeria > li {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+/* No desktop cada imagem do projeto é um card deitado: a prévia à esquerda e,
+   à direita, as ações, a ordem e a descrição */
+
+@media (min-width: 768px) {
+    .galeria .campo-imagem {
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-rows: repeat(4, auto) 1fr;
+        justify-items: stretch;
+        column-gap: var(--espaco-3);
+        padding: var(--espaco-2) var(--espaco-3);
+        text-align: left;
+    }
+
+        .galeria .campo-imagem > * {
+            grid-column: 2;
+        }
+
+        .galeria .campo-imagem > .campo-imagem-previa {
+            grid-column: 1;
+            grid-row: 1 / -1;
+            align-self: start;
+        }
+
+        .galeria .campo-imagem .previa {
+            width: 12rem;
+        }
+
+        .galeria .campo-imagem .bilingue {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .galeria .campo-imagem > .enviar-imagem .botoes {
+            justify-content: flex-start;
+        }
+
+        .galeria .campo-imagem > .botoes {
+            justify-content: flex-end;
+        }
+}
+
+/* Posição da imagem, no canto da prévia */
+
+.galeria-posicao {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-cabecalho);
+    color: var(--cor-texto);
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+.galeria-capa {
+    background: var(--gradiente-acento);
+    box-shadow: var(--sombra-botao);
+    color: var(--cor-acento-contraste);
+}
+
+.galeria-ordem {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.bloco-imagens > .enviar-imagem > .botoes {
+    justify-content: flex-start;
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media (max-width: 767px) {
+    .bloco-imagens > .enviar-imagem > .botoes {
+        justify-content: center;
+    }
+}
+
+/* #endregion */

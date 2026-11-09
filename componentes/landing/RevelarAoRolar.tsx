@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 /**
  * Revela os elementos com .revelar quando eles já estão de fato na tela: ganham
- * a classe .visivel e o CSS toca a animação de entrada (estilos/animacao.css).
+ * a classe .visivel e o CSS toca a animação de entrada (estilos/landing/compartilhado.css).
  *
  * Só esconde depois que este componente roda (classe .revelar-ativo no <html>):
  * sem JavaScript, ou com movimento reduzido, a página fica inteira e estática.

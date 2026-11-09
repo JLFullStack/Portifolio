@@ -40,7 +40,7 @@ O nome do projeto é grafado **`Portifolio`** (com "i") no repositório e no Wor
 - **Cloudflare Workers** serve `out/` como arquivos estáticos. Só as rotas de `run_worker_first` (`/auth/*`, `/api/*`, `/admin*`, `/depoimento*`) passam pelo Worker;
 - **D1** (`portifolio`) guarda conteúdo, imagens (WebP), usuários, sessões, convites e publicações. **Sem R2** (exigiria cartão);
 - **Publicação**: `npm run deploy` (exporta o D1 remoto → `next build` → `wrangler deploy`), automatizado em `.github/workflows/publicar.yml` (push no master e botão Publicar do painel);
-- **Sem framework de CSS**: `estilos/app.css` (tokens e seções), `animacao.css`, `responsivo.css` e `painel.css` (só área restrita);
+- **Sem framework de CSS**: `estilos/app.css`, `animacao.css` e `responsivo.css` (o que é de toda a aplicação), `estilos/landing/` (compartilhado + um arquivo por seção) e `estilos/painel/` (compartilhado + um arquivo por tela);
 - **Ícones**: só Font Awesome Pro 5.13, como SVG inline (`<Icone nome="fal:download" />`), gerados em `componentes/icones/dados.ts`. O pacote Pro fica fora do git (`.local/`), por licença;
 - **Idiomas**: `/` (pt-BR) e `/en`, dois layouts raiz; textos fixos em `dicionarios/index.ts`, conteúdo editável com colunas `_pt`/`_en`.
 
@@ -91,14 +91,14 @@ Regras:
 - o JavaScript da landing deve ficar em ≤ 120 KB comprimido. Nada de biblioteca nova na landing sem medir;
 - imagens com `srcset`, `width`/`height` e `loading="lazy"` abaixo da dobra; a foto do hero tem `fetchPriority="high"` e reserva o espaço (CLS 0);
 - cores só por custom properties (`--cor-*`), com tema escuro em `:root` e claro em `:root[data-tema="claro"]`. **Um único acento ciano**;
-- todo comportamento mobile definido em `responsivo.css`;
+- o comportamento mobile de cada seção fica na região Responsivo do arquivo dela; `responsivo.css` só tem o que é de toda a aplicação;
 - acessibilidade: foco visível, `aria-label` em controles só de ícone, carrosséis operáveis por teclado, `prefers-reduced-motion` respeitado.
 
 ## Área restrita (painel e depoentes)
 
 - páginas estáticas com componentes de cliente que chamam `/api/*` por `lib/api.ts`;
 - navegação com `<a>` comum, **não `next/link`**: o pré-carregamento de rotas do Next pede arquivos que não existem na exportação estática;
-- o CSS fica em `estilos/painel.css`, importado só por `componentes/painel/Moldura.tsx` — a landing não o baixa;
+- o CSS fica em `estilos/painel/`: `compartilhado.css` importado por `componentes/painel/Moldura.tsx` e o arquivo de cada tela importado pela página dela — a landing não baixa nada daqui;
 - imagens são reduzidas e convertidas para WebP no navegador (`componentes/painel/redimensionar.ts`) antes do upload;
 - o que é salvo só aparece no site depois de **Publicar**.
 
@@ -118,7 +118,7 @@ Antes de criar algo novo:
 
 1. verificar se já existe (componente, utilitário de `lib/`, classe de CSS, função do Worker);
 2. verificar se pode ser reutilizado ou estendido;
-3. verificar se pertence ao lugar certo (landing × painel, servidor × cliente, `app.css` × `responsivo.css` × `painel.css`);
+3. verificar se pertence ao lugar certo (landing × painel, servidor × cliente, `app.css` × `estilos/landing/` × `estilos/painel/`, compartilhado × arquivo da seção ou tela);
 4. verificar o impacto no peso da landing;
 5. verificar se exige migração, mudança no export (`scripts/exportar-conteudo.mjs`) ou nos tipos (`lib/conteudo.ts`, `lib/painel.ts`);
 6. verificar se exige ícone novo (`npm run icones`).

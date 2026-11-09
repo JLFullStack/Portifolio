@@ -1,0 +1,150 @@
+/* #region Depoimentos */
+
+/* Faixa de rolagem com scroll-snap: dois
+   cards por "página" no desktop, um no tablet e no celular. As setas rolam uma
+   página inteira (ControlesFaixa.tsx); o dedo rola livre e para no card.
+   A folga do padding evita que o recorte da rolagem corte a sombra dos cards. */
+
+.depoimentos-faixa {
+    --por-pagina: 2;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - (var(--por-pagina) - 1) * var(--espaco-3)) / var(--por-pagina));
+    gap: var(--espaco-3);
+    margin: calc(-1 * var(--espaco-2));
+    padding: var(--espaco-2);
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--espaco-2);
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+    .depoimentos-faixa::-webkit-scrollbar {
+        display: none;
+    }
+
+/* Borda em gradiente: duas camadas de fundo, a de dentro até o padding e a do
+   gradiente até a borda transparente. */
+
+.depoimento-card {
+    scroll-snap-align: start;
+    display: flex;
+    align-items: center;
+    gap: var(--espaco-3);
+    padding: var(--espaco-4) var(--espaco-3) var(--espaco-3);
+    border: 1px solid transparent;
+    border-radius: var(--raio);
+    background:
+        linear-gradient(var(--cor-superficie), var(--cor-superficie)) padding-box,
+        var(--gradiente-borda) border-box;
+    box-shadow: var(--sombra-card);
+    overflow: hidden;
+}
+
+/* Aspas grandes, apagadas, no canto do card */
+
+.depoimento-aspas {
+    position: absolute;
+    top: var(--espaco-2);
+    right: var(--espaco-3);
+    color: var(--cor-acento);
+    font-size: 3.5rem;
+    opacity: 0.18;
+}
+
+/* No mockup o avatar domina o card: cerca de 150px em 1440. O anel duplo
+   (fundo do card e acento) o separa do card. */
+
+.depoimento-avatar {
+    --tamanho-avatar: clamp(5rem, 2.5rem + 6vw, 9rem);
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: var(--tamanho-avatar);
+    height: var(--tamanho-avatar);
+    border-radius: 50%;
+    background-color: var(--cor-superficie-alta);
+    color: var(--cor-acento);
+    font-size: calc(var(--tamanho-avatar) * 0.42);
+    overflow: hidden;
+    box-shadow: 0 0 0 3px var(--cor-superficie), 0 0 0 5px var(--cor-acento-solido), 0 0 36px var(--cor-brilho-acento);
+}
+
+    .depoimento-avatar > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.depoimento-texto {
+    margin: 0;
+    color: var(--cor-texto-suave);
+    font-style: italic;
+    text-align: justify;
+}
+
+/* Nome e profissão, com o botão do LinkedIn (se houver) do lado */
+
+.depoimento-rodape {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--espaco-2);
+    margin-top: var(--espaco-2);
+}
+
+.depoimento-autor {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+/* Fica acima da luz do cartão (.cartao-luz::after) */
+
+.depoimento-linkedin {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    text-decoration: none;
+}
+
+.depoimento-cargo {
+    color: var(--cor-acento);
+    font-size: var(--texto-sm);
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 991px) {
+    /* Dois cards de depoimento lado a lado não cabem: um por página */
+    .depoimentos-faixa {
+        --por-pagina: 1;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .depoimento-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .depoimento-texto {
+        text-align: left;
+    }
+
+    .depoimento-rodape {
+        flex-direction: column;
+    }
+
+    .depoimento-autor {
+        align-items: center;
+    }
+}
+
+/* #endregion */

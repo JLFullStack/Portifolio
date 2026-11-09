@@ -6,6 +6,7 @@ import { Icone } from "@/componentes/icones/Icone";
 import { Avatar } from "@/componentes/painel/Avatar";
 import { Aviso, useAcao } from "@/componentes/painel/Campos";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
+import "@/estilos/painel/mensagens.css";
 
 /** Uma mensagem: quem mandou, o assunto, o texto e as ações (responder, marcar como lida, excluir). */
 function CartaoMensagem({ mensagem }: { mensagem: Mensagem }) {

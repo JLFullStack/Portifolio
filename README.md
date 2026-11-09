@@ -96,7 +96,8 @@ worker/                   index (rotas e guarda), auth, api, contato, imagens, p
 migrations/               esquema do banco D1 (0001 a 0006)
 conteudo/semente.json     conteúdo inicial; conteudo.json e github.json são gerados (não versionados)
 dicionarios/index.ts      textos fixos da interface em pt e en
-estilos/                  app.css, animacao.css, responsivo.css (landing) e painel.css
+estilos/                  app.css, animacao.css e responsivo.css (toda a aplicação),
+                          landing/ e painel/ (compartilhado + um arquivo por seção ou tela)
 fontes/                   Inter (woff2 latino) e Ernestone (assinatura do rodapé)
 lib/                      conteúdo, cliente da API, tipos do painel, metadados e datas
 public/                   favicon, fotos da semente, _headers, robots.txt e sitemap.xml

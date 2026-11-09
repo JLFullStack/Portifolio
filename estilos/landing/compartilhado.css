@@ -1,0 +1,283 @@
+/* Estilos comuns às seções da landing: estrutura das seções e títulos, régua,
+   brilho dos cartões, setas dos carrosséis, selo de disponível, etiquetas e o
+   revelar ao rolar. Cada seção tem o próprio arquivo nesta pasta. */
+
+/* #region Estrutura das seções */
+
+/* Toda <section> da landing. O scroll-margin-top compensa o cabeçalho fixo
+   para que a âncora não pare com o título escondido atrás dele.
+   isolation: os decorativos de z-index negativo (textos-fantasma, halos)
+   ficam atrás do conteúdo, mas nunca atrás do fundo da página. O clip lateral
+   impede que eles criem rolagem horizontal. */
+
+.secao {
+    position: relative;
+    isolation: isolate;
+    overflow-x: clip;
+    padding-block: var(--espaco-secao);
+    scroll-margin-top: calc(var(--altura-cabecalho) + var(--espaco-2));
+}
+
+    /* A primeira seção encosta no cabeçalho: compensa a altura dele */
+
+    .secao.secao--abertura {
+        padding-top: calc(var(--altura-cabecalho) + var(--espaco-4));
+    }
+
+/* Halos de cor que dão profundidade ao fundo, alternando os lados */
+
+.bio::before,
+#habilidades::before,
+#experiencia::before {
+    content: "";
+    position: absolute;
+    z-index: -2;
+    width: min(46rem, 90vw);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.bio::before {
+    top: 10%;
+    left: -18rem;
+    background: radial-gradient(closest-side, var(--cor-brilho-acento), transparent);
+}
+
+#habilidades::before {
+    top: 0;
+    right: -20rem;
+    background: radial-gradient(closest-side, var(--cor-brilho-violeta), transparent);
+}
+
+#experiencia::before {
+    bottom: 0;
+    left: -20rem;
+    background: radial-gradient(closest-side, var(--cor-brilho-acento), transparent);
+}
+
+/* Título de seção: o número (contador) com um traço em gradiente, o h2 e,
+   atrás dele, o mesmo texto gigante e só contornado. */
+
+.titulo-secao {
+    position: relative;
+    margin: 0 0 var(--espaco-4);
+    counter-increment: secao;
+}
+
+    .titulo-secao::before {
+        content: counter(secao, decimal-leading-zero);
+        display: inline-block;
+        margin-bottom: var(--espaco-1);
+        padding-right: 3.25rem;
+        background: var(--gradiente-vivo) no-repeat right center / 2.5rem 2px;
+        color: var(--cor-acento);
+        font-size: var(--texto-sm);
+        font-weight: var(--peso-forte);
+        letter-spacing: 0.2em;
+    }
+
+    .titulo-secao > h2 {
+        position: relative;
+        margin: 0;
+        font-size: var(--texto-titulo);
+        font-weight: var(--peso-display);
+        letter-spacing: -0.02em;
+    }
+
+.titulo-secao-fundo {
+    position: absolute;
+    z-index: -1;
+    left: -0.04em;
+    bottom: -0.3em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--cor-contorno);
+    font-size: var(--texto-fantasma);
+    font-weight: var(--peso-fantasma);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    white-space: nowrap;
+    text-transform: uppercase;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Régua fina entre seções, em gradiente que some nas pontas. No mockup ela é
+   recuada: ocupa cerca de 85% da faixa de conteúdo, não a largura inteira. */
+
+.separador-secao {
+    width: 85%;
+    height: 1px;
+    border: 0;
+    margin: 0 auto var(--espaco-5);
+    opacity: 1;
+    background: linear-gradient(90deg, transparent, var(--cor-acento-solido) 25%, var(--cor-acento-solido) 75%, transparent);
+}
+
+/* Brilho que segue o ponteiro (posição gravada por LuzCartoes.tsx) */
+
+.cartao-luz {
+    position: relative;
+}
+
+    .cartao-luz::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(22rem circle at var(--luz-x, 50%) var(--luz-y, 50%), var(--cor-luz), transparent 60%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .cartao-luz:hover::after {
+        opacity: 1;
+    }
+
+/* #endregion */
+
+/* #region Controles ‹ › dos carrosséis */
+
+/* Mesmo par de setas nas duas seções, centralizado sob o conteúdo:
+   círculos contornados que se enchem de gradiente. */
+
+.controles-carrossel {
+    display: flex;
+    justify-content: center;
+    gap: var(--espaco-3);
+    margin-top: var(--espaco-4);
+}
+
+.controle-faixa {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    padding: 0;
+    border: 1px solid var(--cor-borda-forte);
+    border-radius: 50%;
+    background-color: var(--cor-vidro);
+    color: var(--cor-texto);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s var(--curva-saida);
+}
+
+    .controle-faixa:hover {
+        border-color: transparent;
+        background: var(--gradiente-acento);
+        color: var(--cor-acento-contraste);
+        box-shadow: var(--sombra-botao);
+        transform: translateY(-2px);
+    }
+
+/* #endregion */
+
+/* #region Selo de disponível e etiquetas */
+
+/* "Disponível para novos projetos": pílula verde com um ponto pulsando */
+
+.selo-disponivel {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    width: fit-content;
+    margin: 0 0 var(--espaco-2);
+    padding: 0.3rem 0.9rem 0.3rem 0.7rem;
+    border: 1px solid var(--cor-sucesso-borda);
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-sucesso-fundo);
+    color: var(--cor-sucesso);
+    font-size: var(--texto-sm);
+    font-weight: var(--peso-forte);
+}
+
+    .selo-disponivel::before {
+        content: "";
+        flex: 0 0 auto;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background-color: var(--cor-sucesso);
+        box-shadow: 0 0 0 0 var(--cor-sucesso-borda);
+    }
+
+/* Tecnologias de um projeto ou cargo, em pílulas no acento */
+
+.etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0 0 var(--espaco-3);
+    padding: 0;
+    list-style: none;
+}
+
+    .etiquetas > li {
+        padding: 0.2rem 0.7rem;
+        border: 1px solid var(--cor-acento-suave);
+        border-radius: var(--raio-pilula);
+        background-color: var(--cor-acento-fundo);
+        color: var(--cor-acento);
+        font-size: var(--texto-xs);
+        font-weight: var(--peso-forte);
+    }
+
+/* #endregion */
+
+/* #region Movimento */
+
+@media (prefers-reduced-motion: no-preference) {
+    /* Ponto do selo de disponível: uma onda verde a cada 2 s */
+    .selo-disponivel::before {
+        animation: onda-verde 2s ease-out infinite;
+    }
+
+    /* Revelar ao rolar (.revelar): RevelarAoRolar.tsx marca .visivel quando o
+       elemento já está na tela, e a entrada toca com duração fixa (escalonada
+       pelo --indice nos cards). Só esconde com .revelar-ativo no <html>: sem
+       JavaScript nada some. */
+    .revelar-ativo .revelar:not(.visivel) {
+        opacity: 0;
+    }
+
+    .revelar-ativo .revelar.visivel {
+        animation: revelar 0.9s var(--curva-saida) both;
+        animation-delay: calc(var(--indice, 0) * 110ms);
+    }
+}
+
+@keyframes revelar {
+    from {
+        opacity: 0;
+        transform: translate(var(--desloc-x, 0), 3rem) scale(0.96);
+    }
+}
+
+@keyframes onda-verde {
+    0% { box-shadow: 0 0 0 0 var(--cor-sucesso-borda); }
+    100% { box-shadow: 0 0 0 0.45rem transparent; }
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 767px) {
+    .titulo-secao-fundo {
+        font-size: clamp(2.75rem, 1rem + 9vw, 4.5rem);
+    }
+
+    .separador-secao {
+        width: 100%;
+    }
+
+    .controles-carrossel {
+        gap: var(--espaco-4);
+    }
+}
+
+/* #endregion */

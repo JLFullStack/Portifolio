@@ -1,0 +1,751 @@
+/* #region Projetos */
+
+.projetos {
+    /* a faixa sangra para fora da largura de conteúdo, mas não pode
+       criar rolagem horizontal na página */
+    overflow: hidden;
+}
+
+/* Largura do card ativo: acompanha a largura da tela, mas também a altura. A altura
+   do card (proporção 370 × 512) mais o rótulo, as setas e o cabeçalho precisam caber
+   juntos na janela, inclusive em notebook de tela baixa: daí o limite por 100dvh. */
+
+.projetos-vitrine {
+    --largura-card: max(12rem, min(clamp(14rem, 24vw, 23rem), (100dvh - 22rem) * 370 / 512));
+}
+
+/* Tela baixa (notebook): menos respiro em volta da vitrine, para card e setas caberem juntos */
+
+@media (max-height: 760px) and (min-width: 992px) {
+    .secao.projetos {
+        padding-block: var(--espaco-4);
+    }
+
+    /* menos respiro em cima, mas a folga do brilho embaixo continua */
+    .projetos-faixa {
+        padding-top: var(--espaco-3);
+        padding-bottom: calc(var(--espaco-3) + var(--espaco-4));
+    }
+
+    .projetos-vitrine > .controles-carrossel {
+        margin-top: var(--espaco-2);
+    }
+}
+
+.projetos-grade {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: center;
+    gap: var(--espaco-4);
+}
+
+/* Papel de parede: a imagem de fundo do projeto ativo cobre a seção inteira, bem
+   apagada, e se dissolve nas bordas. Troca com fade e uma leve aproximação. */
+
+.projetos-fundos {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+}
+
+    /* Véu que escurece o lado do texto, para a leitura nunca depender da foto */
+
+    .projetos-fundos::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, var(--cor-fundo) 0%, transparent 55%);
+        opacity: 0.85;
+    }
+
+.projeto-fundo {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.08);
+    transition: opacity 0.9s ease, transform 1.6s var(--curva-saida);
+}
+
+    .projeto-fundo.ativo {
+        opacity: var(--opacidade-fundo-projeto);
+        transform: none;
+    }
+
+    .projeto-fundo > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/* Os textos dos projetos ficam empilhados na mesma célula da grade: a coluna tem
+   sempre a altura do maior, então trocar de projeto não muda a altura da seção (com
+   display: none ela pulava). Só o ativo aparece, num cross-fade. visibility tira os
+   outros do leitor de tela e do Tab. O primeiro já vem ativo no HTML. */
+
+.projetos-info {
+    display: grid;
+}
+
+.projeto-info {
+    position: relative;
+    grid-area: 1 / 1;
+    align-self: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.75rem);
+    transition: opacity 0.45s ease, transform 0.55s var(--curva-saida), visibility 0s linear 0.45s;
+}
+
+    .projeto-info.ativo {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition: opacity 0.45s ease 0.1s, transform 0.55s var(--curva-saida) 0.1s, visibility 0s;
+    }
+
+/* O número do projeto, gigante e contornado, atrás do título */
+
+.projeto-numero {
+    position: absolute;
+    z-index: -1;
+    top: -0.55em;
+    left: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--cor-borda-forte);
+    font-size: clamp(6rem, 3rem + 9vw, 12rem);
+    font-weight: var(--peso-fantasma);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.projeto-titulo {
+    margin: 0;
+    /* No mockup o título do projeto tem cerca de dois terços da altura do nome
+       da hero — e precisa caber em uma linha, como "PROJECT 1". */
+    font-size: clamp(2rem, 0.9rem + 3.4vw, 4rem);
+    font-weight: var(--peso-display);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    text-transform: uppercase;
+    background: var(--gradiente-texto);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Situação do projeto (Em produção...), acima do título */
+
+.projeto-situacao {
+    position: relative;
+    display: inline-block;
+    margin: 0 0 var(--espaco-2);
+    padding: 0.2rem 0.75rem;
+    border-radius: var(--raio-pilula);
+    background-color: var(--cor-acento-fundo);
+    color: var(--cor-acento);
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.projeto-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espaco-1);
+}
+
+.projeto-descricao {
+    max-width: 46ch;
+    margin: var(--espaco-3) 0;
+    color: var(--cor-texto-suave);
+    text-align: justify;
+    text-indent: 1.5rem;
+}
+
+/* A faixa alcança a borda direita da janela: desconta a metade da margem que
+   centraliza .conteudo, mais o padding lateral dela. */
+
+.projetos-faixa {
+    display: flex;
+    gap: var(--espaco-4);
+    align-items: center;
+    /* overflow-x: auto recorta também na vertical: a folga embaixo (compensada pela
+       margem negativa, para o layout não mudar) é onde cabe o brilho do card ativo,
+       que antes era cortado reto e aparecia como um risco. */
+    margin: 0 0 calc(-1 * var(--espaco-4)) calc(-1 * var(--espaco-3));
+    margin-right: calc(-1 * ((100vw - min(100vw, var(--largura-conteudo))) / 2 + var(--espaco-3)));
+    /* O mesmo vale à esquerda, onde o card ativo encosta: folga compensada pela
+       margem, e o snap para o card depois dela (scroll-padding). */
+    padding: var(--espaco-4) 0 calc(var(--espaco-4) * 2) var(--espaco-3);
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline-start: var(--espaco-3);
+    scroll-behavior: smooth;
+    /* os controles ‹ › fazem o papel da barra de rolagem */
+    scrollbar-width: none;
+}
+
+    .projetos-faixa::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Respiro no fim da faixa: sem ele o último card nunca alcança a borda
+       esquerda, e por isso nunca chega a ficar ativo. */
+
+    .projetos-faixa::after {
+        content: "";
+        flex: 0 0 auto;
+        width: max(0px, calc(100% - var(--largura-card) - var(--espaco-4)));
+    }
+
+/* Os cards inativos ficam inclinados em perspectiva, como numa vitrine 3D.
+   O giro é pela borda esquerda: ela não sai do lugar, e é por ela que
+   ProjetosVitrine.tsx decide qual card está ativo.
+   Todos têm a mesma largura: o ativo se destaca só por transform. Animar a
+   largura no meio da rolagem deslocava a faixa, o scroll-snap corrigia e a
+   vitrine tremia. */
+
+.projeto-card {
+    flex: 0 0 auto;
+    width: var(--largura-card);
+    scroll-snap-align: start;
+    transform: perspective(1100px) rotateY(-16deg) scale(0.86);
+    transform-origin: left center;
+    transition: opacity 0.5s ease, transform 0.6s var(--curva-saida);
+    opacity: 0.6;
+    /* camada fixa: criar e desfazer a camada a cada troca de projeto dava soluços */
+    will-change: transform;
+}
+
+    .projeto-card:hover {
+        opacity: 0.9;
+        transform: perspective(1100px) rotateY(-6deg) scale(0.9);
+    }
+
+    /* O card ativo é maior, de frente e com brilho, como no mockup */
+
+    .projeto-card.ativo {
+        opacity: 1;
+        transform: none;
+    }
+
+.projeto-rotulo {
+    margin: 0 0 var(--espaco-1);
+    color: var(--cor-texto-tenue);
+    font-size: var(--texto-xs);
+    font-weight: var(--peso-forte);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+    .projeto-card.ativo .projeto-rotulo {
+        color: var(--cor-acento);
+    }
+
+.projeto-imagem {
+    display: block;
+    width: 100%;
+    /* o height do <img> (tamanho da foto original) venceria o aspect-ratio */
+    height: auto;
+    aspect-ratio: 370 / 512;
+    border: 1px solid var(--cor-borda-forte);
+    border-radius: var(--raio);
+    object-fit: cover;
+    box-shadow: var(--sombra-card);
+}
+
+/* Botão invisível sobre o card: no ativo, amplia a imagem (lupa no hover); nos
+   outros, traz o card para o destaque. */
+
+.projeto-card {
+    position: relative;
+}
+
+    /* O brilho do card ativo fica numa caixa do tamanho da imagem (ela é o último
+       filho, encostada no fundo do card) e acende só por opacity: animar o
+       box-shadow da imagem a repintava a cada quadro, no meio da rolagem. */
+
+    .projeto-card::before {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        aspect-ratio: 370 / 512;
+        border-radius: var(--raio);
+        box-shadow: 0 16px 40px -20px var(--cor-acento-solido), 0 0 0 1px var(--cor-acento-suave);
+        opacity: 0;
+        transition: opacity 0.45s ease;
+        pointer-events: none;
+    }
+
+    .projeto-card.ativo::before {
+        opacity: 1;
+    }
+
+    /* Enquanto a imagem está ampliada, a do card some: parece que ela saiu dali */
+
+    .projeto-card.ampliando .projeto-imagem,
+    .projeto-card.ampliando::before {
+        opacity: 0;
+    }
+
+.projeto-ampliar {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--raio);
+    background: transparent;
+    cursor: pointer;
+}
+
+    .projeto-card.ativo .projeto-ampliar {
+        cursor: zoom-in;
+    }
+
+.projeto-ampliar-icone {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 1px solid var(--cor-borda-forte);
+    border-radius: 50%;
+    background-color: var(--cor-cabecalho);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--sombra-botao);
+    color: var(--cor-texto);
+    font-size: 1.25rem;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+    .projeto-card.ativo .projeto-ampliar:hover .projeto-ampliar-icone,
+    .projeto-card.ativo .projeto-ampliar:focus-visible .projeto-ampliar-icone {
+        opacity: 1;
+        transform: none;
+    }
+
+/* A imagem ampliada: diálogo de tela cheia (qualquer clique fecha), fundo
+   escurecido. A viagem do card até o centro é a animação FLIP do
+   ProjetosVitrine.tsx; aqui só o lugar final e os fades. */
+
+.projeto-ampliado {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--cor-texto);
+    overflow: hidden;
+    /* qualquer clique fecha: o cursor avisa */
+    cursor: zoom-out;
+}
+
+    .projeto-ampliado[open] {
+        display: grid;
+        place-items: center;
+    }
+
+    /* Véu sólido, sem backdrop-filter: desfocar a página inteira a cada quadro da
+       animação derrubava o fps (e a página atrás continua animada). */
+
+    .projeto-ampliado::backdrop {
+        background-color: var(--cor-veu-ampliado);
+        opacity: 1;
+        transition: opacity 0.4s ease;
+    }
+
+@starting-style {
+    .projeto-ampliado[open]::backdrop {
+        opacity: 0;
+    }
+}
+
+    .projeto-ampliado.fechando::backdrop {
+        opacity: 0;
+    }
+
+.projeto-ampliado-figura {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: var(--espaco-2);
+    margin: 0;
+}
+
+    /* Recebe só o foco inicial do diálogo (programático): não é um controle */
+
+    .projeto-ampliado-figura:focus {
+        outline: none;
+    }
+
+/* Mesma proporção do card: o tamanho final já é conhecido antes de a imagem maior chegar */
+
+.projeto-ampliado-imagem {
+    display: block;
+    /* 76dvh: sobra espaço para a legenda embaixo mesmo em tela baixa */
+    height: min(76dvh, calc(90vw * 512 / 370));
+    width: auto;
+    max-width: 90vw;
+    aspect-ratio: 370 / 512;
+    border-radius: 1.25rem;
+    object-fit: cover;
+    box-shadow: 0 40px 90px -30px var(--cor-sombra), 0 0 0 1px var(--cor-borda-forte), 0 0 80px -20px var(--cor-acento-solido);
+    transform-origin: 0 0;
+}
+
+.projeto-ampliado-legenda,
+.projeto-ampliado-fechar {
+    transition: opacity 0.3s ease;
+}
+
+.projeto-ampliado-legenda {
+    color: var(--cor-texto);
+    font-size: var(--texto-lg);
+    font-weight: var(--peso-display);
+    letter-spacing: -0.01em;
+}
+
+.projeto-ampliado-fechar {
+    position: absolute;
+    top: -0.75rem;
+    right: -0.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    background-color: var(--cor-cabecalho);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+    .projeto-ampliado-fechar > .icone {
+        transition: transform 0.35s var(--curva-saida);
+    }
+
+    .projeto-ampliado-fechar:hover > .icone {
+        transform: rotate(90deg);
+    }
+
+    .projeto-ampliado.fechando .projeto-ampliado-legenda,
+    .projeto-ampliado.fechando .projeto-ampliado-fechar {
+        opacity: 0;
+    }
+
+/* Caixa "Imagem" enquanto o projeto não tem foto: o placeholder do mockup,
+   em gradiente suave */
+
+.projeto-imagem--vazia {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle at 30% 20%, var(--cor-brilho-acento), transparent 60%),
+        radial-gradient(circle at 80% 90%, var(--cor-brilho-violeta), transparent 60%),
+        var(--cor-placeholder);
+    color: var(--cor-texto-suave);
+    font-size: var(--texto-lg);
+}
+
+    /* No mockup as setas ficam centradas sob o card ativo, não sob a
+       coluna inteira. */
+
+    .projetos-vitrine > .controles-carrossel {
+        width: var(--largura-card);
+    }
+
+/* #endregion */
+
+/* #region Movimento */
+
+@media (prefers-reduced-motion: no-preference) {
+    /* Imagem ampliada do projeto: legenda e botão de fechar chegam depois da imagem */
+    .projeto-ampliado[open] .projeto-ampliado-legenda,
+    .projeto-ampliado[open] .projeto-ampliado-fechar {
+        animation: surgir-legenda 0.4s ease 0.45s backwards;
+    }
+
+    /* Cards da vitrine: entram da direita em sequência quando a vitrine aparece.
+       Anima translate (o transform é da perspectiva 3D) e só com fill backwards:
+       depois de entrar, as transições de troca de projeto voltam a valer. */
+    .revelar-ativo .projetos-vitrine:not(.visivel) .projeto-card {
+        opacity: 0;
+    }
+
+    /* A imagem de fundo da seção só acende junto com a vitrine, não quando a borda
+       da seção desponta (ainda na Biografia). */
+    .revelar-ativo .projetos-grade:not(:has(.projetos-vitrine.visivel)) > .projetos-fundos {
+        opacity: 0;
+    }
+
+    .revelar-ativo .projetos-fundos {
+        transition: opacity 1.4s ease 0.3s;
+    }
+
+    /* Quem desliza é o conteúdo do card, não o <li>: o Chrome guardava o ponto de snap
+       da faixa com o card ainda deslocado (o fill backwards já o desloca na espera) e,
+       terminada a entrada, a faixa ficava parada fora do lugar. */
+    .revelar-ativo .projetos-vitrine.visivel .projeto-card > *,
+    .revelar-ativo .projetos-vitrine.visivel .projeto-card::before {
+        animation: entrar-card 0.9s var(--curva-saida) backwards;
+        animation-delay: calc(200ms + var(--indice, 0) * 120ms);
+    }
+}
+
+@keyframes surgir-legenda {
+    from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+    }
+}
+
+@keyframes entrar-card {
+    from {
+        opacity: 0;
+        translate: 5rem 0;
+    }
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media only screen and (max-width: 991px) {
+    /* Projetos em uma coluna: a vitrine vem primeiro e o texto do projeto ativo logo
+       abaixo dela. Trocar de projeto e ler a descrição ficam na mesma tela (com o
+       texto em cima, era preciso rolar para cima e para baixo a cada troca). */
+    /* A seção inteira (card, setas, texto e botões) cabe numa tela: ela tem a altura
+       da janela menos o cabeçalho, o texto ocupa o que precisa e a vitrine fica com o
+       resto. A vitrine é um container de tamanho: o card sai da altura dela (100cqh),
+       descontados o rótulo e as folgas (3.5rem), na proporção 370 × 512.
+       svh: a altura com a barra do navegador visível, para nada ficar escondido atrás dela. */
+    .secao.projetos {
+        padding-block: var(--espaco-2);
+        scroll-margin-top: var(--altura-cabecalho);
+    }
+
+    .projetos-grade {
+        display: flex;
+        flex-direction: column;
+        /* o center do desktop encolheria a vitrine a largura zero (container de tamanho) */
+        align-items: stretch;
+        gap: var(--espaco-2);
+        min-height: calc(100vh - var(--altura-cabecalho) - 2 * var(--espaco-2));
+        min-height: calc(100svh - var(--altura-cabecalho) - 2 * var(--espaco-2));
+    }
+
+    .projetos-info {
+        flex: none;
+    }
+
+    /* Com texto muito longo a seção cresce, mas o card nunca fica menor que 9rem.
+       Faixa e setas dividem a mesma célula: as setas não ocupam uma linha própria.
+       Quando o card bate na largura máxima, sobra altura e a faixa fica centrada nela. */
+    .projetos-vitrine {
+        --largura-card: clamp(9rem, (100cqh - 3.5rem) * 370 / 512, min(23rem, 66vw));
+        order: -1;
+        flex: 1 1 0;
+        min-height: calc(9rem * 512 / 370 + 3.5rem);
+        container-type: size;
+        display: grid;
+        align-content: center;
+    }
+
+        .projetos-vitrine > * {
+            grid-area: 1 / 1;
+        }
+
+    /* A folga embaixo da faixa (onde cabe o brilho do card) fica fora do fluxo: só
+       0.5rem dela ocupa espaço */
+    .projetos-faixa {
+        padding-top: var(--espaco-2);
+        padding-bottom: 3rem;
+        margin-bottom: -2.5rem;
+    }
+
+    /* Os cards de trás encolhem a partir do canto de cima: o rótulo deles fica na altura
+       do rótulo do ativo, e embaixo deles sobra o lugar das setas */
+    .projeto-card {
+        transform-origin: left top;
+        transform: perspective(1100px) rotateY(-16deg) scale(0.8);
+    }
+
+    .projeto-card:hover {
+        transform: perspective(1100px) rotateY(-6deg) scale(0.82);
+    }
+
+    .projeto-card.ativo {
+        transform: none;
+    }
+
+    /* Setas no canto de baixo à direita, sob os cards de trás, alinhadas com o pé do
+       card ativo (a folga de 0.5rem da faixa) */
+    .projetos-vitrine > .controles-carrossel {
+        position: relative;
+        z-index: 1;
+        align-self: end;
+        justify-self: end;
+        width: auto;
+        gap: var(--espaco-1);
+        margin: 0 0 0.5rem;
+    }
+
+    /* O texto agora fica embaixo: o véu da imagem de fundo escurece de cima para baixo */
+    .projetos-fundos::after {
+        background: linear-gradient(to bottom, transparent 25%, var(--cor-fundo) 80%);
+    }
+}
+
+/* Em uma coluna o texto do projeto fica embaixo do card: revelado só quando o topo
+   dele chegasse a 60% da tela (.revelar-tarde), ele continuava invisível com o card já
+   à vista e era preciso rolar para encontrá-lo. Aqui ele entra junto com a vitrine. */
+
+@media only screen and (max-width: 991px) and (prefers-reduced-motion: no-preference) {
+    .revelar-ativo .projetos-grade:has(.projetos-vitrine.visivel) > .projetos-info:not(.visivel) {
+        opacity: 1;
+        animation: revelar 0.9s var(--curva-saida) 0.2s both;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    /* Texto do projeto compacto: o destaque no celular é a imagem. A descrição mostra
+       três linhas e o "Ler mais" (ProjetosVitrine) abre o resto. Em coluna flex, o botão
+       vem logo depois da descrição, antes das etiquetas e dos links. */
+    .projeto-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .projeto-info > .etiquetas,
+        .projeto-info > .projeto-acoes {
+            order: 1;
+        }
+
+    .projeto-descricao {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        overflow: hidden;
+        margin: var(--espaco-1) 0 var(--espaco-2);
+        font-size: 0.9rem;
+        line-height: 1.55;
+        text-align: left;
+        text-indent: 0;
+    }
+
+        .projeto-info.expandido > .projeto-descricao {
+            display: block;
+            overflow: visible;
+        }
+
+    .projeto-ler-mais {
+        margin: calc(-1 * var(--espaco-2)) 0 var(--espaco-1);
+        padding: 0.35rem 0;
+        border: 0;
+        background: none;
+        color: var(--cor-acento);
+        font: inherit;
+        font-size: var(--texto-xs);
+        font-weight: var(--peso-forte);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    .projeto-titulo {
+        font-size: clamp(1.5rem, 1rem + 3vw, 2rem);
+    }
+
+    .projeto-numero {
+        font-size: 3.5rem;
+    }
+
+    .projeto-situacao {
+        margin-bottom: var(--espaco-1);
+        padding: 0.15rem 0.6rem;
+    }
+
+    .projeto-info > .etiquetas {
+        margin-bottom: var(--espaco-2);
+    }
+
+    /* Os dois links dividem a linha, mais baixos. À direita fica o lugar do botão
+       flutuante de voltar ao topo (3.5rem, na margem do conteúdo), para não cobri-los. */
+    .projeto-acoes {
+        align-self: stretch;
+        padding-right: calc(3.5rem + var(--espaco-1));
+    }
+
+        .projeto-acoes > .btn-acento,
+        .projeto-acoes > .btn-contorno {
+            flex: 1 1 auto;
+            justify-content: center;
+            padding: 0.6rem 0.85rem;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+    .projetos-vitrine .controle-faixa {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Celular de tela baixa: o texto do projeto encolhe para o card não ficar minúsculo */
+@media only screen and (max-width: 767px) and (max-height: 720px) {
+    .projeto-descricao {
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
+    .projeto-titulo {
+        font-size: 1.4rem;
+    }
+
+    .projeto-numero {
+        font-size: 3rem;
+    }
+
+    .projeto-info > .etiquetas {
+        margin-bottom: var(--espaco-1);
+    }
+
+    .projeto-acoes > .btn-acento,
+    .projeto-acoes > .btn-contorno {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Celular estreito (360px): os dois links só cabem lado a lado, ao lado do botão de
+   voltar ao topo, com letra e folgas menores */
+
+@media only screen and (max-width: 380px) {
+    .projeto-acoes > .btn-acento,
+    .projeto-acoes > .btn-contorno {
+        gap: 0.4rem;
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* #endregion */

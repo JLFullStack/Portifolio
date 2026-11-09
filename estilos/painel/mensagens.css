@@ -1,0 +1,72 @@
+/* #region Mensagens */
+
+.mensagem {
+    position: relative;
+    padding: var(--espaco-3);
+    border: 1px solid var(--cor-borda);
+    border-radius: 1rem;
+    background-color: var(--cor-superficie);
+    box-shadow: var(--sombra-card);
+    transition: border-color 0.25s ease;
+}
+
+    .mensagem:hover {
+        border-color: var(--cor-borda-forte);
+    }
+
+    /* Mensagem nova: barra em gradiente na borda esquerda */
+
+    .mensagem-nova::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 1rem;
+        bottom: 1rem;
+        width: 3px;
+        border-radius: 3px;
+        background: var(--gradiente-vivo);
+    }
+
+.mensagem-cabeca {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.mensagem-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.85rem;
+    color: var(--cor-texto-tenue);
+}
+
+    .mensagem-meta small {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: var(--texto-xs);
+    }
+
+.mensagem-texto {
+    margin: var(--espaco-2) 0 0;
+    padding: var(--espaco-2);
+    border-radius: 0.75rem;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto-suave);
+    white-space: pre-line;
+}
+
+/* #endregion */
+
+/* #region Responsivo */
+
+@media (max-width: 767px) {
+    .mensagem {
+        padding: var(--espaco-2);
+    }
+}
+
+/* #endregion */

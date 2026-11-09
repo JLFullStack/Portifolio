@@ -9,6 +9,7 @@ import { EditorColecao, type DefCampo } from "@/componentes/painel/EditorColecao
 import { CampoImagem, EnviarImagem } from "@/componentes/painel/Imagens";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
 import type { ImagemEnviada } from "@/componentes/painel/redimensionar";
+import "@/estilos/painel/projetos.css";
 
 const CAMPOS: DefCampo[] = [
     { nome: "titulo", rotulo: "Título", bilingue: true },

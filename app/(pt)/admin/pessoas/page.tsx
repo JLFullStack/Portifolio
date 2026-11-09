@@ -7,6 +7,7 @@ import { Icone } from "@/componentes/icones/Icone";
 import { Avatar } from "@/componentes/painel/Avatar";
 import { Aviso, Campo, Entrada, useAcao } from "@/componentes/painel/Campos";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
+import "@/estilos/painel/pessoas.css";
 
 type Convite = { link: string; expiraEm: string };
 

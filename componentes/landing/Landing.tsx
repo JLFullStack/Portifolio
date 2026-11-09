@@ -27,7 +27,7 @@ export type PropsSecao = { conteudo: Conteudo; idioma: Idioma; d: Dicionario };
  * A landing page de página única, na ordem do mockup.
  * Componente de servidor: vira HTML no build. Só os pedaços interativos (menus, tema,
  * carrosséis, voltar ao topo, brilho dos cards, revelar ao rolar, formulário de
- * contato) são componentes de cliente. As animações em si são CSS (estilos/animacao.css).
+ * contato) são componentes de cliente. As animações em si são CSS (estilos/landing/).
  *
  * Seções sem conteúdo (nenhum projeto, depoimento ou serviço publicado, GitHub fora
  * do ar no build) não aparecem, nem no menu.

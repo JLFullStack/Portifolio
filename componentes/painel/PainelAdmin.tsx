@@ -39,7 +39,7 @@ const ABAS_NA_BARRA = 4;
  * carregados ao abrir a página e compartilhados com ela pelo contexto.
  * A navegação usa links comuns, não next/link: na exportação estática o pré-carregamento
  * de rotas do Next pede arquivos que não existem e fica preso atrás do Worker.
- * No celular as abas vão para uma barra fixa embaixo (painel.css), ao alcance do polegar:
+ * No celular as abas vão para uma barra fixa embaixo (estilos/painel/compartilhado.css), ao alcance do polegar:
  * as quatro primeiras e um botão Mais, que abre as outras numa folha que sobe da barra.
  * O acesso já foi conferido pelo Worker antes de a página chegar aqui.
  */

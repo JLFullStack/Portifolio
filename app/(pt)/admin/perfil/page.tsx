@@ -8,6 +8,7 @@ import { Icone } from "@/componentes/icones/Icone";
 import { CamposAparenciaHero, PADRAO_FOTO } from "@/componentes/painel/AparenciaHero";
 import { CampoImagem } from "@/componentes/painel/Imagens";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
+import "@/estilos/painel/perfil.css";
 
 const SIMPLES = ["nome_curto", "nome_completo", "nascimento", "email", "telefone", "whatsapp", "linkedin", "curriculo_pt", "curriculo_en", "chamada_autor", "foto_hero", "foto_biografia", "inicio_carreira", "hero_tamanho", "hero_esmaecer", "hero_esmaecer_direita", "hero_luz_direita", "hero_opacidade_escuro", "hero_opacidade_claro"];
 const BILINGUES = ["saudacao", "profissao", "descricao_hero", "biografia", "endereco", "chamada_convite", "chamada_citacao"];

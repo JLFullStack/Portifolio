@@ -4,6 +4,7 @@ import { Icone } from "@/componentes/icones/Icone";
 import { TrocarEmail, TrocarSenha } from "@/componentes/painel/Acesso";
 import { Avatar } from "@/componentes/painel/Avatar";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
+import "@/estilos/painel/conta.css";
 
 export default function PaginaConta() {
     const { dados, recarregar } = usePainel();

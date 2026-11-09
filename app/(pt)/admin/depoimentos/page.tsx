@@ -9,6 +9,7 @@ import { Aviso, Campo, CampoBilingue, Entrada, useAcao } from "@/componentes/pai
 import { BotoesOrdem } from "@/componentes/painel/EditorColecao";
 import { CampoImagem } from "@/componentes/painel/Imagens";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
+import "@/estilos/painel/depoimentos.css";
 
 const SITUACAO = {
     pendente: { selo: "selo-pendente", texto: "Aguardando aprovação", icone: "fal:hourglass-half" },

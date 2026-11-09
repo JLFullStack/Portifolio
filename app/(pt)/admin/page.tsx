@@ -8,6 +8,7 @@ import { Icone } from "@/componentes/icones/Icone";
 import { Aviso, useAcao } from "@/componentes/painel/Campos";
 import { Avatar } from "@/componentes/painel/Avatar";
 import { usePainel } from "@/componentes/painel/PainelAdmin";
+import "@/estilos/painel/visao-geral.css";
 
 const SITUACAO = {
     pedida: { selo: "selo-pendente", texto: "Em andamento", icone: "fal:hourglass-half" },
