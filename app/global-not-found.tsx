@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Documento } from "@/componentes/Documento";
+import { ICONES } from "@/lib/metadados";
 
 // Página 404 (vira out/404.html; o Worker a usa pelo not_found_handling do wrangler.jsonc).
 // É global porque há dois layouts raiz, um por idioma. Fica em português,
 // com o atalho para a versão em inglês.
 export const metadata: Metadata = {
     title: "Página não encontrada — Lucas Araújo",
-    robots: { index: false }
+    robots: { index: false },
+    icons: ICONES
 };
 
 export default function NaoEncontrada() {

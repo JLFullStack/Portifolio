@@ -24,6 +24,7 @@ npm run deploy     # exporta o D1 remoto + build + wrangler deploy
 npm run tipos      # tsc --noEmit
 npm run icones     # regenera componentes/icones/dados.ts (lê .local/font-awesome-pro/)
 npm run imagens    # regenera as fotos WebP da semente em public/imagens/
+npm run favicon    # regenera favicon.ico e apple-touch-icon.png a partir de public/icone.svg
 npm run banco:migrar[:remoto]    # aplica migrations/ no D1 local ou remoto
 npm run banco:semente[:remoto]   # carrega conteudo/semente.json no D1 (recusa banco com conteúdo; --substituir)
 npm run conteudo[:remoto]        # exporta o D1 para conteudo/conteudo.json, public/midia/ e public/curriculo-<idioma>.pdf

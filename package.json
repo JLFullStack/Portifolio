@@ -12,6 +12,7 @@
     "tipos": "tsc --noEmit",
     "icones": "node scripts/gerar-icones.mjs",
     "imagens": "node scripts/otimizar-imagens.mjs",
+    "favicon": "node scripts/gerar-favicon.mjs",
     "banco:migrar": "wrangler d1 migrations apply portifolio --local",
     "banco:migrar:remoto": "wrangler d1 migrations apply portifolio --remote",
     "banco:semente": "node scripts/carregar-semente.mjs",

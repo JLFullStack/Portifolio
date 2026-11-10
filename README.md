@@ -62,6 +62,7 @@ Outros comandos:
 | `npm run banco:migrar:remoto` | aplica as migrações no D1 de produção |
 | `npm run icones` | regenera `componentes/icones/dados.ts` a partir do Font Awesome Pro em `.local/` |
 | `npm run imagens` | regenera as fotos WebP da semente em `public/imagens/` |
+| `npm run favicon` | regenera `favicon.ico` e `apple-touch-icon.png` a partir de `public/icone.svg` |
 | `node scripts/criar-admin.mjs --remoto ...` | cria o admin em produção ou gera um link de nova senha |
 
 No Windows, pare o `npm run preview` antes de rodar um novo build: o Wrangler
