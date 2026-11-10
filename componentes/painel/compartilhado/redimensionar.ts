@@ -8,15 +8,20 @@ import type { Recorte } from "@/componentes/painel/compartilhado/EditorRecorte";
 export type ImagemEnviada = InfoImagem & { id: string };
 
 const QUALIDADE = 0.82;
+// Versões grandes servem para ver de perto (a capa ampliada em tamanho real): menos
+// compressão para as letras pequenas não borrarem. Mesmo assim ficam bem abaixo de 1 MB.
+const LARGURA_DETALHE = 1200;
+const QUALIDADE_DETALHE = 0.92;
 
 function paraWebp(canvas: HTMLCanvasElement): Promise<Blob> {
+    const qualidade = canvas.width >= LARGURA_DETALHE ? QUALIDADE_DETALHE : QUALIDADE;
     return new Promise((resolver, rejeitar) => canvas.toBlob(blob => {
         if (!blob || blob.type !== "image/webp") {
             rejeitar(new Error("Este navegador não gera imagens WebP. Use Chrome, Edge ou Firefox atualizados."));
         } else {
             resolver(blob);
         }
-    }, "image/webp", QUALIDADE));
+    }, "image/webp", qualidade));
 }
 
 /**

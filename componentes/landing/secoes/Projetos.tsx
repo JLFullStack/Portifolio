@@ -17,6 +17,9 @@ import { ProjetosVitrine } from "@/componentes/landing/secoes/ProjetosVitrine";
  * Atrás da seção inteira, a imagem de fundo do projeto ativo, bem apagada (papel de parede).
  * Clicar na imagem do card em destaque a amplia (ProjetosVitrine).
  */
+
+/** Maior versão que o card e a ampliada usam; as maiores ficam para o tamanho real. */
+const LARGURA_MAXIMA_CARD = 1000;
 export function Projetos({ conteudo, idioma, d }: PropsSecao) {
     const projetos = conteudo.projetos.map((projeto, indice) => {
         const titulo = texto(projeto.titulo, idioma);
@@ -74,9 +77,11 @@ export function Projetos({ conteudo, idioma, d }: PropsSecao) {
                     <p className="projeto-rotulo">{titulo}</p>
 
                     {projeto.imagem ? (
+                        // O card nunca pede a versão de 1480 (só a ampliada em tamanho real, em data-detalhe).
                         <img className="projeto-imagem"
                              src={src(projeto.imagem)}
-                             srcSet={srcset(projeto.imagem)}
+                             srcSet={srcset(projeto.imagem, LARGURA_MAXIMA_CARD)}
+                             data-detalhe={srcset(projeto.imagem)}
                              sizes="(max-width: 991px) 60vw, 23rem"
                              width={projeto.imagem.largura} height={projeto.imagem.altura}
                              alt={d.imagemProjetoAlt(titulo)}
@@ -103,6 +108,8 @@ export function Projetos({ conteudo, idioma, d }: PropsSecao) {
                     projetos={projetos}
                     rotuloVitrine={d.vitrineProjetos}
                     rotuloFechar={d.fecharImagem}
+                    rotuloTamanhoReal={d.verTamanhoReal}
+                    rotuloTamanhoNormal={d.voltarTamanhoNormal}
                     rotuloLerMais={d.lerMais}
                     rotuloLerMenos={d.lerMenos}
                     iconeAmpliar={<Icone nome="fal:search-plus" />}

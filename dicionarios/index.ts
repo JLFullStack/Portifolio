@@ -79,6 +79,8 @@ const pt = {
     vitrineProjetos: "Vitrine de projetos",
     ampliarImagem: (titulo: string) => `Ampliar a imagem de ${titulo}`,
     fecharImagem: "Fechar imagem",
+    verTamanhoReal: "Ver em tamanho real",
+    voltarTamanhoNormal: "Voltar ao tamanho normal",
     projetoAnterior: "Projeto anterior",
     proximoProjeto: "Próximo projeto",
 
@@ -196,6 +198,8 @@ const en: Dicionario = {
     vitrineProjetos: "Project showcase",
     ampliarImagem: (titulo: string) => `Enlarge the image of ${titulo}`,
     fecharImagem: "Close image",
+    verTamanhoReal: "View at full size",
+    voltarTamanhoNormal: "Back to normal size",
     projetoAnterior: "Previous project",
     proximoProjeto: "Next project",
 

@@ -201,8 +201,11 @@ export function texto(valor: ItemHabilidade, idioma: Idioma): string {
 }
 
 /** srcset de uma Foto, das larguras geradas. */
-export function srcset(foto: Foto): string {
-    return foto.larguras.map(largura => `${foto.base}-${largura}.webp ${largura}w`).join(", ");
+export function srcset(foto: Foto, larguraMaxima = Infinity): string {
+    // `larguraMaxima` deixa de fora as versões grandes que só servem para ver de perto
+    // (a menor fica sempre, para o srcset nunca sair vazio).
+    const larguras = foto.larguras.filter((largura, indice) => indice === 0 || largura <= larguraMaxima);
+    return larguras.map(largura => `${foto.base}-${largura}.webp ${largura}w`).join(", ");
 }
 
 /** A maior versão da foto, para o src (navegadores sem srcset). */

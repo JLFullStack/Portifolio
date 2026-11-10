@@ -21,7 +21,8 @@ const CAMPOS: DefCampo[] = [
     { nome: "publicado", rotulo: "Mostrar no site", tipo: "bool" }
 ];
 
-const LARGURAS_CARD = [360, 560, 740];
+// Até 740 para o card; 1480 só para ver a capa em tamanho real na landing (o card não a pede).
+const LARGURAS_CARD = [360, 560, 740, 1480];
 
 /** Uma imagem do projeto: prévia, trocar e ajustar, ordem, texto alternativo PT/EN e remover. */
 function ImagemDoProjeto({ projetoId, imagem, posicao, primeira, ultima, mover }: {
