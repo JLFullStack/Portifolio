@@ -412,22 +412,6 @@
     transform-origin: 0 0;
 }
 
-/* A imagem é um botão: clicar nela alterna o tamanho real (clicar fora fecha) */
-
-.projeto-ampliado-alternar {
-    display: block;
-    padding: 0;
-    border: 0;
-    border-radius: 1.25rem;
-    background: none;
-    cursor: zoom-in;
-}
-
-    .projeto-ampliado-alternar:focus-visible {
-        outline: 2px solid var(--cor-acento-solido);
-        outline-offset: 4px;
-    }
-
 /* Tamanho real: a capa na largura em que foi desenhada (no celular, mais larga que a
    tela), com rolagem dentro do diálogo. overscroll-behavior: a rolagem não passa para
    a página, que fecharia a imagem. */
@@ -445,11 +429,6 @@
         width: max-content;
         margin: 0 auto;
         padding: var(--espaco-4) var(--espaco-2);
-    }
-
-    .projeto-ampliado.detalhe .projeto-ampliado-alternar {
-        border-radius: 0.75rem;
-        cursor: zoom-out;
     }
 
     .projeto-ampliado.detalhe .projeto-ampliado-imagem {
@@ -476,22 +455,32 @@
 .projeto-ampliado-legenda {
     display: grid;
     justify-items: center;
-    gap: 0.25rem;
+    gap: var(--espaco-2);
     color: var(--cor-texto);
     font-size: var(--texto-lg);
     font-weight: var(--peso-display);
     letter-spacing: -0.01em;
 }
 
-.projeto-ampliado-dica {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--cor-texto-suave);
-    font-size: var(--texto-sm);
-    font-weight: 400;
+/* Único controle que não fecha: leva a imagem ao tamanho real. É um .btn-acento (o
+   destaque em gradiente) para não passar despercebido sobre o véu escuro. */
+
+.projeto-ampliado-real {
+    font-size: var(--texto-md);
     letter-spacing: 0;
+    cursor: zoom-in;
 }
+
+    /* A lupa cresce no hover em vez de deslizar como a seta dos outros botões */
+
+    .projeto-ampliado-real:hover > .icone:last-child {
+        transform: scale(1.2);
+    }
+
+    .projeto-ampliado-real:focus-visible {
+        outline: 2px solid var(--cor-acento-solido);
+        outline-offset: 3px;
+    }
 
 .projeto-ampliado-fechar {
     position: absolute;

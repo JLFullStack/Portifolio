@@ -109,7 +109,6 @@ export function Projetos({ conteudo, idioma, d }: PropsSecao) {
                     rotuloVitrine={d.vitrineProjetos}
                     rotuloFechar={d.fecharImagem}
                     rotuloTamanhoReal={d.verTamanhoReal}
-                    rotuloTamanhoNormal={d.voltarTamanhoNormal}
                     rotuloLerMais={d.lerMais}
                     rotuloLerMenos={d.lerMenos}
                     iconeAmpliar={<Icone nome="fal:search-plus" />}

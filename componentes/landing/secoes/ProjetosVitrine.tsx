@@ -38,8 +38,10 @@ function inverter(origem: DOMRect, destino: DOMRect): string {
  * Clicar na imagem do card ativo a amplia com FLIP: a imagem ampliada nasce no
  * lugar e no tamanho do card (transform invertido) e anima até o centro da tela;
  * ao fechar, faz o caminho de volta. Clicar num card inativo o traz para o destaque.
- * Clicar na imagem ampliada alterna para o tamanho real (largura de desenho da capa,
- * com rolagem): só então a versão de 1480 é pedida. Clicar fora dela fecha.
+ * O botão "Ver em tamanho real", sob a imagem ampliada, leva a imagem com o mesmo
+ * FLIP até a largura de desenho da capa (com rolagem); só quando essa viagem termina
+ * a versão de 1480 é pedida. Qualquer outro clique, nos dois tamanhos, fecha e leva
+ * a imagem de volta ao card.
  *
  * Para a animação ficar fluida (inclusive no celular): só transform, pelo Web
  * Animations API (nada de border-radius animado nem desfoque no fundo); a versão
@@ -51,12 +53,11 @@ function inverter(origem: DOMRect, destino: DOMRect): string {
  * "Ler mais". Ao abrir, a vitrine fica com a altura que tinha: sem isso o texto maior
  * tomaria o espaço dela e o card encolheria.
  */
-export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, rotuloTamanhoReal, rotuloTamanhoNormal, rotuloLerMais, rotuloLerMenos, iconeAmpliar, iconeFechar, controles }: {
+export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, rotuloTamanhoReal, rotuloLerMais, rotuloLerMenos, iconeAmpliar, iconeFechar, controles }: {
     projetos: ItemVitrine[];
     rotuloVitrine: string;
     rotuloFechar: string;
     rotuloTamanhoReal: string;
-    rotuloTamanhoNormal: string;
     rotuloLerMais: string;
     rotuloLerMenos: string;
     iconeAmpliar: ReactNode;
@@ -71,13 +72,20 @@ export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, rotuloT
     const [aberto, setAberto] = useState<{ id: number; alturaVitrine: number } | null>(null);
     const dialogo = useRef<HTMLDialogElement>(null);
     const imagemAmpliada = useRef<HTMLImageElement>(null);
+    const figuraAmpliada = useRef<HTMLElement>(null);
+    // Enquanto a imagem viaja (para o card ou para o tamanho real), cliques são ignorados.
     const fechando = useRef(false);
+    const crescendo = useRef(false);
     const [ativo, setAtivo] = useState(projetos[0]?.id);
     const [ampliada, setAmpliada] = useState<Ampliada | null>(null);
     // Depois da abertura, o srcset entra e o navegador pode trocar pela versão maior.
     const [nitida, setNitida] = useState(false);
     // Tamanho real: a imagem na largura em que foi desenhada, com rolagem.
     const [detalhe, setDetalhe] = useState(false);
+    // Depois da viagem até o tamanho real, o srcset troca para o que tem a versão de 1480
+    // (trocar no meio dela faria a imagem piscar).
+    const [detalheNitido, setDetalheNitido] = useState(false);
+    const real = detalhe && detalheNitido;
 
     useEffect(() => {
         const elemento = faixa.current;
@@ -202,7 +210,7 @@ export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, rotuloT
     const fechar = () => {
         const elemento = dialogo.current;
         const alvo = imagemAmpliada.current;
-        if (!ampliada || !elemento || !alvo || fechando.current) return;
+        if (!ampliada || !elemento || !alvo || fechando.current || crescendo.current) return;
 
         const terminar = () => {
             fechando.current = false;
@@ -212,14 +220,15 @@ export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, rotuloT
                 setAmpliada(null);
                 setNitida(false);
                 setDetalhe(false);
+                setDetalheNitido(false);
             });
             elemento.classList.remove("fechando");
             elemento.close();
         };
 
-        // Em tamanho real a imagem pode estar rolada e maior que a tela: a viagem de
-        // volta ao card não teria de onde partir. Fecha direto.
-        if (movimentoReduzido() || detalhe) {
+        // Também em tamanho real: a imagem parte de onde está (mesmo rolada e maior
+        // que a tela) e encolhe até o card.
+        if (movimentoReduzido()) {
             terminar();
             return;
         }
@@ -249,13 +258,34 @@ export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, rotuloT
         return () => window.removeEventListener("scroll", rolar);
     }, [ampliada, nitida]);
 
-    const alternarDetalhe = (evento: MouseEvent<HTMLButtonElement>) => {
+    // Tamanho real: FLIP do tamanho ampliado até o real, como na abertura.
+    const verTamanhoReal = (evento: MouseEvent<HTMLButtonElement>) => {
         // Não deixa o clique chegar ao diálogo (que fecharia).
         evento.stopPropagation();
-        if (!nitida || fechando.current) return;
+        const elemento = dialogo.current;
+        const alvo = imagemAmpliada.current;
+        if (!nitida || detalhe || fechando.current || crescendo.current || !elemento || !alvo) return;
 
-        setDetalhe(atual => !atual);
-        dialogo.current?.scrollTo({ top: 0, left: 0 });
+        const antes = alvo.getBoundingClientRect();
+        // O botão some no tamanho real: o foco passa para a figura antes.
+        figuraAmpliada.current?.focus({ preventScroll: true });
+        flushSync(() => setDetalhe(true));
+        elemento.scrollTo({ top: 0, left: 0 });
+
+        if (movimentoReduzido()) {
+            setDetalheNitido(true);
+            return;
+        }
+
+        crescendo.current = true;
+        const animacao = alvo.animate(
+            [{ transform: inverter(antes, alvo.getBoundingClientRect()) }, { transform: "none" }],
+            { duration: 600, easing: EASING_ABRIR }
+        );
+        animacao.onfinish = () => {
+            crescendo.current = false;
+            setDetalheNitido(true);
+        };
     };
 
     const comFundo = projetos.filter(projeto => projeto.fundo);
@@ -322,28 +352,25 @@ export function ProjetosVitrine({ projetos, rotuloVitrine, rotuloFechar, rotuloT
             </div>
 
             {/* Esc dispara "cancel": vira o fechamento animado. Clique fora da imagem também
-                fecha (o do × chega aqui e o fechando o ignora); na imagem, alterna o tamanho real. */}
+                fecha, inclusive na própria imagem (o do × chega aqui e o fechando o ignora). */}
             <dialog ref={dialogo} className={detalhe ? "projeto-ampliado detalhe" : "projeto-ampliado"} aria-label={ampliada?.titulo}
                     onCancel={evento => { evento.preventDefault(); fechar(); }}
                     onClick={fechar}>
                 {ampliada && (
                     // O foco inicial do diálogo fica na figura, não no ×: o anel de foco
                     // aparecendo e sumindo no botão também piscava no celular.
-                    <figure className="projeto-ampliado-figura" tabIndex={-1} autoFocus>
-                        <button type="button" className="projeto-ampliado-alternar" aria-pressed={detalhe}
-                                aria-label={detalhe ? rotuloTamanhoNormal : rotuloTamanhoReal}
-                                title={detalhe ? rotuloTamanhoNormal : rotuloTamanhoReal} onClick={alternarDetalhe}>
-                            {/* Em tamanho real o sizes cresce e o navegador troca pela versão de 1480. */}
-                            <img ref={imagemAmpliada} className="projeto-ampliado-imagem" src={ampliada.src} decoding="sync"
-                                 srcSet={nitida ? (detalhe ? ampliada.srcSetDetalhe : ampliada.srcSet) : undefined}
-                                 sizes={detalhe ? "min(1180px, max(96vw, 900px))" : "min(90vw, 56dvh)"} alt={ampliada.alt} />
-                        </button>
+                    <figure ref={figuraAmpliada} className="projeto-ampliado-figura" tabIndex={-1} autoFocus>
+                        {/* Em tamanho real o sizes cresce e o navegador troca pela versão de 1480. */}
+                        <img ref={imagemAmpliada} className="projeto-ampliado-imagem" src={ampliada.src} decoding="sync"
+                             srcSet={nitida ? (real ? ampliada.srcSetDetalhe : ampliada.srcSet) : undefined}
+                             sizes={real ? "min(1180px, max(96vw, 900px))" : "min(90vw, 56dvh)"} alt={ampliada.alt} />
                         <figcaption className="projeto-ampliado-legenda">
                             {ampliada.titulo}
-                            {/* A dica repete o rótulo do botão da imagem: no celular não há cursor que avise. */}
-                            <small className="projeto-ampliado-dica" aria-hidden="true">
-                                {iconeAmpliar} {detalhe ? rotuloTamanhoNormal : rotuloTamanhoReal}
-                            </small>
+                            {!detalhe && (
+                                <button type="button" className="btn-acento projeto-ampliado-real" onClick={verTamanhoReal}>
+                                    {iconeAmpliar} {rotuloTamanhoReal}
+                                </button>
+                            )}
                         </figcaption>
                         <button type="button" className="botao-icone projeto-ampliado-fechar" aria-label={rotuloFechar} onClick={fechar}>
                             {iconeFechar}
