@@ -31,7 +31,7 @@ export const PADRAO_FOTO = { tamanho: 100, esmaecer: 60, esmaecerDireita: 0, luz
 /** Dois toques ou cliques em uma barra dentro deste intervalo, em ms, voltam ao padrão. */
 const INTERVALO_TOQUE_DUPLO = 400;
 
-/** Limites dos ajustes, em %. A API recusa o que passar deles (worker/api.js). */
+/** Limites dos ajustes, em %. A API recusa o que passar deles (worker/api/conteudo.js). */
 const TAMANHO_MINIMO = 50;
 const TAMANHO_MAXIMO = 100;
 const OPACIDADE_MINIMA = 10;

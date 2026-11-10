@@ -60,7 +60,7 @@ conteudo/conteudo.json        exportado do D1 antes do build (não versionado)
 public/midia/                 imagens exportadas do D1 (não versionado)
 migrations/                   esquema do D1 (wrangler d1 migrations apply)
 scripts/                      exportar-conteudo, carregar-semente, gerar-icones, otimizar-imagens
-worker/                       index.js, auth.js, api.js, imagens.js, publicar.js, http.js
+worker/                       index.js, auth.js, api/, imagens.js, publicar.js, http.js
 .github/workflows/            publicar.yml
 docs/mockup-landing.png       mockup oficial da landing
 ```

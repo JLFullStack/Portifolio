@@ -52,10 +52,10 @@ O nome do projeto é grafado **`Portifolio`** (com "i") no repositório e no Wor
 | `app/global-not-found.tsx` | página 404 (`out/404.html`) |
 | `componentes/` | `Documento.tsx` e `BotaoTopo.tsx`, de toda a aplicação |
 | `componentes/landing/` | `Landing.tsx`, `compartilhado/`, `cabecalho/` e `secoes/` (uma seção por arquivo); componentes de servidor, salvo os interativos |
-| `componentes/painel/` | área restrita: `compartilhado/` (moldura, campos, acesso, imagens, editor de coleções) e `telas/` (o que é de uma tela só) |
+| `componentes/painel/` | área restrita: `compartilhado/` (moldura, campos, acesso, imagens, editor de coleções) e `telas/` (uma tela por arquivo; a página em `app/` só a monta) |
 | `componentes/icones/` | `Icone.tsx` e `dados.ts` (gerado por `npm run icones`) |
 | `lib/` | `conteudo.ts` (tipos e leitura no build), `api.ts` (cliente da API), `painel.ts` (tipos do painel), `metadados.ts`, `datas.ts` |
-| `worker/` | `index.js` (roteador e guarda), `auth.js`, `api.js`, `imagens.js`, `publicar.js`, `http.js` |
+| `worker/` | `index.js` (roteador e guarda), `auth.js`, `api/` (roteador e um arquivo por assunto), `imagens.js`, `publicar.js`, `http.js` |
 | `migrations/` | esquema do D1 |
 | `scripts/` | `exportar-conteudo`, `carregar-semente`, `criar-admin`, `gerar-icones`, `otimizar-imagens`, `d1` |
 | `conteudo/semente.json` | conteúdo inicial e fallback do desenvolvimento sem banco |
@@ -99,13 +99,13 @@ Regras:
 
 - páginas estáticas com componentes de cliente que chamam `/api/*` por `lib/api.ts`;
 - navegação com `<a>` comum, **não `next/link`**: o pré-carregamento de rotas do Next pede arquivos que não existem na exportação estática;
-- o CSS fica em `estilos/painel/`: `compartilhado.css` importado por `componentes/painel/compartilhado/Moldura.tsx` e o arquivo de cada tela importado pela página dela — a landing não baixa nada daqui;
+- o CSS fica em `estilos/painel/`: `compartilhado.css` importado por `componentes/painel/compartilhado/Moldura.tsx` e o arquivo de cada tela importado pelo componente dela — a landing não baixa nada daqui;
 - imagens são reduzidas e convertidas para WebP no navegador (`componentes/painel/compartilhado/redimensionar.ts`) antes do upload;
 - o que é salvo só aparece no site depois de **Publicar**.
 
 ## Worker e banco
 
-- **toda regra de permissão fica no Worker** (`worker/index.js` guarda as páginas; `worker/api.js` confere o papel em cada rota). Nunca confie no navegador;
+- **toda regra de permissão fica no Worker** (`worker/index.js` guarda as páginas; `worker/api/index.js` confere o papel em cada rota). Nunca confie no navegador;
 - senhas com PBKDF2 (100 mil iterações), sessões e convites guardados só como SHA-256; cookie `__Host-sessao` (`HttpOnly`, `Secure`, `SameSite=Lax`); métodos de escrita só da própria origem;
 - consultas sempre com parâmetros (`prepare().bind()`); nomes de tabela e coluna só de listas fixas (`COLECOES`, `PERFIL`);
 - mudança de esquema = arquivo novo em `migrations/` (nunca editar uma migração já aplicada). O workflow aplica as migrações antes do deploy;

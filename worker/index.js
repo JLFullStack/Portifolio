@@ -4,14 +4,14 @@
 //
 //   /auth/*         login, sessão, convites e troca de senha e e-mail (auth.js)
 //   /contato        formulário de contato da landing, sem login (contato.js)
-//   /api/*          dados do painel e do depoente, imagens e publicação (api.js)
+//   /api/*          dados do painel e do depoente, imagens e publicação (api/)
 //   /admin/*        páginas do painel: só o administrador
 //   /depoimento/*   página do depoente: qualquer pessoa logada
 //
 // Métodos que alteram dados só são aceitos da própria origem (o cookie já é SameSite=Lax).
 // Toda resposta daqui sai com os cabeçalhos de segurança (o public/_headers só vale para
 // os arquivos estáticos que não passam pelo Worker).
-import { tratarApi } from "./api.js";
+import { tratarApi } from "./api/index.js";
 import { tratarAuth, usuarioDaSessao } from "./auth.js";
 import { tratarContato } from "./contato.js";
 import { ErroHttp, json } from "./http.js";

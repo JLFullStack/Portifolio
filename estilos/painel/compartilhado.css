@@ -2,7 +2,7 @@
    Usa os tokens de app.css (cores, gradientes, espaços, raios) e a mesma linguagem
    da landing: aurora ao fundo, vidro, pílulas em gradiente e entradas suaves.
    Este arquivo tem o que as telas dividem; cada tela com estilo próprio tem o
-   arquivo dela nesta pasta, importado pela página. Só é carregado na área restrita
+   arquivo dela nesta pasta, importado pelo componente da tela. Só é carregado na área restrita
    (componentes/painel/compartilhado/Moldura.tsx): a landing não baixa nada daqui.
 
    No celular (até 767px) as abas do painel viram uma barra fixa embaixo, e a altura

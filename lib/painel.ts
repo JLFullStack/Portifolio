@@ -1,4 +1,4 @@
-// Tipos dos dados que o painel recebe de GET /api/painel (worker/api.js, painel()).
+// Tipos dos dados que o painel recebe de GET /api/painel (worker/api/index.js, painel()).
 // São as linhas do D1, com as colunas _pt/_en separadas.
 
 export type InfoImagem = { largura: number; altura: number; larguras: number[] };

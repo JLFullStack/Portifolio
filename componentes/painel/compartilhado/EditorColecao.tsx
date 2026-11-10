@@ -193,7 +193,7 @@ function NovoItem({ tabela, campos, rotulo, valoresFixos }: { tabela: string; ca
 }
 
 /**
- * Lista editável de uma coleção do banco (worker/api.js, COLECOES): cada item abre um
+ * Lista editável de uma coleção do banco (worker/api/conteudo.js, COLECOES): cada item abre um
  * formulário com Salvar, Excluir e as setas de ordem; no fim, o formulário de um novo.
  * `resumo` é o título do item no cabeçalho; `selos`, as etiquetas embaixo dele.
  */

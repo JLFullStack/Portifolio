@@ -91,9 +91,9 @@ app/                      rotas: (pt)/ = /, login, convite, depoimento, admin/*;
 componentes/
   Documento, BotaoTopo     de toda a aplicação
   landing/                Landing, compartilhado/, cabecalho/ e secoes/ (uma seção por arquivo)
-  painel/                 área restrita: compartilhado/ e telas/ (o que é de uma tela só)
+  painel/                 área restrita: compartilhado/ e telas/ (uma tela por arquivo)
   icones/                 ícones do Font Awesome Pro em SVG inline (dados.ts é gerado)
-worker/                   index (rotas e guarda), auth, api, contato, imagens, publicar
+worker/                   index (rotas e guarda), auth, api/ (por assunto), contato, imagens, publicar
 migrations/               esquema do banco D1 (0001 a 0006)
 conteudo/semente.json     conteúdo inicial; conteudo.json e github.json são gerados (não versionados)
 dicionarios/index.ts      textos fixos da interface em pt e en

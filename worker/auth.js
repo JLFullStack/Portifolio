@@ -1,5 +1,5 @@
 // Login, sessões e convites (/auth/*). O Worker é a fronteira de segurança: toda
-// regra de acesso fica aqui e em api.js, nunca no navegador.
+// regra de acesso fica aqui e em api/, nunca no navegador.
 //
 // Senhas: PBKDF2-SHA256 com sal aleatório (100 mil iterações, o máximo do Workers).
 // Sessões e convites: o navegador recebe um token aleatório; o banco guarda só o SHA-256.
