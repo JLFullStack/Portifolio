@@ -3,10 +3,10 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { api } from "@/lib/api";
 import type { InfoImagem } from "@/lib/painel";
-import { sair, TrocarEmail, TrocarSenha } from "./Acesso";
-import { AreaTexto, Aviso, Campo, Entrada, useAcao } from "./Campos";
+import { sair, TrocarEmail, TrocarSenha } from "@/componentes/painel/compartilhado/Acesso";
+import { AreaTexto, Aviso, Campo, Entrada, useAcao } from "@/componentes/painel/compartilhado/Campos";
 import { Icone } from "@/componentes/icones/Icone";
-import { CampoImagem } from "./Imagens";
+import { CampoImagem } from "@/componentes/painel/compartilhado/Imagens";
 
 type MeuDepoimento = {
     usuario: { nome: string; email: string };

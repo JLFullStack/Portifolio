@@ -1,8 +1,8 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import type { SecaoNavegacao } from "./Cabecalho";
-import { useSecaoAtiva } from "./secaoAtiva";
+import type { SecaoNavegacao } from "@/componentes/landing/cabecalho/Cabecalho";
+import { useSecaoAtiva } from "@/componentes/landing/cabecalho/secaoAtiva";
 
 /**
  * Os links das seções principais no cabeçalho (só no desktop; no celular fica o menu

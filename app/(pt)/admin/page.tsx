@@ -5,9 +5,9 @@ import { api } from "@/lib/api";
 import { dataHora } from "@/lib/painel";
 import type { NomeIcone } from "@/componentes/icones/dados";
 import { Icone } from "@/componentes/icones/Icone";
-import { Aviso, useAcao } from "@/componentes/painel/Campos";
-import { Avatar } from "@/componentes/painel/Avatar";
-import { usePainel } from "@/componentes/painel/PainelAdmin";
+import { Aviso, useAcao } from "@/componentes/painel/compartilhado/Campos";
+import { Avatar } from "@/componentes/painel/compartilhado/Avatar";
+import { usePainel } from "@/componentes/painel/compartilhado/PainelAdmin";
 import "@/estilos/painel/visao-geral.css";
 
 const SITUACAO = {

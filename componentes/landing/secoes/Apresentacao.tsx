@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { src, srcset, texto } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
-import type { PropsSecao } from "./Landing";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 /**
  * Seção 2: Hero. À esquerda o selo de disponível (quando ligado no painel), a saudação,

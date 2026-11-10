@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { InfoImagem } from "@/lib/painel";
-import { urlImagem } from "./Imagens";
+import { urlImagem } from "@/componentes/painel/compartilhado/Imagens";
 
 /** Iniciais do nome: primeira e última palavra ("Maria da Silva" → "MS"). */
 function iniciais(nome: string): string {

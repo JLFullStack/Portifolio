@@ -2,8 +2,8 @@ import type { CSSProperties } from "react";
 import { texto } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
 import type { NomeIcone } from "@/componentes/icones/dados";
-import { SeparadorSecao, TituloSecao } from "./Comuns";
-import type { PropsSecao } from "./Landing";
+import { SeparadorSecao, TituloSecao } from "@/componentes/landing/compartilhado/Comuns";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 // Ícone de cada grupo, escolhido pelo título (em pt ou en). Grupo novo sem par cai no ícone genérico.
 const ICONES_GRUPO: [RegExp, NomeIcone][] = [

@@ -3,11 +3,11 @@
 import { useRef, useState, type FormEvent } from "react";
 import { api } from "@/lib/api";
 import { dataHora } from "@/lib/painel";
-import { Aviso, Campo, CampoBilingue, Entrada, useAcao, type Bilingue } from "@/componentes/painel/Campos";
+import { Aviso, Campo, CampoBilingue, Entrada, useAcao, type Bilingue } from "@/componentes/painel/compartilhado/Campos";
 import { Icone } from "@/componentes/icones/Icone";
-import { CamposAparenciaHero, PADRAO_FOTO } from "@/componentes/painel/AparenciaHero";
-import { CampoImagem } from "@/componentes/painel/Imagens";
-import { usePainel } from "@/componentes/painel/PainelAdmin";
+import { CamposAparenciaHero, PADRAO_FOTO } from "@/componentes/painel/telas/AparenciaHero";
+import { CampoImagem } from "@/componentes/painel/compartilhado/Imagens";
+import { usePainel } from "@/componentes/painel/compartilhado/PainelAdmin";
 import "@/estilos/painel/perfil.css";
 
 const SIMPLES = ["nome_curto", "nome_completo", "nascimento", "email", "telefone", "whatsapp", "linkedin", "curriculo_pt", "curriculo_en", "chamada_autor", "foto_hero", "foto_biografia", "inicio_carreira", "hero_tamanho", "hero_esmaecer", "hero_esmaecer_direita", "hero_luz_direita", "hero_opacidade_escuro", "hero_opacidade_claro"];

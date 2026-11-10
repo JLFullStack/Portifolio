@@ -4,9 +4,9 @@ import { src, srcset, texto } from "@/lib/conteudo";
 import { idade } from "@/lib/datas";
 import { Icone } from "@/componentes/icones/Icone";
 import type { NomeIcone } from "@/componentes/icones/dados";
-import { LinkSocial, TituloSecao } from "./Comuns";
-import { Idade } from "./Idade";
-import type { PropsSecao } from "./Landing";
+import { LinkSocial, TituloSecao } from "@/componentes/landing/compartilhado/Comuns";
+import { Idade } from "@/componentes/landing/secoes/Idade";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 /**
  * Seção 3 do mockup: Biografia. À esquerda a foto circular com o anel em

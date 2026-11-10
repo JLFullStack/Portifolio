@@ -4,7 +4,7 @@ import { useEffect, useState, type FormEvent, type InputHTMLAttributes } from "r
 import { api, destinoDepoisDoLogin, type Usuario } from "@/lib/api";
 import type { NomeIcone } from "@/componentes/icones/dados";
 import { Icone } from "@/componentes/icones/Icone";
-import { Aviso, Campo, Entrada, useAcao } from "./Campos";
+import { Aviso, Campo, Entrada, useAcao } from "@/componentes/painel/compartilhado/Campos";
 
 const proximo = () => new URLSearchParams(location.search).get("next");
 

@@ -89,8 +89,9 @@ Publicação manual, da própria máquina: `npx wrangler login` (uma vez) e `npm
 ```
 app/                      rotas: (pt)/ = /, login, convite, depoimento, admin/*; (en)/en/ = /en
 componentes/
-  landing/                uma seção da landing por arquivo
-  painel/                 área restrita: login, convite, painel, depoente, imagens
+  Documento, BotaoTopo     de toda a aplicação
+  landing/                Landing, compartilhado/, cabecalho/ e secoes/ (uma seção por arquivo)
+  painel/                 área restrita: compartilhado/ e telas/ (o que é de uma tela só)
   icones/                 ícones do Font Awesome Pro em SVG inline (dados.ts é gerado)
 worker/                   index (rotas e guarda), auth, api, contato, imagens, publicar
 migrations/               esquema do banco D1 (0001 a 0006)

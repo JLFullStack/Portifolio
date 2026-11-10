@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { dataHora, type Depoimento } from "@/lib/painel";
 import { Icone } from "@/componentes/icones/Icone";
-import { Avatar } from "@/componentes/painel/Avatar";
-import { Aviso, Campo, CampoBilingue, Entrada, useAcao } from "@/componentes/painel/Campos";
-import { BotoesOrdem } from "@/componentes/painel/EditorColecao";
-import { CampoImagem } from "@/componentes/painel/Imagens";
-import { usePainel } from "@/componentes/painel/PainelAdmin";
+import { Avatar } from "@/componentes/painel/compartilhado/Avatar";
+import { Aviso, Campo, CampoBilingue, Entrada, useAcao } from "@/componentes/painel/compartilhado/Campos";
+import { BotoesOrdem } from "@/componentes/painel/compartilhado/EditorColecao";
+import { CampoImagem } from "@/componentes/painel/compartilhado/Imagens";
+import { usePainel } from "@/componentes/painel/compartilhado/PainelAdmin";
 import "@/estilos/painel/depoimentos.css";
 
 const SITUACAO = {

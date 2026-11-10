@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { FormLogin } from "@/componentes/painel/Acesso";
-import { Moldura } from "@/componentes/painel/Moldura";
+import { FormLogin } from "@/componentes/painel/compartilhado/Acesso";
+import { Moldura } from "@/componentes/painel/compartilhado/Moldura";
 import "@/estilos/painel/acesso.css";
 
 export const metadata: Metadata = {

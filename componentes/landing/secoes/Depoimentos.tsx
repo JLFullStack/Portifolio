@@ -1,9 +1,9 @@
 import { src, srcset, texto } from "@/lib/conteudo";
 import { LOCALE } from "@/dicionarios";
 import { Icone } from "@/componentes/icones/Icone";
-import { TituloSecao } from "./Comuns";
-import { ControlesFaixa } from "./ControlesFaixa";
-import type { PropsSecao } from "./Landing";
+import { TituloSecao } from "@/componentes/landing/compartilhado/Comuns";
+import { ControlesFaixa } from "@/componentes/landing/compartilhado/ControlesFaixa";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 /**
  * Seção 5 do mockup: Depoimentos. Dois cards por vez no desktop (um no celular),

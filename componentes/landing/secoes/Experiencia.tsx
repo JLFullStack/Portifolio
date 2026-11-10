@@ -1,7 +1,7 @@
 import { texto } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
-import { ItemLinhaTempo, LinhaTempo, SeparadorSecao, TituloSecao } from "./Comuns";
-import type { PropsSecao } from "./Landing";
+import { ItemLinhaTempo, LinhaTempo, SeparadorSecao, TituloSecao } from "@/componentes/landing/compartilhado/Comuns";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 /** Seção 9 do mockup: Experiência. Mesma timeline da Educação, com empresa, endereço, descrição e a stack do cargo. */
 export function Experiencia({ conteudo, idioma, d }: PropsSecao) {

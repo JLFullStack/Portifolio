@@ -28,7 +28,7 @@
 
    O atributo data-tema é escrito no <html> pelo script inline de
    componentes/Documento.tsx, antes da primeira pintura, e alternado por
-   componentes/landing/BotaoTema.tsx.
+   componentes/landing/cabecalho/BotaoTema.tsx.
    Nenhuma regra de componente deve usar hex literal.
 
 */

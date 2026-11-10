@@ -1,7 +1,7 @@
 import { texto } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
-import { ItemLinhaTempo, LinhaTempo, SeparadorSecao, TituloSecao } from "./Comuns";
-import type { PropsSecao } from "./Landing";
+import { ItemLinhaTempo, LinhaTempo, SeparadorSecao, TituloSecao } from "@/componentes/landing/compartilhado/Comuns";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 /** Seção 8 do mockup: Educação, numa timeline com os cards alternando os lados. */
 export function Educacao({ conteudo, idioma, d }: PropsSecao) {

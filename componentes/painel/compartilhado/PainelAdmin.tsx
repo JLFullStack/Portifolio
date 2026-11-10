@@ -6,8 +6,8 @@ import { api } from "@/lib/api";
 import type { DadosPainel } from "@/lib/painel";
 import type { NomeIcone } from "@/componentes/icones/dados";
 import { Icone } from "@/componentes/icones/Icone";
-import { sair } from "./Acesso";
-import { Aviso, useAcao } from "./Campos";
+import { sair } from "@/componentes/painel/compartilhado/Acesso";
+import { Aviso, useAcao } from "@/componentes/painel/compartilhado/Campos";
 
 type ContextoPainel = { dados: DadosPainel; recarregar: () => Promise<void> };
 

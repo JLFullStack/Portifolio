@@ -2,8 +2,8 @@ import type { CSSProperties } from "react";
 import { LOCALE } from "@/dicionarios";
 import { texto } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
-import { SeparadorSecao, TituloSecao } from "./Comuns";
-import type { PropsSecao } from "./Landing";
+import { SeparadorSecao, TituloSecao } from "@/componentes/landing/compartilhado/Comuns";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 // Cores que o próprio GitHub usa para cada linguagem: identificam a linguagem num relance.
 // São dados (como as cores de uma logo), não parte do tema.

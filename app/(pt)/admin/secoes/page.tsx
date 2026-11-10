@@ -3,9 +3,9 @@
 import { api } from "@/lib/api";
 import type { Grupo, Linha } from "@/lib/painel";
 import { Icone } from "@/componentes/icones/Icone";
-import { Aviso, useAcao } from "@/componentes/painel/Campos";
-import { EditorColecao, type DefCampo } from "@/componentes/painel/EditorColecao";
-import { usePainel } from "@/componentes/painel/PainelAdmin";
+import { Aviso, useAcao } from "@/componentes/painel/compartilhado/Campos";
+import { EditorColecao, type DefCampo } from "@/componentes/painel/compartilhado/EditorColecao";
+import { usePainel } from "@/componentes/painel/compartilhado/PainelAdmin";
 
 const titulo = (item: Linha, ...campos: string[]) => String(campos.map(c => item[c]).find(Boolean) ?? "Sem título");
 

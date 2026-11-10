@@ -3,7 +3,7 @@
 // nunca maior que a original.
 import { api } from "@/lib/api";
 import type { InfoImagem } from "@/lib/painel";
-import type { Recorte } from "./EditorRecorte";
+import type { Recorte } from "@/componentes/painel/compartilhado/EditorRecorte";
 
 export type ImagemEnviada = InfoImagem & { id: string };
 

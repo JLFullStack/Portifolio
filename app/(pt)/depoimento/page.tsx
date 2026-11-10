@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Icone } from "@/componentes/icones/Icone";
-import { BotaoTopo } from "@/componentes/landing/BotaoTopo";
-import { AreaDepoente } from "@/componentes/painel/AreaDepoente";
-import { Moldura } from "@/componentes/painel/Moldura";
+import { BotaoTopo } from "@/componentes/BotaoTopo";
+import { AreaDepoente } from "@/componentes/painel/telas/AreaDepoente";
+import { Moldura } from "@/componentes/painel/compartilhado/Moldura";
 
 // Protegida pelo Worker (worker/index.js): sem sessão, redireciona para o login.
 export const metadata: Metadata = {

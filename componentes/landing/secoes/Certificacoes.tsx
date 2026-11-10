@@ -1,7 +1,7 @@
 import { texto } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
-import { SeparadorSecao, TituloSecao } from "./Comuns";
-import type { PropsSecao } from "./Landing";
+import { SeparadorSecao, TituloSecao } from "@/componentes/landing/compartilhado/Comuns";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 /** Seção 7 do mockup: Certificações. Ícone de certificado num ladrilho em gradiente à esquerda e o texto à direita. */
 export function Certificacoes({ conteudo, idioma, d }: PropsSecao) {

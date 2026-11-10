@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { InfoImagem } from "@/lib/painel";
 import { Icone } from "@/componentes/icones/Icone";
-import { Aviso, useAcao } from "./Campos";
-import { EditorRecorte, type Recorte } from "./EditorRecorte";
-import { enviarImagem, type ImagemEnviada } from "./redimensionar";
+import { Aviso, useAcao } from "@/componentes/painel/compartilhado/Campos";
+import { EditorRecorte, type Recorte } from "@/componentes/painel/compartilhado/EditorRecorte";
+import { enviarImagem, type ImagemEnviada } from "@/componentes/painel/compartilhado/redimensionar";
 
 /** Endereço da versão da imagem mais próxima de `alvo` px (no painel, lida do D1 pelo Worker). */
 export function urlImagem(id: string, info: InfoImagem | undefined, alvo = 360): string | null {

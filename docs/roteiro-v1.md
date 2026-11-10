@@ -49,8 +49,9 @@ Arquitetura, decisões e fases de desenvolvimento da V1 do portfólio.
 
 ```
 app/                          rotas: (pt)/ = /, login, convite, depoimento, admin/*; (en)/en/ = /en; 404
-componentes/landing/          uma seção da landing por arquivo
-componentes/painel/           área restrita (login, convite, painel, depoente, imagens)
+componentes/                  Documento e BotaoTopo, de toda a aplicação
+componentes/landing/          Landing, compartilhado/, cabecalho/ e secoes/ (uma seção por arquivo)
+componentes/painel/           área restrita: compartilhado/ e telas/
 componentes/icones/           ícones do Font Awesome Pro em SVG inline
 dicionarios/index.ts          textos fixos da interface em pt e en
 lib/conteudo.ts               tipos do conteúdo e leitura no build

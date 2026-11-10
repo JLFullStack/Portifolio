@@ -3,9 +3,9 @@
 import { api } from "@/lib/api";
 import { dataHora, type Mensagem } from "@/lib/painel";
 import { Icone } from "@/componentes/icones/Icone";
-import { Avatar } from "@/componentes/painel/Avatar";
-import { Aviso, useAcao } from "@/componentes/painel/Campos";
-import { usePainel } from "@/componentes/painel/PainelAdmin";
+import { Avatar } from "@/componentes/painel/compartilhado/Avatar";
+import { Aviso, useAcao } from "@/componentes/painel/compartilhado/Campos";
+import { usePainel } from "@/componentes/painel/compartilhado/PainelAdmin";
 import "@/estilos/painel/mensagens.css";
 
 /** Uma mensagem: quem mandou, o assunto, o texto e as ações (responder, marcar como lida, excluir). */

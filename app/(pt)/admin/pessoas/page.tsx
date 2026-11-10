@@ -4,9 +4,9 @@ import { useState, type FormEvent } from "react";
 import { api } from "@/lib/api";
 import { dataHora, type UsuarioPainel } from "@/lib/painel";
 import { Icone } from "@/componentes/icones/Icone";
-import { Avatar } from "@/componentes/painel/Avatar";
-import { Aviso, Campo, Entrada, useAcao } from "@/componentes/painel/Campos";
-import { usePainel } from "@/componentes/painel/PainelAdmin";
+import { Avatar } from "@/componentes/painel/compartilhado/Avatar";
+import { Aviso, Campo, Entrada, useAcao } from "@/componentes/painel/compartilhado/Campos";
+import { usePainel } from "@/componentes/painel/compartilhado/PainelAdmin";
 import "@/estilos/painel/pessoas.css";
 
 type Convite = { link: string; expiraEm: string };

@@ -4,11 +4,11 @@ import { useState } from "react";
 import { api } from "@/lib/api";
 import type { ImagemProjeto, Linha, Projeto } from "@/lib/painel";
 import { Icone } from "@/componentes/icones/Icone";
-import { Aviso, CampoBilingue, useAcao } from "@/componentes/painel/Campos";
-import { EditorColecao, type DefCampo } from "@/componentes/painel/EditorColecao";
-import { CampoImagem, EnviarImagem } from "@/componentes/painel/Imagens";
-import { usePainel } from "@/componentes/painel/PainelAdmin";
-import type { ImagemEnviada } from "@/componentes/painel/redimensionar";
+import { Aviso, CampoBilingue, useAcao } from "@/componentes/painel/compartilhado/Campos";
+import { EditorColecao, type DefCampo } from "@/componentes/painel/compartilhado/EditorColecao";
+import { CampoImagem, EnviarImagem } from "@/componentes/painel/compartilhado/Imagens";
+import { usePainel } from "@/componentes/painel/compartilhado/PainelAdmin";
+import type { ImagemEnviada } from "@/componentes/painel/compartilhado/redimensionar";
 import "@/estilos/painel/projetos.css";
 
 const CAMPOS: DefCampo[] = [

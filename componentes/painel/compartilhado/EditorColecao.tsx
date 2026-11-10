@@ -5,8 +5,8 @@ import { api } from "@/lib/api";
 import type { Linha } from "@/lib/painel";
 import { ICONES } from "@/componentes/icones/dados";
 import { Icone } from "@/componentes/icones/Icone";
-import { AreaTexto, Aviso, Campo, CampoBilingue, Entrada, useAcao } from "./Campos";
-import { usePainel } from "./PainelAdmin";
+import { AreaTexto, Aviso, Campo, CampoBilingue, Entrada, useAcao } from "@/componentes/painel/compartilhado/Campos";
+import { usePainel } from "@/componentes/painel/compartilhado/PainelAdmin";
 
 /** "icone": redes sociais (fab:); "icone-servico": os ícones de traço fino dos cards de Serviços. */
 type TipoCampo = "texto" | "area" | "url" | "icone" | "icone-servico" | "bool";

@@ -1,7 +1,7 @@
 import { texto } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
-import { FormularioContato } from "./FormularioContato";
-import type { PropsSecao } from "./Landing";
+import { FormularioContato } from "@/componentes/landing/secoes/FormularioContato";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 /**
  * Seção 10 do mockup: chamada final. Um painel em gradiente com aurora e anéis

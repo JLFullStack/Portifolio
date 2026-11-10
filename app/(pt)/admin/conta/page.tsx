@@ -1,9 +1,9 @@
 "use client";
 
 import { Icone } from "@/componentes/icones/Icone";
-import { TrocarEmail, TrocarSenha } from "@/componentes/painel/Acesso";
-import { Avatar } from "@/componentes/painel/Avatar";
-import { usePainel } from "@/componentes/painel/PainelAdmin";
+import { TrocarEmail, TrocarSenha } from "@/componentes/painel/compartilhado/Acesso";
+import { Avatar } from "@/componentes/painel/compartilhado/Avatar";
+import { usePainel } from "@/componentes/painel/compartilhado/PainelAdmin";
 import "@/estilos/painel/conta.css";
 
 export default function PaginaConta() {

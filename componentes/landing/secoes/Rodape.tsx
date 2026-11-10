@@ -1,7 +1,7 @@
 import { Icone } from "@/componentes/icones/Icone";
-import { AnoAtual } from "./AnoAtual";
-import { LinkSocial } from "./Comuns";
-import type { PropsSecao } from "./Landing";
+import { AnoAtual } from "@/componentes/landing/secoes/AnoAtual";
+import { LinkSocial } from "@/componentes/landing/compartilhado/Comuns";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 /**
  * Seção 11 do mockup: rodapé de ponta a ponta. Redes sociais em círculos

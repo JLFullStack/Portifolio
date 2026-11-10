@@ -3,11 +3,11 @@ import type { Dicionario } from "@/dicionarios";
 import { LOCALE, ROTA } from "@/dicionarios";
 import { texto, type Conteudo, type Idioma } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
-import { BotaoTema } from "./BotaoTema";
-import { CabecalhoFixo } from "./CabecalhoFixo";
-import { LinkSocial } from "./Comuns";
-import { MenuNavegacao } from "./MenuNavegacao";
-import { NavegacaoTopo } from "./NavegacaoTopo";
+import { BotaoTema } from "@/componentes/landing/cabecalho/BotaoTema";
+import { CabecalhoFixo } from "@/componentes/landing/cabecalho/CabecalhoFixo";
+import { LinkSocial } from "@/componentes/landing/compartilhado/Comuns";
+import { MenuNavegacao } from "@/componentes/landing/cabecalho/MenuNavegacao";
+import { NavegacaoTopo } from "@/componentes/landing/cabecalho/NavegacaoTopo";
 
 export type SecaoNavegacao = { ancora: string; rotulo: string; icone: ReactNode };
 

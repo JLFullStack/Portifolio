@@ -1,8 +1,8 @@
 import { src, srcset, texto } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
-import { ControlesFaixa } from "./ControlesFaixa";
-import type { PropsSecao } from "./Landing";
-import { ProjetosVitrine } from "./ProjetosVitrine";
+import { ControlesFaixa } from "@/componentes/landing/compartilhado/ControlesFaixa";
+import type { PropsSecao } from "@/componentes/landing/Landing";
+import { ProjetosVitrine } from "@/componentes/landing/secoes/ProjetosVitrine";
 
 /**
  * Seção 4 do mockup: Projetos. À esquerda o título, a descrição e o Ver Trabalho

@@ -50,8 +50,9 @@ O nome do projeto é grafado **`Portifolio`** (com "i") no repositório e no Wor
 |---|---|
 | `app/(pt)/`, `app/(en)/en/` | rotas: landing pt e en, login, convite, depoimento, painel (`admin/`) |
 | `app/global-not-found.tsx` | página 404 (`out/404.html`) |
-| `componentes/landing/` | uma seção da landing por arquivo; componentes de servidor, salvo os interativos |
-| `componentes/painel/` | área restrita: moldura, campos, imagens, editor de coleções, login, depoente |
+| `componentes/` | `Documento.tsx` e `BotaoTopo.tsx`, de toda a aplicação |
+| `componentes/landing/` | `Landing.tsx`, `compartilhado/`, `cabecalho/` e `secoes/` (uma seção por arquivo); componentes de servidor, salvo os interativos |
+| `componentes/painel/` | área restrita: `compartilhado/` (moldura, campos, acesso, imagens, editor de coleções) e `telas/` (o que é de uma tela só) |
 | `componentes/icones/` | `Icone.tsx` e `dados.ts` (gerado por `npm run icones`) |
 | `lib/` | `conteudo.ts` (tipos e leitura no build), `api.ts` (cliente da API), `painel.ts` (tipos do painel), `metadados.ts`, `datas.ts` |
 | `worker/` | `index.js` (roteador e guarda), `auth.js`, `api.js`, `imagens.js`, `publicar.js`, `http.js` |
@@ -98,8 +99,8 @@ Regras:
 
 - páginas estáticas com componentes de cliente que chamam `/api/*` por `lib/api.ts`;
 - navegação com `<a>` comum, **não `next/link`**: o pré-carregamento de rotas do Next pede arquivos que não existem na exportação estática;
-- o CSS fica em `estilos/painel/`: `compartilhado.css` importado por `componentes/painel/Moldura.tsx` e o arquivo de cada tela importado pela página dela — a landing não baixa nada daqui;
-- imagens são reduzidas e convertidas para WebP no navegador (`componentes/painel/redimensionar.ts`) antes do upload;
+- o CSS fica em `estilos/painel/`: `compartilhado.css` importado por `componentes/painel/compartilhado/Moldura.tsx` e o arquivo de cada tela importado pela página dela — a landing não baixa nada daqui;
+- imagens são reduzidas e convertidas para WebP no navegador (`componentes/painel/compartilhado/redimensionar.ts`) antes do upload;
 - o que é salvo só aparece no site depois de **Publicar**.
 
 ## Worker e banco

@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef, type CSSProperties, type MouseEvent, type ReactNode } from "react";
-import type { SecaoNavegacao } from "./Cabecalho";
-import { useSecaoAtiva } from "./secaoAtiva";
+import type { SecaoNavegacao } from "@/componentes/landing/cabecalho/Cabecalho";
+import { useSecaoAtiva } from "@/componentes/landing/cabecalho/secaoAtiva";
 
 type Rotulos = { abrir: string; fechar: string; titulo: string; navegacao: string };
 

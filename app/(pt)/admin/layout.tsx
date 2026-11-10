@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Icone } from "@/componentes/icones/Icone";
-import { BotaoTopo } from "@/componentes/landing/BotaoTopo";
-import { Moldura } from "@/componentes/painel/Moldura";
-import { PainelAdmin } from "@/componentes/painel/PainelAdmin";
+import { BotaoTopo } from "@/componentes/BotaoTopo";
+import { Moldura } from "@/componentes/painel/compartilhado/Moldura";
+import { PainelAdmin } from "@/componentes/painel/compartilhado/PainelAdmin";
 
 // Páginas do painel. Protegidas pelo Worker (worker/index.js): só o administrador as recebe.
 export const metadata: Metadata = {

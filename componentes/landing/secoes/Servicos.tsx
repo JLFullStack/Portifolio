@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
 import { texto } from "@/lib/conteudo";
 import { Icone } from "@/componentes/icones/Icone";
-import { TituloSecao } from "./Comuns";
-import type { PropsSecao } from "./Landing";
+import { TituloSecao } from "@/componentes/landing/compartilhado/Comuns";
+import type { PropsSecao } from "@/componentes/landing/Landing";
 
 /**
  * "O que eu faço": um card por serviço, logo depois da hero, para dizer em segundos

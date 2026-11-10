@@ -1,6 +1,6 @@
 // Imagens no D1 (sem R2, para a publicação ser gratuita).
 //
-// O navegador já reduz e converte para WebP antes de enviar (componentes/painel/redimensionar.ts):
+// O navegador já reduz e converte para WebP antes de enviar (componentes/painel/compartilhado/redimensionar.ts):
 // chega um multipart com "largura" e "altura" da imagem original e um arquivo por largura
 // gerada, "arquivo-<largura>". O id é o hash do conteúdo, então reenviar a mesma imagem
 // não duplica nada. Na landing, as imagens viram arquivos estáticos no build
